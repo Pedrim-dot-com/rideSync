@@ -1,3 +1,8 @@
+import { Invitation } from "./features/trips/Invitation";
+import {
+  clearPendingInvitation,
+  readPendingInvitation,
+} from "./features/trips/invitation-link";
 import { UpdateNotice } from "./UpdateNotice";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
@@ -10,11 +15,25 @@ import { Profile } from "./features/Profile";
 import { Trips } from "./features/trips/Trips";
 export default function App() {
   const cache = useQueryClient();
+  const [invitation, setInvitation] = useState(readPendingInvitation);
+  const [acceptedTrip, setAcceptedTrip] = useState<string | undefined>();
+  function closeInvitation() {
+    clearPendingInvitation();
+    setInvitation(null);
+  }
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(Boolean(supabase));
   const [authError, setAuthError] = useState(false);
   const [recovery, setRecovery] = useState(false);
   const [page, setPage] = useState<"garage" | "profile" | "trips">("garage");
+  useEffect(() => {
+    function captureInvitation() {
+      if (new URLSearchParams(window.location.hash.slice(1)).has("invite"))
+        setInvitation(readPendingInvitation());
+    }
+    window.addEventListener("hashchange", captureInvitation);
+    return () => window.removeEventListener("hashchange", captureInvitation);
+  }, []);
   useEffect(() => {
     if (!supabase) return;
     let active = true;
@@ -56,6 +75,7 @@ export default function App() {
       cache.clear();
       setSession(null);
       setPage("garage");
+      setAcceptedTrip(undefined);
     }
   }
   return (
@@ -104,6 +124,22 @@ export default function App() {
         )}
       </header>
       <main>
+        {invitation && !loading && !recovery && supabase && (
+          <Invitation
+            key={`${session?.user.id ?? "anonymous"}-${invitation}`}
+            token={invitation}
+            signedIn={Boolean(session)}
+            onClose={closeInvitation}
+            onAccepted={(tripId) => {
+              closeInvitation();
+              setAcceptedTrip(tripId);
+              setPage("trips");
+              void cache.invalidateQueries({
+                queryKey: ["trips", session?.user.id],
+              });
+            }}
+          />
+        )}
         {authError && (
           <p className="error" role="alert">
             Não foi possível atualizar a sessão. Tenta novamente ou recarrega a
@@ -131,7 +167,11 @@ export default function App() {
             {page === "garage" ? (
               <Garage userId={session.user.id} />
             ) : page === "trips" ? (
-              <Trips userId={session.user.id} />
+              <Trips
+                key={acceptedTrip ?? "list"}
+                userId={session.user.id}
+                initialTripId={acceptedTrip}
+              />
             ) : (
               <Profile userId={session.user.id} />
             )}

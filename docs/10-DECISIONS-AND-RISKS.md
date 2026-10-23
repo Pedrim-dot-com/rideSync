@@ -14,7 +14,7 @@
 - DEC-003: fornecedor/modelo de LLM e orçamento máximo por mês.
 - DEC-004: **RESOLVIDO — Cloudflare Pages ligada ao GitHub**; endereço indicado: https://ridesync-8z1.pages.dev.
 - DEC-005: política exata de retenção de snapshots GPS (sugestão: apagar ao parar/terminar).
-- DEC-006: convites apenas a contas existentes ou link para registo.
+- DEC-006: **RESOLVIDO — link com login ou registo**, confirmado pelo utilizador em 2026-10-24.
 - DEC-007: se fotos da mota são P0 ou P1 (sugestão P1).
 - DEC-008: mecanismo de confiança de Broadcast (publicação autenticada server-side se necessário).
 
@@ -116,3 +116,22 @@ proxy; dependências Deno com lockfile e resolução automática. Segredo ORS re
 atualizado pelo utilizador; smoke autenticado de pesquisa, cálculo e persistência
 passou (10 checks), com limpeza dos dados temporários. Logs de erro do fornecedor
 incluem apenas operação e código HTTP, sem pesquisas, coordenadas ou credenciais.
+
+
+## ADR-011 — Convites por link e mota na viagem
+
+Escolha confirmada pelo utilizador: link com login/registo antes de responder.
+Links individuais de uso único, validade fixa de 48 horas, revogação pelo
+organizador e hash SHA-256 no servidor. Token de dois UUIDs v4 independentes
+(244 bits aleatórios), devolvido uma vez. Fragmento removido do endereço e
+retido em sessionStorage até resposta/fecho, sem o incluir no redirect Auth.
+Limites: 10 convites/viagem e 30/organizador por janela móvel de 24 horas.
+Apenas viagens em draft/planned aceitam novos participantes ou seleção de mota.
+
+Aceitar/recusar é autenticado e serializado com o estado da viagem. Só aceitar
+concede membership e acesso RLS. Link é bearer: quem o receber pode usá-lo;
+partilha manual pelo organizador, sem emails automáticos. Dados partilhados:
+nome/nickname e marca/modelo da mota escolhida, via projeção mínima; perfis e
+restante garagem continuam privados. Não requer novas dependências/segredos.
+Migration 004 preparada e testada localmente; aplicação remota aguarda autorização.
+Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.

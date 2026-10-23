@@ -24,10 +24,11 @@
 - [x] Testes locais de criação, edição, permissões e concorrência; smoke remoto transacional de viagens aprovado. Sessão Auth real validada; browser/email por validar.
 
 ## Fase 3 — Convites e participantes
-- [ ] Convites seguros com expiração.
-- [ ] Aceitar/recusar e listar participantes.
-- [ ] Selecionar mota própria por viagem.
-- [ ] Testes de token expirado, duplicado e outsider.
+- [x] Convites seguros de uso único com expiração/revogação (local; migration 004 remota aguarda autorização).
+- [x] Aceitar/recusar e listar participantes (código e testes locais).
+- [x] Selecionar mota própria por viagem, ou nenhuma (RPC e UI).
+- [x] Testes de token expirado, duplicado, outsider, concorrência, quotas e ownership.
+- [ ] Autorizar/aplicar migration 004, regenerar tipos remotos e validar com sessões reais.
 
 ## Fase 4 — Tracking
 - [ ] Sessões de tracking e regras de estado.

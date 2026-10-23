@@ -1,3 +1,4 @@
+import { Participation } from "./Participation";
 import { RouteControls } from "./RouteControls";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -41,9 +42,17 @@ type Action =
     }
   | { kind: "status"; trip: TripRow; status: "draft" | "planned" | "cancelled" }
   | { kind: "delete"; trip: TripRow };
-export function Trips({ userId }: { userId: string }) {
+export function Trips({
+  userId,
+  initialTripId,
+}: {
+  userId: string;
+  initialTripId?: string;
+}) {
   const cache = useQueryClient();
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(
+    initialTripId ?? null,
+  );
   const [editor, setEditor] = useState<"new" | TripDetail | null>(null);
   const [confirm, setConfirm] = useState<"cancel" | "delete" | null>(null);
   const [message, setMessage] = useState("");
@@ -222,11 +231,10 @@ export function Trips({ userId }: { userId: string }) {
                         : "participantes confirmados"}
                     </span>
                   </div>
-                  <small>
-                    A partilha GPS e os convites ainda não estão disponíveis.
-                  </small>
+                  <small>A partilha GPS ainda não está disponível.</small>
                 </aside>
               </div>
+              <Participation key={trip.id} detail={data} userId={userId} />
               {canEdit && (
                 <div className="actions trip-actions">
                   <button

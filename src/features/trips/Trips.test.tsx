@@ -1,3 +1,4 @@
+vi.mock("./Participation", () => ({ Participation: () => null }));
 vi.mock("./TripMap", () => ({ default: () => null }));
 import { describe, it, expect, vi, afterEach } from "vitest";
 import {

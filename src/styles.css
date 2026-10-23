@@ -13,12 +13,14 @@ body {
   margin: 0;
 }
 button,
-input {
+input,
+select {
   font: inherit;
 }
 button,
 a,
-input {
+input,
+select {
   -webkit-tap-highlight-color: transparent;
 }
 button {
@@ -44,7 +46,8 @@ button:disabled {
 }
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 3px solid #b09324;
   outline-offset: 4px;
 }
@@ -265,7 +268,8 @@ label {
   font-weight: 600;
   margin-bottom: 20px;
 }
-input {
+input,
+select {
   border: 1px solid #cbd5c6;
   border-radius: 7px;
   padding: 13px;
@@ -845,5 +849,44 @@ h3 {
     left: 16px;
     right: 16px;
     padding: 20px;
+  }
+}
+
+.participation,
+.invitation-panel {
+  margin-block: 1.5rem;
+}
+.participant-list,
+.invitation-list {
+  list-style: none;
+  padding: 0;
+}
+.participant-list li,
+.invitation-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--line, #d9ddd3);
+  overflow-wrap: anywhere;
+}
+.participant-list p {
+  margin: 0.25rem 0 0;
+}
+.participation form,
+.trip-invitations,
+.invitation-link {
+  margin-top: 1.5rem;
+}
+.participation select,
+.invitation-link input {
+  width: 100%;
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .participant-list li,
+  .invitation-list li {
+    flex-wrap: wrap;
   }
 }

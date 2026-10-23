@@ -78,6 +78,18 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
       };
     else if (path.endsWith("/user")) body = user;
     else if (path.endsWith("/motorcycles")) body = [];
+    else if (path.endsWith("/list_trip_invitations")) body = [];
+    else if (path.endsWith("/list_trip_members"))
+      body = [
+        {
+          user_id: user.id,
+          role: "organizer",
+          display_name: "Organizador",
+          username: null,
+          motorcycle_brand: null,
+          motorcycle_model: null,
+        },
+      ];
     else if (path.endsWith("/search-places")) body = { places: [] };
     else if (path.endsWith("/calculate-route")) {
       const input = request.postDataJSON();
