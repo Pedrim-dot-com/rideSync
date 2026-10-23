@@ -16,8 +16,9 @@ openrouteservice, bem como links Google Maps/Waze, estão implementados.
 A migration `202610230003_map_services.sql` foi aplicada com autorização e as
 duas Edge Functions estão publicadas. Pesquisa, cálculo e persistência foram
 validados com uma sessão Supabase real em 2026-10-23.
-Convites e participação estão implementados e testados localmente; a migration
-004 remota aguarda autorização. Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.
+Convites e participação estão implementados; a migration 004 foi aplicada com
+autorização e passou 25 verificações com sessões reais.
+Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.
 Tracking, uploads e IA ainda não estão implementados.
 Não são apresentados dados fictícios como dados de utilizadores reais.
 A instalação e GPS em iOS/Android exigem testes futuros em dispositivos reais.

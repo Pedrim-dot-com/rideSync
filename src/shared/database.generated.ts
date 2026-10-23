@@ -1,4 +1,4 @@
-// Generated from the Supabase public schema after migration 202610230003.
+// Generated from the Supabase public schema after migration 202610240004.
 export type Json =
   | string
   | number
@@ -114,6 +114,67 @@ export type Database = {
           username?: string | null;
         };
         Relationships: [];
+      };
+      trip_invitations: {
+        Row: {
+          created_at: string;
+          expires_at: string;
+          id: string;
+          invited_by: string;
+          response: string | null;
+          revoked_at: string | null;
+          token_hash: string;
+          trip_id: string;
+          used_at: string | null;
+          used_by: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          invited_by: string;
+          response?: string | null;
+          revoked_at?: string | null;
+          token_hash: string;
+          trip_id: string;
+          used_at?: string | null;
+          used_by?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          invited_by?: string;
+          response?: string | null;
+          revoked_at?: string | null;
+          token_hash?: string;
+          trip_id?: string;
+          used_at?: string | null;
+          used_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "trip_invitations_invited_by_fkey";
+            columns: ["invited_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_invitations_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_invitations_used_by_fkey";
+            columns: ["used_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       trip_participants: {
         Row: {
@@ -289,16 +350,58 @@ export type Database = {
         Args: { p_departure_at: string; p_title: string; p_waypoints: Json };
         Returns: string;
       };
+      create_trip_invitation: {
+        Args: { p_trip_id: string };
+        Returns: {
+          expires_at: string;
+          invitation_id: string;
+          token: string;
+        }[];
+      };
       delete_trip: {
         Args: { p_expected_revision: number; p_trip_id: string };
         Returns: undefined;
+      };
+      list_trip_invitations: {
+        Args: { p_trip_id: string };
+        Returns: {
+          created_at: string;
+          expires_at: string;
+          invitation_id: string;
+          response: string;
+          revoked_at: string;
+          used_at: string;
+        }[];
+      };
+      list_trip_members: {
+        Args: { p_trip_id: string };
+        Returns: {
+          display_name: string;
+          motorcycle_brand: string;
+          motorcycle_model: string;
+          role: string;
+          user_id: string;
+          username: string;
+        }[];
       };
       replace_trip_waypoints: {
         Args: { p_trip_id: string; p_waypoints: Json };
         Returns: undefined;
       };
+      respond_trip_invitation: {
+        Args: { p_accept: boolean; p_token: string };
+        Returns: string;
+      };
+      revoke_trip_invitation: {
+        Args: { p_invitation_id: string; p_trip_id: string };
+        Returns: undefined;
+      };
       set_primary_motorcycle: {
         Args: { motorcycle_id: string };
+        Returns: undefined;
+      };
+      set_trip_motorcycle: {
+        Args: { p_motorcycle_id: string; p_trip_id: string };
         Returns: undefined;
       };
       set_trip_status: {

@@ -1,10 +1,13 @@
 // Domain aliases derived from the generated Supabase schema.
 import type { Database as GeneratedDatabase } from "./database.generated";
 import type { ParticipationFunctions } from "../features/trips/participation.types";
-// Keep the generated remote snapshot intact until migration 004 is authorized.
+// Preserve the generated snapshot; SQL RPC nullability is refined separately.
 export type Database = Omit<GeneratedDatabase, "public"> & {
   public: Omit<GeneratedDatabase["public"], "Functions"> & {
-    Functions: GeneratedDatabase["public"]["Functions"] &
+    Functions: Omit<
+      GeneratedDatabase["public"]["Functions"],
+      keyof ParticipationFunctions
+    > &
       ParticipationFunctions;
   };
 };

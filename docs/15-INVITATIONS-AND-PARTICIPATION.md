@@ -43,7 +43,7 @@ automaticamente a mota principal nem se expõe o resto da garagem.
 - Qualquer pessoa autenticada que possua um link ainda válido pode utilizá-lo.
   O organizador deve partilhá-lo apenas com o destinatário pretendido.
 
-## Migration e publicação pendentes
+## Migration e publicação autorizadas
 
 Ficheiro: `supabase/migrations/202610240004_trip_invitations.sql`.
 Cria `trip_invitations`, índices e seis RPCs: `create_trip_invitation`,
@@ -51,16 +51,18 @@ Cria `trip_invitations`, índices e seis RPCs: `create_trip_invitation`,
 `list_trip_members`, `set_trip_motorcycle`. Não altera dados de viagens existentes.
 Não requer Edge Functions, novos segredos nem alterações a Auth ou MapTiler.
 
-A migration está validada apenas em PostgreSQL local descartável; **ainda não
-foi aplicada no Supabase**. Requer autorização explícita conforme `CLAUDE.md`.
-Depois da autorização: aplicar só a 004, regenerar tipos com o esquema remoto,
-substituir o contrato provisório `participation.types.ts` pela tipagem gerada
-quando adequado, executar smoke com contas temporárias e só depois publicar o
-frontend via push para `main`. Nunca executar o bootstrap local no Supabase real.
+A migration foi aplicada com autorização do utilizador em 2026-10-24
+(Europe/Lisbon; recibo UTC: 2026-10-23 23:16:26.803351+00).
+SHA-256: `149f2275320819c7367b79ff6f0784a2c3844b26cdc27df549fa081cddc8abde`.
+RLS, privilégios e as seis funções SECURITY DEFINER com search_path vazio foram
+confirmados no projeto real. Não reaplicar nem editar esta migration.
 
-O snapshot `database.generated.ts` continua a refletir a migration 003 remota.
-`database.types.ts` acrescenta explicitamente os contratos da migration 004
-pendente, sem fingir que o esquema remoto já foi atualizado.
+O snapshot `database.generated.ts` foi regenerado da API Supabase após a 004.
+`participation.types.ts` deriva agora os contratos gerados e corrige apenas a
+nulabilidade de argumentos/resultados SQL que o gerador não representa
+(por exemplo, escolher nenhuma mota e metadados de convites ainda não usados).
+O frontend é publicado via push para `main`, após validação do backend.
+Nunca executar o bootstrap de testes local no Supabase real.
 
 ## Validação
 
@@ -70,5 +72,17 @@ pendente, sem fingir que o esquema remoto já foi atualizado.
   convite e fragmentos privados sem interferir com hashes de recuperação Auth.
 - E2E com transporte Supabase simulado: criar/revogar convite, registo, login,
   persistência do convite após reload, aceitação e escolha de mota em viewport
-  móvel. Não comprova entrega de email nem integração remota da migration 004.
+  móvel. Não comprova entrega de email.
 - Instalação/uso em iOS e Android reais continuam por validar.
+
+
+Smoke HTTPS remoto: **25 verificações passaram** com quatro sessões reais.
+Incluiu privacidade antes da aceitação, bloqueio anónimo/outsider, hashes
+inacessíveis, listagem mínima, recusa, expiração, revogação, aceitação,
+anti-replay, motas próprias/nenhuma, garagem/perfis privados e aceitações
+simultâneas com apenas um vencedor. Contas, viagem, convites e motas temporárias
+removidos; limpeza confirmada no fim. Este teste não envia emails reais.
+
+Verificações locais após regeneração: tipagem, lint, formatação, 72 testes e
+build passam. SQL inalterado desde os 138 checks PostgreSQL aprovados; os três
+E2E com transporte simulado passaram na implementação da funcionalidade.

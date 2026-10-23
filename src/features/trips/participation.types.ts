@@ -1,40 +1,30 @@
-// Contract for migration 202610240004, pending remote application/type generation.
-export type TripMember = {
-  user_id: string;
-  role: string;
-  display_name: string;
-  username: string | null;
-  motorcycle_brand: string | null;
-  motorcycle_model: string | null;
-};
-export type TripInvitation = {
-  invitation_id: string;
-  created_at: string;
-  expires_at: string;
-  used_at: string | null;
-  response: string | null;
-  revoked_at: string | null;
-};
+import type { Database } from "../../shared/database.generated";
+type Functions = Database["public"]["Functions"];
+// Supabase's generator omits nullability for SQL function arguments/results.
+// Add only the nullable values verified by the migration and remote smoke tests.
+type Nullable<T, K extends keyof T> = Omit<T, K> & { [P in K]: T[P] | null };
+export type TripMember = Nullable<
+  Functions["list_trip_members"]["Returns"][number],
+  "username" | "motorcycle_brand" | "motorcycle_model"
+>;
+export type TripInvitation = Nullable<
+  Functions["list_trip_invitations"]["Returns"][number],
+  "response" | "used_at" | "revoked_at"
+>;
 export type ParticipationFunctions = {
-  create_trip_invitation: {
-    Args: { p_trip_id: string };
-    Returns: { invitation_id: string; token: string; expires_at: string }[];
+  list_trip_members: Omit<Functions["list_trip_members"], "Returns"> & {
+    Returns: TripMember[];
   };
-  list_trip_invitations: {
-    Args: { p_trip_id: string };
+  list_trip_invitations: Omit<Functions["list_trip_invitations"], "Returns"> & {
     Returns: TripInvitation[];
   };
-  revoke_trip_invitation: {
-    Args: { p_trip_id: string; p_invitation_id: string };
-    Returns: undefined;
-  };
-  respond_trip_invitation: {
-    Args: { p_token: string; p_accept: boolean };
+  respond_trip_invitation: Omit<
+    Functions["respond_trip_invitation"],
+    "Returns"
+  > & {
     Returns: string | null;
   };
-  list_trip_members: { Args: { p_trip_id: string }; Returns: TripMember[] };
-  set_trip_motorcycle: {
-    Args: { p_trip_id: string; p_motorcycle_id: string | null };
-    Returns: undefined;
+  set_trip_motorcycle: Omit<Functions["set_trip_motorcycle"], "Args"> & {
+    Args: Nullable<Functions["set_trip_motorcycle"]["Args"], "p_motorcycle_id">;
   };
 };

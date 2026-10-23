@@ -133,5 +133,7 @@ concede membership e acesso RLS. Link é bearer: quem o receber pode usá-lo;
 partilha manual pelo organizador, sem emails automáticos. Dados partilhados:
 nome/nickname e marca/modelo da mota escolhida, via projeção mínima; perfis e
 restante garagem continuam privados. Não requer novas dependências/segredos.
-Migration 004 preparada e testada localmente; aplicação remota aguarda autorização.
+Migration 004 aplicada com autorização em 2026-10-24 (Europe/Lisbon); tipos
+regenerados e 25 verificações remotas de convites/participação aprovadas, com
+limpeza confirmada dos dados temporários.
 Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.
