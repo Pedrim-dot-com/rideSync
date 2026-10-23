@@ -11,9 +11,11 @@ Planeamento de viagens: criar/listar/consultar/editar/remover, partida, origem,
 destino e paragens ordenadas, com coordenadas manuais validadas. Estados
 rascunho/planeada/cancelada e controlo de revisões concorrentes.
 
-Mapas, cálculo de rotas, geocoding, convites, tracking, uploads e IA ainda não
-estão implementados. A tabela de rotas está preparada mas apenas o futuro
-backend de routing poderá escrever nela.
+Mapa MapLibre/MapTiler, pesquisa de lugares, cálculo e persistência de rotas
+openrouteservice, bem como links Google Maps/Waze, estão implementados.
+A migration `202610230003_map_services.sql` e as duas Edge Functions ainda
+aguardam autorização/publicação; sem elas, a PWA mantém itinerários manuais.
+Convites, tracking, uploads e IA ainda não estão implementados.
 Não são apresentados dados fictícios como dados de utilizadores reais.
 A instalação e GPS em iOS/Android exigem testes futuros em dispositivos reais.
 
@@ -42,7 +44,9 @@ O `.env.edge-functions` é um modelo local separado; não é carregado automatic
 Sem configuração, a aplicação apresenta instruções de setup. Reiniciar o Vite
 após alterar o `.env`. Configurar **Authentication → URL Configuration** no
 Supabase com o URL efetivo do frontend e os redirect URLs permitidos. Em
-produção usar HTTPS. Manter confirmação de email; o registo pode exigir que o
+produção usar HTTPS. O Site URL foi configurado para
+`https://ridesync-8z1.pages.dev`, com esse domínio nos redirects e preservação
+do endereço de desenvolvimento anterior. Manter confirmação de email; o registo pode exigir que o
 utilizador confirme o email antes de entrar. A recuperação regressa à aplicação
 e apresenta o formulário de nova password.
 
@@ -91,6 +95,8 @@ No teste local, o runner descobre e aplica todas as migrations numa BD nova.
 
 ```sh
 npm run typecheck
+# Deno instalado como devDependency; neste ambiente usar DENO_DIR=/workspace/.deno-cache
+npm run check:edge
 npm run lint
 npm run format:check
 npm test
@@ -146,3 +152,34 @@ estão agora funcionais (projeto `ACTIVE_HEALTHY`). O token é apenas server-sid
 injetado pelo proxy; nunca copiá-lo para o frontend, `.env` do Vite ou logs.
 Uma resposta `CONNECT tunnel failed, response 403` indica bloqueio do proxy,
 não uma chave inválida.
+
+## Mapas e rotas (nova fatia da Fase 2)
+
+Ver `docs/14-CLOUDFLARE-PAGES.md` para o site público e segredos remotos.
+`VITE_MAPTILER_API_KEY` e `VITE_MAP_STYLE_URL` só configuram o browser.
+`ROUTING_API_KEY` e `APP_ORIGINS` são configuração privada das Edge Functions.
+A chave de geocoding é a mesma de routing; não é exigida uma segunda chave.
+
+As chaves presentes no ambiente passaram chamadas HTTPS verificadas de estilo
+MapTiler, geocoding e directions openrouteservice. A resposta de directions foi
+GeoJSON LineString com perfil driving-car e opção de evitar autoestradas. Estas
+chamadas não validam as Edge Functions remotas, ainda não publicadas.
+
+O novo SQL cria limites de chamadas persistentes e uma função exclusiva do
+service_role para guardar rotas. Nunca aplicar a migration ou publicar funções
+sem autorização explícita. Não reaplicar migrations já presentes.
+
+Testes: os handlers validam autenticação, CORS, ownership, estado, revisão, quotas,
+input e falhas de persistência. Os adapters rejeitam geometrias inválidas e não
+inventam rotas. O E2E usa MapLibre/WebGL2 real com estilo offline controlado e
+transporte Supabase simulado, incluindo cálculo, distância e links externos.
+Os testes PostgreSQL cobrem a RPC privilegiada, invalidação de rotas e quotas.
+O entrypoint Deno também rejeitou POST sem autenticação (401) e origem não
+autorizada (403) numa verificação local.
+
+O frontend carrega o mapa em chunk separado. O build pode emitir avisos de
+tamanho desses chunks; não são falhas de build. A instalação e a navegação
+externa em dispositivos Android/iOS continuam a exigir validação real.
+
+A PWA apresenta aviso quando existe uma atualização, para o utilizador guardar
+as edições antes de ativar a nova versão. Não há reload automático durante edição.

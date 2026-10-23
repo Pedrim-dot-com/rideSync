@@ -19,5 +19,9 @@ export default ts.config(
       ],
     },
   },
+  {
+    files: ["supabase/functions/**/*.ts"],
+    languageOptions: { globals: { Deno: "readonly" } },
+  },
   { files: ["**/*.mjs"], languageOptions: { globals: globals.node } },
 );

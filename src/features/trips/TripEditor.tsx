@@ -1,3 +1,4 @@
+import { PlaceSearch } from "./PlaceSearch";
 import { useState, type FormEvent } from "react";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import {
@@ -113,8 +114,8 @@ export function TripEditor({
           </div>
           <h2>Itinerário</h2>
           <p className="coordinate-help">
-            Por enquanto, indica o nome e as coordenadas de cada ponto. Latitude
-            e longitude em graus decimais; não é uma rota calculada.
+            Pesquisa um lugar e escolhe uma sugestão, ou preenche as coordenadas
+            em graus decimais. Os pontos ainda não são uma rota calculada.
           </p>
           <ol className="waypoint-editor">
             {points.map((point, index) => (
@@ -163,17 +164,25 @@ export function TripEditor({
                   )}
                 </div>
                 <div className="point-inputs">
-                  <label>
-                    Nome do ponto {index + 1}
-                    <input
-                      value={point.label}
-                      onChange={(e) =>
-                        change(point.key, "label", e.target.value)
-                      }
-                      maxLength={120}
-                      required
-                    />
-                  </label>
+                  <PlaceSearch
+                    label={`Nome do ponto ${index + 1}`}
+                    value={point.label}
+                    onChange={(value) => change(point.key, "label", value)}
+                    onSelect={(place) =>
+                      setPoints((current) =>
+                        current.map((p) =>
+                          p.key === point.key
+                            ? {
+                                ...p,
+                                label: place.label.slice(0, 120),
+                                latitude: String(place.latitude),
+                                longitude: String(place.longitude),
+                              }
+                            : p,
+                        ),
+                      )
+                    }
+                  />
                   <label>
                     Latitude do ponto {index + 1}
                     <input

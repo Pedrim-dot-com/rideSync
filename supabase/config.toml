@@ -1,0 +1,7 @@
+project_id = "rideSync"
+# JWT is validated with auth.getUser() inside each function. The legacy gateway
+# verifier is disabled to support current asymmetric Supabase signing keys.
+[functions.calculate-route]
+verify_jwt = false
+[functions.search-places]
+verify_jwt = false

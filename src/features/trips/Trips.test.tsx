@@ -1,3 +1,4 @@
+vi.mock("./TripMap", () => ({ default: () => null }));
 import { describe, it, expect, vi, afterEach } from "vitest";
 import {
   render,

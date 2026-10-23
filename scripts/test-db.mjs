@@ -1,6 +1,7 @@
 import pg from "pg";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
+import { runMapChecks } from "../tests/integration/maps.mjs";
 import { runTripChecks } from "../tests/integration/trips.mjs";
 const url = process.env.TEST_DATABASE_URL;
 if (!url)
@@ -204,6 +205,7 @@ try {
   checks++;
   await db.query("reset role");
   checks += await runTripChecks({ db, asUser, a, b, bikeA, bikeB, url });
+  checks += await runMapChecks({ db, asUser, a, b });
   console.log(
     `${checks} database checks passed (ownership, RLS, primary switch, constraints, anonymous access).`,
   );

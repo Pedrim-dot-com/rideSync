@@ -12,7 +12,7 @@
 - DEC-001: **RESOLVIDO — MapLibre GL JS + MapTiler**; confirmar licença/quotas/chave no onboarding.
 - DEC-002: **RESOLVIDO — openrouteservice** para routing/geocoding; confirmar quotas e opções realmente suportadas antes de implementar filtros.
 - DEC-003: fornecedor/modelo de LLM e orçamento máximo por mês.
-- DEC-004: plataforma de deploy (Cloudflare Pages/Vercel).
+- DEC-004: **RESOLVIDO — Cloudflare Pages ligada ao GitHub**; confirmar endereço de produção após a primeira publicação.
 - DEC-005: política exata de retenção de snapshots GPS (sugestão: apagar ao parar/terminar).
 - DEC-006: convites apenas a contas existentes ou link para registo.
 - DEC-007: se fotos da mota são P0 ou P1 (sugestão P1).
@@ -80,3 +80,31 @@ não podem ser editados. Cancelamento é terminal nesta fase.
 Data e hora são introduzidas no fuso horário do browser e persistidas como UTC.
 Motas referenciadas por participantes são verificadas por ownership e usam
 `ON DELETE SET NULL`, preservando a viagem quando se remove a mota.
+
+## ADR-010 — Mapas e serviços de rotas
+
+MapLibre GL JS carregado de forma lazy, com worker empacotado pelo Vite e estilo
+MapTiler com atribuição original. Pins mostram os pontos guardados; só uma
+LineString validada do fornecedor é desenhada como percurso. Sem fallback OSM.
+
+As Edge Functions `search-places` e `calculate-route` validam o JWT com
+`auth.getUser()`. O verificador legado do gateway fica desativado para suportar
+as chaves assimétricas atuais; cada POST continua a exigir uma sessão válida
+no handler. CORS restrito a `APP_ORIGINS`, timeout de 15 s e respostas sem cache.
+
+O cálculo recebe apenas tripId/revisão/preferência; lê os pontos sob RLS e só
+permite ao organizador calcular em draft/planned. Perfil openrouteservice
+`driving-car`, com opção suportada `avoid_features: [highways]`; não anunciar
+routing especializado para motas. A geometria/duração/distância são validadas
+e guardadas por RPC exclusiva de service_role, com nova verificação de owner,
+estado e revisão depois da chamada externa. A persistência aumenta a revisão.
+
+Limites persistentes: 10 cálculos/minuto e 30 pesquisas/minuto por conta, com
+duas entradas agregadas por utilizador (sem guardar pesquisas/coordenadas).
+São proteção da PoC, não substituem limites globais de orçamento/quotas do
+fornecedor. O segredo de openrouteservice serve também o geocoding.
+
+Cloudflare Pages é a plataforma escolhida para a PWA. A ligação GitHub requer
+a autorização da conta Cloudflare no browser do utilizador. As variáveis de
+build `VITE_*` são públicas; segredos privados ficam nas Edge Functions.
+A nova migration e publicação das funções requerem autorização própria.

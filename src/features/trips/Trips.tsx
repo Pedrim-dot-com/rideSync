@@ -1,3 +1,4 @@
+import { RouteControls } from "./RouteControls";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -159,6 +160,7 @@ export function Trips({ userId }: { userId: string }) {
                   {statusLabels[trip.status]}
                 </span>
               </div>
+              <RouteControls detail={data} userId={userId} />
               <div className="trip-detail-grid">
                 <section className="panel">
                   <div className="section-heading">
@@ -208,8 +210,8 @@ export function Trips({ userId }: { userId: string }) {
                     </>
                   ) : (
                     <p>
-                      Os pontos estão guardados. O cálculo e o mapa ficam
-                      disponíveis após integrar o serviço de rotas.
+                      Os pontos estão guardados. Calcula o percurso para obter a
+                      rota, distância e duração.
                     </p>
                   )}
                   <div className="trip-members">

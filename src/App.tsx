@@ -1,3 +1,4 @@
+import { UpdateNotice } from "./UpdateNotice";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
@@ -137,6 +138,7 @@ export default function App() {
           </div>
         )}
       </main>
+      <UpdateNotice />
       <footer>
         <span>RideSync © {new Date().getFullYear()}</span>
         <span>Planeia parado. Aproveita o caminho.</span>

@@ -30,7 +30,27 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
     position: number;
   };
   let trip: Trip | null = null;
+  let storedRoute: Record<string, unknown> | null = null;
   let points: Point[] = [];
+  // Real MapLibre rendering against a controlled offline style; provider services are mocked.
+  await page.route("https://api.maptiler.com/**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: { "access-control-allow-origin": "*" },
+      body: JSON.stringify({
+        version: 8,
+        sources: {},
+        layers: [
+          {
+            id: "background",
+            type: "background",
+            paint: { "background-color": "#eaf0df" },
+          },
+        ],
+      }),
+    }),
+  );
   await page.route("http://127.0.0.1:54321/**", async (route) => {
     const request = route.request();
     const url = new URL(request.url());
@@ -58,8 +78,37 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
       };
     else if (path.endsWith("/user")) body = user;
     else if (path.endsWith("/motorcycles")) body = [];
-    else if (path.endsWith("/create_trip") || path.endsWith("/update_trip")) {
+    else if (path.endsWith("/search-places")) body = { places: [] };
+    else if (path.endsWith("/calculate-route")) {
       const input = request.postDataJSON();
+      expect(input.expectedRevision).toBe(trip!.revision);
+      expect(input.avoidHighways).toBe(true);
+      const geometry = {
+        type: "LineString",
+        coordinates: points.map((p) => [p.longitude, p.latitude]),
+      };
+      storedRoute = {
+        id: "route",
+        trip_id: trip!.id,
+        geometry,
+        distance_m: 4200,
+        duration_s: 600,
+        routing_provider: "openrouteservice",
+        calculated_at: "2026-10-23T12:00:00Z",
+      };
+      trip = { ...trip!, revision: trip!.revision + 1 };
+      body = {
+        route: {
+          geometry,
+          distanceM: 4200,
+          durationS: 600,
+          provider: "openrouteservice",
+          calculatedAt: "2026-10-23T12:00:00Z",
+        },
+      };
+    } else if (path.endsWith("/create_trip") || path.endsWith("/update_trip")) {
+      const input = request.postDataJSON();
+      storedRoute = null;
       expect(input).not.toHaveProperty("created_by");
       expect(input).not.toHaveProperty("user_id");
       if (trip) {
@@ -118,7 +167,8 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
             },
           ]
         : [];
-    else if (path.endsWith("/trip_routes")) body = [];
+    else if (path.endsWith("/trip_routes"))
+      body = storedRoute ? [storedRoute] : [];
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -189,6 +239,32 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
     "Gerês",
   ]);
   await expect(page.getByText("Percurso por calcular")).toBeVisible();
+  await page.getByLabel("Evitar autoestradas").check();
+  await page
+    .getByRole("button", { name: "Calcular percurso", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Rota calculada" }),
+  ).toBeVisible();
+  await expect(page.getByText("Percurso calculado e guardado.")).toBeVisible();
+  await expect(page.locator(".map-pin")).toHaveCount(4);
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Mapa do itinerário" }),
+  ).toHaveAttribute("data-map-ready", "true");
+  await page
+    .getByRole("button", { name: "Abrir navegação", exact: true })
+    .click();
+  await expect(
+    page.getByText(
+      "Ao abrir outra aplicação, a tua localização pode deixar de ser partilhada com o grupo.",
+    ),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: /Google Maps/ })).toHaveAttribute(
+    "href",
+    /destination=41.727%2C-8.162/,
+  );
+
   await page.screenshot({
     path: testInfo.outputPath("trip-desktop.png"),
     fullPage: true,

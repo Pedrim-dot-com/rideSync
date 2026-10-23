@@ -9,3 +9,6 @@ coverage/
 supabase/.temp/
 test-results/
 playwright-report/
+
+# Deno cache is kept outside the checkout in this cloud environment.
+.deno/
