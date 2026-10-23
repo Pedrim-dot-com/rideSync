@@ -1,6 +1,6 @@
 # RideSync — documentação da PoC
 
-> Fonte de verdade para implementação assistida por Claude Code. Estado: especificação inicial, decisões pendentes assinaladas.
+> Fonte de verdade para implementação assistida por Claude Code. Estado: fases 0 e 1 e planeamento de viagens implementados; mapas, rotas e validação remota pendentes.
 
 ## Objetivo
 Validar que motards conseguem criar e partilhar uma viagem, escolher a mota, participar em grupos e ver as posições uns dos outros em tempo real **com a PWA aberta**. Um planeador com IA transforma pedidos em itinerários validados por um motor de rotas.
@@ -25,6 +25,10 @@ React + TypeScript + Vite; Tailwind; TanStack Query; Zustand quando necessário;
 
 ## Limites explícitos
 Não prometer GPS em segundo plano no iOS; não construir navegação turn-by-turn, SOS, chat, pagamentos, motoclubes públicos, monetização ou aplicação nativa nesta PoC. A posição só é partilhada após consentimento explícito.
+
+## Desenvolvimento
+
+Consultar [docs/13-DEVELOPMENT.md](docs/13-DEVELOPMENT.md) para instalação, `.env`, migrations e testes.
 
 ## Como começar
 Abrir este repositório no Claude Code e enviar o conteúdo de `PROMPT-CLAUDE.md`. O Claude deve primeiro inspecionar o repositório, elaborar um plano, assinalar decisões bloqueantes e implementar faseadamente.

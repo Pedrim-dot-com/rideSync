@@ -4,24 +4,24 @@
 
 ## Fase 0 — Fundação
 - [ ] Confirmar fornecedores routing/tiles, IA, deploy e Supabase project.
-- [ ] Inicializar Vite React TS, PWA, Tailwind, lint, formatter, Vitest.
-- [ ] Configurar variáveis de ambiente e cliente Supabase.
-- [ ] Definir estrutura modular e navegação.
-- [ ] Preparar CI para lint, typecheck e testes.
+- [x] Inicializar Vite React TS, PWA, Tailwind, lint, formatter, Vitest.
+- [x] Configurar variáveis de ambiente e cliente Supabase (Auth real ainda por validar).
+- [x] Definir estrutura modular e navegação.
+- [x] Preparar CI para lint, typecheck e testes.
 
 ## Fase 1 — Auth e garagem
-- [ ] Criar migrations profiles/motorcycles, índices e RLS.
-- [ ] Auth e proteção de rotas.
-- [ ] CRUD de perfil e garagem.
-- [ ] Mota principal transacional.
-- [ ] Testes de ownership e RLS.
+- [x] Criar migrations profiles/motorcycles, índices e RLS.
+- [x] Auth e proteção de rotas.
+- [x] CRUD de perfil e garagem.
+- [x] Mota principal transacional.
+- [x] Testes de ownership e RLS locais (PostgreSQL isolado; validar também no Supabase real).
 
 ## Fase 2 — Viagens e mapa
-- [ ] Migrations trips, waypoints, routes, participants.
-- [ ] CRUD de viagens e estados.
+- [x] Migrations trips, waypoints, routes, participants (aplicadas e verificadas no Supabase com autorização).
+- [x] CRUD de viagens e estados de planeamento (draft/planned/cancelled; start/stop reservado à Fase 4).
 - [ ] Mapa, geocoding, waypoints e routing externo.
 - [ ] Guardar e apresentar geometria, distância e ETA.
-- [ ] Testes de criação, edição e permissão.
+- [x] Testes locais de criação, edição, permissões e concorrência; smoke remoto transacional de viagens aprovado. Auth/browser real ainda por validar.
 
 ## Fase 3 — Convites e participantes
 - [ ] Convites seguros com expiração.
