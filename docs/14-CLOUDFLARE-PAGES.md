@@ -6,7 +6,8 @@ não cria, por si só, um site publicado.
 
 Endereço indicado pelo utilizador: **https://ridesync-8z1.pages.dev**.
 O Site URL e os redirects desse domínio foram configurados no Supabase;
-login/entrega de emails reais ainda requerem validação.
+a sessão Auth real foi validada por API, mas browser e entrega de emails ainda
+requerem validação.
 
 ## Primeira publicação pelo GitHub
 
@@ -53,9 +54,9 @@ No MapTiler, restringir a chave pública ao domínio publicado conforme as opç�
 do plano e os padrões suportados no painel. Rever atribuição, termos e quotas.
 Não configurar wildcard de todos os sites sem necessidade.
 
-As Edge Functions de mapas têm publicação separada. Antes de usar pesquisa e
-cálculo, é necessário aplicar a migration de serviços de mapas, publicar as duas
-funções e configurar no Supabase → Edge Functions → Secrets:
+A migration 003 e as Edge Functions de mapas foram publicadas com autorização
+em 2026-10-23. Pesquisa, cálculo e persistência passaram testes remotos com
+sessão real. A configuração em Supabase → Edge Functions → Secrets é:
 
 - `ROUTING_API_KEY`: chave privada openrouteservice, usada também em geocoding.
 - `APP_ORIGINS`: origens HTTPS autorizadas, separadas por vírgulas, incluindo o

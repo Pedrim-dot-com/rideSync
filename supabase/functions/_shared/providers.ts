@@ -46,7 +46,7 @@ export function openRouteService(
     init: RequestInit,
     signal?: AbortSignal,
   ) {
-    const key = getKey();
+    const key = getKey()?.trim();
     if (!key) throw new MapError(503, "ROUTING_NOT_CONFIGURED");
     try {
       const response = await fetcher(
@@ -59,6 +59,16 @@ export function openRouteService(
             : AbortSignal.timeout(15000),
         },
       );
+      if (!response.ok)
+        console.warn(
+          JSON.stringify({
+            provider: "openrouteservice",
+            operation: path.startsWith("/geocode/") ? "geocoding" : "routing",
+            status: response.status,
+          }),
+        );
+      if (response.status === 401 || response.status === 403)
+        throw new MapError(503, "PROVIDER_AUTH_ERROR");
       if (response.status === 429)
         throw new MapError(429, "PROVIDER_RATE_LIMITED");
       if (!response.ok)

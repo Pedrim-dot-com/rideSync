@@ -1,11 +1,28 @@
 // @vitest-environment node
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { openRouteService } from "./providers";
+afterEach(() => vi.restoreAllMocks());
 const points = [
   { label: "A", latitude: 41, longitude: -8 },
   { label: "B", latitude: 42, longitude: -9 },
 ];
 describe("openrouteservice adapter", () => {
+  it("distinguishes provider access rejection and logs no credential or search input", async () => {
+    const logger = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(new Response("", { status: 403 }));
+    await expect(
+      openRouteService(() => "test-api-key", fetcher).search("Porto"),
+    ).rejects.toMatchObject({ status: 503, code: "PROVIDER_AUTH_ERROR" });
+    expect(logger).toHaveBeenCalledWith(
+      JSON.stringify({
+        provider: "openrouteservice",
+        operation: "geocoding",
+        status: 403,
+      }),
+    );
+  });
   it("sends longitude/latitude and supported highway avoidance", async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(
@@ -72,18 +89,16 @@ describe("openrouteservice adapter", () => {
     ).rejects.toMatchObject({ status: 429, code: "PROVIDER_RATE_LIMITED" });
   });
   it("normalizes geocoding coordinates", async () => {
-    const fetcher = vi
-      .fn<typeof fetch>()
-      .mockResolvedValue(
-        Response.json({
-          features: [
-            {
-              geometry: { type: "Point", coordinates: [-8, 41] },
-              properties: { label: "Porto" },
-            },
-          ],
-        }),
-      );
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(
+      Response.json({
+        features: [
+          {
+            geometry: { type: "Point", coordinates: [-8, 41] },
+            properties: { label: "Porto" },
+          },
+        ],
+      }),
+    );
     expect(
       await openRouteService(() => "test-api-key", fetcher).search("Porto"),
     ).toEqual([{ label: "Porto", latitude: 41, longitude: -8 }]);

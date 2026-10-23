@@ -34,6 +34,8 @@ export const mapTiler: MapStyleProvider = {
   },
 };
 const messages: Record<string, string> = {
+  PROVIDER_AUTH_ERROR:
+    "O acesso ao fornecedor de mapas está indisponível. Tenta mais tarde.",
   UNAUTHENTICATED: "Entra novamente na tua conta.",
   FORBIDDEN: "Não tens acesso a esta operação.",
   TRIP_CHANGED:

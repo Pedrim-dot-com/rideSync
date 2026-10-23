@@ -12,7 +12,7 @@
 - DEC-001: **RESOLVIDO — MapLibre GL JS + MapTiler**; confirmar licença/quotas/chave no onboarding.
 - DEC-002: **RESOLVIDO — openrouteservice** para routing/geocoding; confirmar quotas e opções realmente suportadas antes de implementar filtros.
 - DEC-003: fornecedor/modelo de LLM e orçamento máximo por mês.
-- DEC-004: **RESOLVIDO — Cloudflare Pages ligada ao GitHub**; confirmar endereço de produção após a primeira publicação.
+- DEC-004: **RESOLVIDO — Cloudflare Pages ligada ao GitHub**; endereço indicado: https://ridesync-8z1.pages.dev.
 - DEC-005: política exata de retenção de snapshots GPS (sugestão: apagar ao parar/terminar).
 - DEC-006: convites apenas a contas existentes ou link para registo.
 - DEC-007: se fotos da mota são P0 ou P1 (sugestão P1).
@@ -108,3 +108,11 @@ Cloudflare Pages é a plataforma escolhida para a PWA. A ligação GitHub requer
 a autorização da conta Cloudflare no browser do utilizador. As variáveis de
 build `VITE_*` são públicas; segredos privados ficam nas Edge Functions.
 A nova migration e publicação das funções requerem autorização própria.
+
+
+Publicação autorizada em 2026-10-23: migration 003 aplicada e duas funções ACTIVE
+versão 2. Deploy pela Management API oficial quando a CLI rejeita o placeholder
+proxy; dependências Deno com lockfile e resolução automática. Segredo ORS remoto
+atualizado pelo utilizador; smoke autenticado de pesquisa, cálculo e persistência
+passou (10 checks), com limpeza dos dados temporários. Logs de erro do fornecedor
+incluem apenas operação e código HTTP, sem pesquisas, coordenadas ou credenciais.

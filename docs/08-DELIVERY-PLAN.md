@@ -5,7 +5,7 @@
 ## Fase 0 — Fundação
 - [ ] Confirmar fornecedores routing/tiles, IA, deploy e Supabase project.
 - [x] Inicializar Vite React TS, PWA, Tailwind, lint, formatter, Vitest.
-- [x] Configurar variáveis de ambiente e cliente Supabase (Auth real ainda por validar).
+- [x] Configurar variáveis de ambiente e cliente Supabase (sessão real validada; emails por validar).
 - [x] Definir estrutura modular e navegação.
 - [x] Preparar CI para lint, typecheck e testes.
 
@@ -19,9 +19,9 @@
 ## Fase 2 — Viagens e mapa
 - [x] Migrations trips, waypoints, routes, participants (aplicadas e verificadas no Supabase com autorização).
 - [x] CRUD de viagens e estados de planeamento (draft/planned/cancelled; start/stop reservado à Fase 4).
-- [x] Mapa, geocoding, waypoints e routing externo implementados e testados localmente; publicação das Edge Functions pendente.
-- [x] Guardar e apresentar geometria, distância e duração estimada (código + testes; migration003 e funções remotas pendentes).
-- [x] Testes locais de criação, edição, permissões e concorrência; smoke remoto transacional de viagens aprovado. Auth/browser real ainda por validar.
+- [x] Mapa, geocoding, waypoints e routing externo implementados; Edge Functions publicadas e smoke remoto autenticado aprovado.
+- [x] Guardar e apresentar geometria, distância e duração estimada (migration 003 aplicada e persistência remota validada).
+- [x] Testes locais de criação, edição, permissões e concorrência; smoke remoto transacional de viagens aprovado. Sessão Auth real validada; browser/email por validar.
 
 ## Fase 3 — Convites e participantes
 - [ ] Convites seguros com expiração.
@@ -55,8 +55,8 @@ Objetivo, requisitos FR, alterações, migration/RLS, testes executados, screens
 ## Checklist específica de mapas
 - [ ] Confirmar chaves, quotas e termos MapTiler/openrouteservice; registar restrições de domínio/servidor.
 - [x] Integrar MapLibre e estilo MapTiler com atribuição e estados de erro.
-- [x] Criar adapters de geocoding/routing e Edge Functions com segredos server-side (publicação pendente).
-- [ ] Mostrar rota, waypoints, distância e ETA de openrouteservice.
+- [x] Criar adapters de geocoding/routing e Edge Functions com segredos server-side (publicados e validados).
+- [x] Mostrar rota, waypoints, distância e duração estimada de openrouteservice.
 - [x] Adicionar links externos Google Maps e Waze com aviso sobre suspensão do tracking.
 - [ ] Validar em iOS Safari e Android Chrome, incluindo regresso após abrir navegação externa.
 - [ ] Documentar comportamento stale e medir quota/latência dos serviços.

@@ -1,4 +1,4 @@
-// Generated from the approved Supabase public schema after migration 202610230002.
+// Generated from the Supabase public schema after migration 202610230003.
 export type Json =
   | string
   | number
@@ -15,6 +15,35 @@ export type Database = {
   };
   public: {
     Tables: {
+      map_request_limits: {
+        Row: {
+          action: string;
+          requests: number;
+          user_id: string;
+          window_started_at: string;
+        };
+        Insert: {
+          action: string;
+          requests: number;
+          user_id: string;
+          window_started_at: string;
+        };
+        Update: {
+          action?: string;
+          requests?: number;
+          user_id?: string;
+          window_started_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "map_request_limits_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       motorcycles: {
         Row: {
           brand: string;
@@ -255,6 +284,7 @@ export type Database = {
     };
     Functions: {
       can_read_trip: { Args: { p_trip_id: string }; Returns: boolean };
+      consume_map_request: { Args: { p_action: string }; Returns: undefined };
       create_trip: {
         Args: { p_departure_at: string; p_title: string; p_waypoints: Json };
         Returns: string;
@@ -275,6 +305,18 @@ export type Database = {
         Args: {
           p_expected_revision: number;
           p_status: string;
+          p_trip_id: string;
+        };
+        Returns: undefined;
+      };
+      store_trip_route: {
+        Args: {
+          p_actor: string;
+          p_calculated_at: string;
+          p_distance_m: number;
+          p_duration_s: number;
+          p_expected_revision: number;
+          p_geometry: Json;
           p_trip_id: string;
         };
         Returns: undefined;

@@ -13,8 +13,9 @@ rascunho/planeada/cancelada e controlo de revisões concorrentes.
 
 Mapa MapLibre/MapTiler, pesquisa de lugares, cálculo e persistência de rotas
 openrouteservice, bem como links Google Maps/Waze, estão implementados.
-A migration `202610230003_map_services.sql` e as duas Edge Functions ainda
-aguardam autorização/publicação; sem elas, a PWA mantém itinerários manuais.
+A migration `202610230003_map_services.sql` foi aplicada com autorização e as
+duas Edge Functions estão publicadas. Pesquisa, cálculo e persistência foram
+validados com uma sessão Supabase real em 2026-10-23.
 Convites, tracking, uploads e IA ainda não estão implementados.
 Não são apresentados dados fictícios como dados de utilizadores reais.
 A instalação e GPS em iOS/Android exigem testes futuros em dispositivos reais.
@@ -121,7 +122,7 @@ Para testar uma BD descartável já existente, definir `TEST_DATABASE_URL`
 e executar `npm run test:db`. O runner só aceita loopback e cria roles/tabelas;
 nunca apontar para uma BD de desenvolvimento com dados que se queira preservar.
 
-## Validação com Supabase real (pendente)
+## Validação com Supabase real
 
 1. Configurar URL e chave pública e aprovar/aplicar apenas as migrations em falta.
 2. Registar duas contas e confirmar os emails.
@@ -143,8 +144,9 @@ O servidor valida campos e intervalos, e grava viagem/participações/itinerári
 só transação. Conflitos de revisão devolvem `40001`; a UI permite atualizar os
 valores sem tentar reenviar uma edição antiga automaticamente.
 
-Sem os passos anteriores não se considera a integração remota validada.
-Não foi feito deploy. A CI executa checks frontend, RLS local e E2E simulado.
+A sessão real e os serviços de mapas foram validados no smoke descrito abaixo.
+Os passos de email e utilização manual no browser continuam por validar.
+A CI executa checks frontend, RLS local e E2E simulado.
 
 O projeto Supabase fornecido usa publishable key. No ambiente cloud, o domínio
 `isyhpoyihcbkujtjadzc.supabase.co` precisa de estar permitido na rede. A rede da API de gestão `api.supabase.com` e o token `SUPABASE_ACCESS_TOKEN`
@@ -163,7 +165,7 @@ A chave de geocoding é a mesma de routing; não é exigida uma segunda chave.
 As chaves presentes no ambiente passaram chamadas HTTPS verificadas de estilo
 MapTiler, geocoding e directions openrouteservice. A resposta de directions foi
 GeoJSON LineString com perfil driving-car e opção de evitar autoestradas. Estas
-chamadas não validam as Edge Functions remotas, ainda não publicadas.
+chamadas diretas são complementadas pelo smoke das Edge Functions publicadas.
 
 O novo SQL cria limites de chamadas persistentes e uma função exclusiva do
 service_role para guardar rotas. Nunca aplicar a migration ou publicar funções
@@ -183,3 +185,33 @@ externa em dispositivos Android/iOS continuam a exigir validação real.
 
 A PWA apresenta aviso quando existe uma atualização, para o utilizador guardar
 as edições antes de ativar a nova versão. Não há reload automático durante edição.
+
+
+## Publicação e smoke remoto — 2026-10-23
+
+Aplicada com autorização a migration 003 (SHA-256
+`5ca1430b1d7b6b83ac3dfcb222371367388d8ec58d1537a40265f2fe35507942`).
+`search-places` e `calculate-route` publicadas, ACTIVE versão 2, com
+`APP_ORIGINS=https://ridesync-8z1.pages.dev` e segredo ORS guardado no Supabase.
+Tipos gerados sincronizados com o esquema remoto. Não reaplicar migrations.
+
+Passaram 10 verificações transacionais da BD com rollback e 10 verificações
+HTTPS com conta temporária: sessão Auth real, pesquisa (5 locais), bloqueio de
+pedidos anónimos/JWT inválido/origem não autorizada, cálculo ORS, persistência
+sob RLS, incremento da revisão e rejeição de revisão antiga/viagem inacessível.
+A rota de teste no Porto devolveu 4191,9 m e 559,9 s. Conta, viagem e contadores
+temporários removidos no fim. Isto não valida emails nem o browser Pages.
+
+O deploy usa dependências Deno com lockfile e `nodeModulesDir: auto`.
+Se a CLI rejeitar o placeholder de autenticação proxy, usar a API oficial:
+
+```sh
+python3 scripts/deploy-map-functions.py --project-ref isyhpoyihcbkujtjadzc --dry-run
+# Apenas após autorização de deploy:
+python3 scripts/deploy-map-functions.py --project-ref isyhpoyihcbkujtjadzc
+```
+
+O helper usa `SUPABASE_ACCESS_TOKEN` injetado por HTTPS, sem o guardar ou imprimir.
+Não aplica migrations nem configura segredos. Não extrair o token proxy nem
+alterar HOME para contornar autenticação. Erros ORS 401/403 são apresentados como
+indisponibilidade de credenciais do serviço; logs incluem apenas operação/status.

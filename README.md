@@ -1,6 +1,6 @@
 # RideSync — documentação da PoC
 
-> Fonte de verdade para implementação assistida por Claude Code. Estado: fases 0 e 1 e planeamento de viagens implementados; mapas e adapters de rotas implementados; publicação das funções e validação de Auth real pendentes.
+> Fonte de verdade para implementação assistida por Claude Code. Estado: fases 0 e 1 e planeamento de viagens implementados; mapas e adapters de rotas implementados; serviços de mapas publicados e validados com sessão Supabase real; emails e instalação mobile por validar.
 
 ## Objetivo
 Validar que motards conseguem criar e partilhar uma viagem, escolher a mota, participar em grupos e ver as posições uns dos outros em tempo real **com a PWA aberta**. Um planeador com IA transforma pedidos em itinerários validados por um motor de rotas.
