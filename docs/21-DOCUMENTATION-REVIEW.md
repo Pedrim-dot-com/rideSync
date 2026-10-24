@@ -75,3 +75,17 @@ na listagem de PRs como no POST de criação; por isso não foi criado um númer
 ou URL de PR. A descrição completa está em docs/22-PULL-REQUEST.md, incluída
 no índice do README, para criação pelo formulário GitHub. Main mantém a versão
 anterior e as migrations/Edge Function novas continuam pendentes de publicação.
+
+
+## Fluxogramas no README
+
+Acrescentados dois diagramas Mermaid: arquitetura (PWA, Cloudflare, Supabase,
+cartografia/routing e integração de voz) e fluxos de acesso, perfil/garagem,
+convites, viagens/GPS, SOS e grupos. Ligações tracejadas e nós identificados
+assinalam grupos/voz ainda em revisão. IA e uploads continuam planeados;
+interrupção por SOS não sugere retoma automática do microfone do organizador.
+Docs/03 e docs/07 apontam para as vistas gerais no README. As alterações seguem
+na mesma branch de revisão, sem aplicar migrations ou publicar funcionalidades.
+
+Os dois diagramas foram validados pelo parser Mermaid 11.12 e renderizados em
+Chromium sem erros. Links locais e âncoras do README foram verificados.
