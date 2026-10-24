@@ -1230,7 +1230,7 @@ details[open] > summary::after {
     z-index: 50;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     padding: 5px 12px max(5px, env(safe-area-inset-bottom));
     background: #151515;
     border-top: 1px solid #393939;
@@ -1288,7 +1288,7 @@ details[open] > summary::after {
   }
   .trip-filters {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0;
   }
   .filter-button {
@@ -1654,5 +1654,97 @@ details[open] > summary::after {
     min-width: 0;
     padding-inline: 3px;
     font-size: 10px;
+  }
+}
+
+.journey-controls {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+.group-list,
+.group-members {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+.group-list > li,
+.group-members > li {
+  border: 1px solid var(--line);
+  padding: 18px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.group-map {
+  width: 100%;
+  height: min(65vh, 520px);
+  min-height: 300px;
+  margin-bottom: 24px;
+}
+.group-map-pin {
+  border: 2px solid white;
+  min-height: 36px;
+  width: 36px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--ink);
+}
+.groups-panel .actions {
+  margin-bottom: 20px;
+}
+.sos-alert {
+  border: 2px solid #a52012;
+  background: #fff0ec;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.sos-alert strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sos-button {
+  width: 100%;
+  background: #b92717;
+  color: white;
+  margin-top: 16px;
+}
+.sos-button:hover {
+  background: #981b0e;
+}
+.voice-audio {
+  display: none;
+}
+.voice-panel label {
+  margin-top: 20px;
+}
+@media (max-width: 360px) {
+  .app-header nav button {
+    font-size: 9px;
+    padding-inline: 1px;
+  }
+}
+
+.groups-panel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.trip-sos-shortcut {
+  display: none;
+}
+@media (max-width: 760px) {
+  .trip-sos-shortcut {
+    position: fixed;
+    z-index: 60;
+    right: 16px;
+    bottom: calc(88px + env(safe-area-inset-bottom));
+    display: inline-flex;
+    background: #b92717;
+    color: white;
+    border: 2px solid white;
+    box-shadow: 0 3px 12px #0004;
   }
 }

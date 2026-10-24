@@ -18,7 +18,7 @@
 
 ## Fase 2 — Viagens e mapa
 - [x] Migrations trips, waypoints, routes, participants (aplicadas e verificadas no Supabase com autorização).
-- [x] CRUD de viagens e estados de planeamento (draft/planned/cancelled; start/stop reservado à Fase 4).
+- [x] CRUD de viagens e estados de planeamento (planeamento; start/stop implementado na Fase 4).
 - [x] Mapa, geocoding, waypoints e routing externo implementados; Edge Functions publicadas e smoke remoto autenticado aprovado.
 - [x] Guardar e apresentar geometria, distância e duração estimada (migration 003 aplicada e persistência remota validada).
 - [x] Testes locais de criação, edição, permissões e concorrência; smoke remoto transacional de viagens aprovado. Sessão Auth real validada; browser/email por validar.
@@ -46,13 +46,14 @@
 - [ ] Limites de chamadas e fallback manual.
 
 ## Fase 6 — Beta PoC
-- [ ] E2E de fluxo principal.
+- [x] E2E automatizados com transporte simulado para Auth, garagem, viagens, convites, tracking e grupos.
+- [ ] Fluxo completo em dispositivos e redes móveis reais.
 - [ ] Auditoria RLS, privacidade, secrets e quotas.
 - [ ] Testes mobile e medição de latência.
 - [ ] Deploy e roteiro de demonstração.
 
 ## Formato para cada PR
-Objetivo, requisitos FR, alterações, migration/RLS, testes executados, screenshots se UI, riscos e rollback.
+Objetivo, requisitos, alterações, migration/RLS, testes executados, screenshots se UI, riscos e rollback. Rever toda a documentação e atualizar README/documentos afetados em cada entrega; depois de aplicar/publicar, registar o resultado verificado e pendências reais.
 
 ## Checklist específica de mapas
 - [ ] Confirmar chaves, quotas e termos MapTiler/openrouteservice; registar restrições de domínio/servidor.
@@ -62,3 +63,22 @@ Objetivo, requisitos FR, alterações, migration/RLS, testes executados, screens
 - [x] Adicionar links externos Google Maps e Waze com aviso sobre suspensão do tracking.
 - [ ] Validar em iOS Safari e Android Chrome, incluindo regresso após abrir navegação externa.
 - [ ] Documentar comportamento stale e medir quota/latência dos serviços.
+
+
+## Extensão obrigatória — grupos e voz/SOS
+
+- [x] Rever documentação, retirar exclusão antiga de grupos/SOS e resolver IDs duplicados.
+- [x] Diretório/lista/mapa de sedes, dados legais declarados e direção partilhada.
+- [x] Uma inscrição/pedido por conta, aprovações e proteção do último dirigente.
+- [x] Migrations 007/008 locais, RLS e testes de concorrência/autorização.
+- [x] Edge trip-voice, áudio LiveKit, floor exclusivo e interrupção SOS.
+- [x] Alertas visuais independentes de microfone, cleanup de media e estados de erro.
+- [x] Nomes dos três segredos LiveKit presentes no Supabase (read-only).
+- [ ] Aplicar 007/008 e publicar trip-voice após autorização.
+- [ ] Regenerar tipos e validar contratos/provider com contas temporárias reais.
+- [ ] Publicar frontend e confirmar bundle/precache Cloudflare.
+- [ ] Executar VOZ-006: três dispositivos, headset, rede móvel e medição de latência.
+- [ ] Rever billing e política de limpeza de salas órfãs no fornecedor.
+
+Os checks históricos das fases anteriores descrevem execuções datadas, não
+uma alegação de que todas as validações de campo estão concluídas.

@@ -5,3 +5,6 @@ project_id = "rideSync"
 verify_jwt = false
 [functions.search-places]
 verify_jwt = false
+
+[functions.trip-voice]
+verify_jwt = false

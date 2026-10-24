@@ -1,3 +1,4 @@
+import { TripVoice } from "../voice/TripVoice";
 import type { TripDetail } from "./api";
 import { RouteControls } from "./RouteControls";
 import { TrackingControls } from "../tracking/TrackingControls";
@@ -18,11 +19,19 @@ export function TripJourney({
         positions={tracking.positions}
         now={tracking.now}
       />
-      <TrackingControls
-        tracking={tracking}
-        owner={detail.trip.created_by === userId}
-        hasRoute={Boolean(detail.route)}
-      />
+      <div className="journey-controls">
+        <TrackingControls
+          tracking={tracking}
+          owner={detail.trip.created_by === userId}
+          hasRoute={Boolean(detail.route)}
+        />
+        <TripVoice
+          tripId={detail.trip.id}
+          userId={userId}
+          owner={detail.trip.created_by === userId}
+          active={tracking.active}
+        />
+      </div>
     </div>
   );
 }

@@ -220,3 +220,14 @@ O helper usa `SUPABASE_ACCESS_TOKEN` injetado por HTTPS, sem o guardar ou imprim
 Não aplica migrations nem configura segredos. Não extrair o token proxy nem
 alterar HOME para contornar autenticação. Erros ORS 401/403 são apresentados como
 indisponibilidade de credenciais do serviço; logs incluem apenas operação/status.
+
+
+## Extensão local — grupos e voz/SOS (2026-10-24)
+
+Migrations 007/008 e função trip-voice preparadas; autorização remota pendente.
+Contratos temporários tipados refinam o snapshot gerado até regeneração após
+aplicação. Novas pastas src/features/groups e src/features/voice. SDK de áudio
+cliente é lazy; servidor LiveKit só na Edge. Ver docs/19 e docs/20 pelo nome
+completo dos ficheiros. Adicionar trip-voice/index.ts ao check:edge e manter
+RLS/integration tests em scripts/test-db.mjs. Segredos já presentes no projeto
+foram confirmados por nome, sem obter ou imprimir os seus valores.

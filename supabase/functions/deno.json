@@ -2,7 +2,8 @@
   "nodeModulesDir": "auto",
   "imports": {
     "@supabase/supabase-js": "npm:@supabase/supabase-js@2.118.0",
-    "zod": "npm:zod@4.6.7"
+    "zod": "npm:zod@4.6.7",
+    "livekit-server-sdk": "npm:livekit-server-sdk@2.19.2"
   },
   "compilerOptions": {
     "strict": true

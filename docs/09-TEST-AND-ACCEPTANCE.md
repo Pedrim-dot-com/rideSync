@@ -28,16 +28,40 @@
 Três contas, três motas, uma viagem com 2+ waypoints, convite e aceitação, seleção de mota, visualização simultânea de posições, interrupção/reconexão, stop de partilha, encerramento e proposta de rota por IA.
 
 ## Critérios de qualidade
-Typecheck, lint, testes automatizados e verificações RLS a passar; nenhuma chave privada no frontend; fluxos críticos demonstrados em dispositivos reais; erros e limitações documentados.
+Typecheck, lint, testes automatizados e verificações RLS a passar; nenhuma chave privada no frontend; fluxos críticos demonstrados em dispositivos reais; erros e limitações documentados. Toda a documentação e o README devem ser revistos em cada alteração, com os documentos afetados atualizados e os estados local/publicado/validado coerentes. Validar links locais e IDs documentais.
 
 ## Testes adicionais — mapa e navegação
 | ID | Cenário | Resultado esperado |
 |---|---|---|
-| T-13 | Safari iOS e Chrome Android | Mapa renderiza, rota visível, controlos touch e safe areas corretos |
-| T-14 | Routing/geocoding indisponível | Erro recuperável; sem rota ou ETA inventados |
-| T-15 | Abrir Google Maps | Abre destino por link; aviso de possível suspensão GPS antes de sair |
-| T-16 | Abrir Waze | Abre destino por link/fallback; sem garantia de waypoints |
-| T-17 | PWA suspensa/background | Outros veem posição antiga com timestamp; nunca posição falsa em tempo real |
-| T-18 | Regressar à PWA | Reconnect e snapshot, atualização com consentimento, sem duplicações |
-| T-19 | Chaves de API | Segredos routing/LLM ausentes do bundle; MapTiler público com restrições quando disponíveis |
-| T-20 | Atribuição e quotas | Créditos cartográficos visíveis; limites externos documentados |
+| MAP-T01 | Safari iOS e Chrome Android | Mapa renderiza, rota visível, controlos touch e safe areas corretos |
+| MAP-T02 | Routing/geocoding indisponível | Erro recuperável; sem rota ou ETA inventados |
+| MAP-T03 | Abrir Google Maps | Abre destino por link; aviso de possível suspensão GPS antes de sair |
+| MAP-T04 | Abrir Waze | Abre destino por link/fallback; sem garantia de waypoints |
+| MAP-T05 | PWA suspensa/background | Outros veem posição antiga com timestamp; nunca posição falsa em tempo real |
+| MAP-T06 | Regressar à PWA | Reconnect e snapshot, atualização com consentimento, sem duplicações |
+| MAP-T07 | Chaves de API | Segredos routing/LLM ausentes do bundle; MapTiler público com restrições quando disponíveis |
+| MAP-T08 | Atribuição e quotas | Créditos cartográficos visíveis; limites externos documentados |
+
+
+IDs duplicados resolvidos: T-13/T-14 da tabela principal mantêm significado;
+a tabela de mapas usa MAP-T01…08. Histórico conserva nomes antigos nas execuções
+datadas. Novos cenários:
+
+| ID | Cenário | Resultado esperado |
+|---|---|---|
+| GRP-T01 | Membro pede entrada e tenta aprovar-se | Pedido criado; autoaprovação negada |
+| GRP-T02 | Dois dirigentes saem simultaneamente | Só um sai; permanece pelo menos um |
+| GRP-T03 | Inscrição aceite noutro grupo | Rejeitada no servidor/índice único |
+| GRP-T04 | Outsider lê pedidos ou perfil bruto | Negado; diretório mostra só sede/dados publicados |
+| GRP-T05 | Sede sem coordenadas ou NaN | Rejeitada; não converter vazio para zero |
+| VOZ-T01 | Participante normal pede publish | JWT de ouvinte; falar normal negado |
+| VOZ-T02 | SOS durante fala do organizador | Interrupção, nova época e prioridade ao emissor do SOS |
+| VOZ-T03 | Reutilizar JWT de fala antiga | Não autoriza a sala atual da audiência |
+| VOZ-T04 | Provider falha/operação atrasada | Época trocada, sem publicação indevida |
+| VOZ-T05 | Microfone negado ou permissão termina depois de sair | SOS visual permanece; track tardio parado |
+| VOZ-T06 | Rede/background/viagem termina | Media local parada; retoma explícita |
+| VOZ-T07 | Mensagem/papel forjado no Broadcast | Só invalida; snapshot autorizado determina subscrição |
+| VOZ-T08 | Três dispositivos e headset reais | Medir áudio/latência; ainda pendente |
+
+Executar npm run test:db:local, npm test, npm run test:e2e e check:edge. Testes
+simulados não substituem a validação LiveKit real nem a aceitação em hardware.

@@ -27,10 +27,13 @@ Age como tech lead e engenheiro full-stack sénior. Implementa a PoC descrita em
 3. Implementar vertical slices pequenos; após cada um correr typecheck, lint e testes relevantes.
 4. Criar/atualizar migrations, tipos gerados, políticas RLS e testes de autorização em conjunto.
 5. Registar escolhas importantes em `docs/10-DECISIONS-AND-RISKS.md`.
-6. No fim de cada fase: resumo, ficheiros alterados, comandos executados, testes, riscos e próximo passo.
+6. Em cada alteração, rever toda a documentação e o README; atualizar os documentos afetados na mesma entrega. Esta é uma instrução permanente do utilizador.
+7. Manter README, requisitos, arquitetura, contratos, segurança, UX, plano, testes e operação coerentes. Distinguir sempre implementado localmente, aplicado/publicado e validado em ambiente real; registar pendências e resultados sem substituir recibos históricos.
+8. Validar links locais e IDs de requisitos/testes quando a documentação mudar. Se houver migrations/deploy, atualizar também o estado documental após a execução e verificação, antes de concluir a tarefa.
+9. No fim de cada fase: resumo, ficheiros alterados, comandos executados, testes, riscos e próximo passo.
 
 ## Definition of Done
-Funcionalidade demonstrável, autorização verificada, erros tratados, testes relevantes a passar, documentação atualizada e sem segredos no git.
+Funcionalidade demonstrável, autorização verificada, erros tratados, testes relevantes a passar, revisão de toda a documentação e README atualizado com o estado real da entrega, sem segredos no git.
 
 ## Regras de mapas e navegação
 - Ler `docs/12-MAPS-AND-NAVIGATION.md` antes de implementar mapas, geocoding, routing ou links externos.

@@ -28,6 +28,7 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
     started_at: string;
     ended_at: string | null;
   } | null = null;
+  let sosActive = false;
   let share: string | null = null;
   let publishCount = 0;
   let stopCount = 0;
@@ -157,7 +158,38 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
       ];
     else if (path.endsWith("/list_received_trip_invitations")) body = [];
     else if (path.endsWith("/list_trip_invitations")) body = [];
-    else if (path.endsWith("/tracking_snapshot"))
+    else if (path.endsWith("/trip_voice_snapshot"))
+      body = {
+        status: trip.status,
+        server_now: new Date().toISOString(),
+        room_epoch: "test-voice",
+        speaker_id: null,
+        speaker_name: null,
+        speaker_kind: null,
+        speaker_until: null,
+        ready: false,
+        settling: false,
+        sos: sosActive
+          ? {
+              user_id: user.id,
+              display_name: "Motard",
+              reason: "puncture",
+              raised_at: new Date().toISOString(),
+              expires_at: new Date(Date.now() + 90000).toISOString(),
+            }
+          : null,
+      };
+    else if (path.endsWith("/raise_trip_sos")) {
+      expect(req.postDataJSON()).toEqual({
+        p_trip_id: trip.id,
+        p_reason: "puncture",
+      });
+      sosActive = true;
+      body = null;
+    } else if (path.endsWith("/resolve_trip_sos")) {
+      sosActive = false;
+      body = null;
+    } else if (path.endsWith("/tracking_snapshot"))
       body = {
         server_now: new Date().toISOString(),
         status: trip.status,
@@ -280,6 +312,28 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
   await expect(page.getByLabel("Tempo decorrido da viagem")).toHaveText(
     /00:01:\d\d/,
   );
+  await page.evaluate(() => {
+    navigator.mediaDevices.getUserMedia = async () => {
+      throw new DOMException("Microphone denied for test", "NotAllowedError");
+    };
+  });
+  await page.getByLabel("Motivo do SOS").selectOption("puncture");
+  await page.getByRole("button", { name: "SOS · preciso de ajuda" }).click();
+  await expect(
+    page.getByText(
+      "SOS visual enviado ao grupo. Não foi possível ativar a voz.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Falar para o grupo" }),
+  ).toBeDisabled();
+  await expect(page.locator(".sos-alert")).toContainText("Furo");
+  await page.screenshot({
+    path: testInfo.outputPath("sos-microphone-denied-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Resolver SOS" }).click();
+  await expect(page.locator(".sos-alert")).toHaveCount(0);
   expect(publishCount).toBe(0);
   await page
     .getByRole("button", { name: "Partilhar a minha localização" })

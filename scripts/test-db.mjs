@@ -1,3 +1,5 @@
+import { runGroupChecks } from "../tests/integration/groups.mjs";
+import { runVoiceChecks } from "../tests/integration/voice.mjs";
 import { runNotificationChecks } from "../tests/integration/notifications.mjs";
 import { runTrackingChecks } from "../tests/integration/tracking.mjs";
 import pg from "pg";
@@ -212,6 +214,8 @@ try {
   checks += await runInvitationChecks({ db, asUser, a, b, bikeB, url });
   checks += await runTrackingChecks({ db, asUser, a, b, url });
   checks += await runNotificationChecks({ db, asUser, url });
+  checks += await runGroupChecks({ db, asUser, url });
+  checks += await runVoiceChecks({ db, asUser });
   console.log(
     `${checks} database checks passed (ownership, RLS, primary switch, constraints, anonymous access).`,
   );
