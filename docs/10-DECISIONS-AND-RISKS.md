@@ -193,8 +193,9 @@ sem recolher biometria, guardar passwords ou fazer autenticação apenas no clie
 Face ID, impressão digital ou PIN são escolhas do dispositivo.
 
 Registo só em sessão autenticada, gestão no Perfil e alternativa email/password.
-RP ID proposto limitado a ridesync-8z1.pages.dev e origem HTTPS exata. O projeto
-real tem a funcionalidade desligada; ativação dos quatro campos Auth e publicação
-aguardam confirmação. Não há migrations ou chaves adicionais. SDK e Auth instalado
-incluem endpoints nativos; a prova completa contra servidor real depende da ativação.
+RP ID proposto limitado a ridesync-8z1.pages.dev e origem HTTPS exata. A ativação dos quatro campos Auth foi autorizada e confirmada em 2026-10-24,
+sem mudar as restantes definições. Dez verificações com Auth real e autenticador
+virtual passaram, incluindo assinatura inválida recusada e revogação, com
+limpeza confirmada da conta temporária. Não há migrations ou chaves adicionais.
+Face ID num iPhone físico ainda requer validação do utilizador.
 Ver docs/18-INSTALLATION-AND-PASSKEYS.md.

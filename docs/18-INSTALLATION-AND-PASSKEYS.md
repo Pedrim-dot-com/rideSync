@@ -39,10 +39,10 @@ internas do serviço. O pedido é abortado ao desmontar o ecrã e impede operaç
 concorrentes. Browsers sem WebAuthn/HTTPS têm alternativa de email/password.
 Em dispositivos compatíveis, o sistema pode permitir chaves sincronizadas.
 
-## Estado remoto e ativação pendente
+## Ativação remota autorizada
 
 O SDK 2.118.0 já inclui a API nativa. Leitura da configuração real confirmou:
-`passkey_enabled=false`; RP ID, display name e origins ainda nulos. Auth health
+inicialmente `passkey_enabled=false`, com RP ID/display name/origins nulos. Auth health
 reporta GoTrue v2.197.0. Os endpoints nativos foram confirmados no código oficial
 da mesma versão:
 https://raw.githubusercontent.com/supabase/auth/v2.197.0/internal/api/api.go
@@ -50,9 +50,10 @@ https://raw.githubusercontent.com/supabase/auth/v2.197.0/internal/api/api.go
 Um pedido ao endpoint de authentication/options devolveu 404 com a opção desligada,
 sem criar sessão. A Management OpenAPI confirma os quatro campos editáveis.
 
-**Não se ativou a configuração remota nem se publicou o frontend nesta fase.**
-Após autorização explícita de ativação/publicação, atualizar apenas estes campos
-por PATCH em `/v1/projects/isyhpoyihcbkujtjadzc/config/auth`:
+A configuração foi ativada com autorização explícita em 2026-10-24, alterando
+apenas os quatro campos abaixo por PATCH em
+`/v1/projects/isyhpoyihcbkujtjadzc/config/auth`. GET após a alteração confirmou
+os valores; nenhuma outra definição Auth mudou:
 
 ```json
 {
@@ -68,10 +69,13 @@ wildcards, URLs de preview ou substituir as restantes definições Auth. Não al
 email/password, confirmação de email ou recuperação de conta. Não são necessárias
 migrations, Edge Functions, novos fornecedores ou novos segredos.
 
-Depois da ativação, confirmar configuração e challenge/RP/origin, fazer registo,
-login, rejeição de prova inválida e revogação contra Auth real com uma conta
-estritamente temporária e autenticador virtual, com limpeza. Preservar TLS e não
-imprimir tokens/credenciais. Só então push main, confirmar Pages e service worker.
+Passaram 10 verificações com Auth real e autenticador virtual na origem de
+produção: sessão por password, registo WebAuthn vinculado ao domínio, listagem,
+logout, assinatura inválida recusada sem sessão, login por passkey, revogação,
+lista vazia e password de recuperação funcional. A conta temporária, chaves,
+sessões e perfil foram removidos; limpeza de utilizador/perfil confirmada.
+O frontend é enviado para main depois desta validação, com confirmação de
+assets/worker publicados. Preservar TLS e não imprimir tokens/credenciais.
 Para mudar o domínio da aplicação será necessário rever o RP ID das passkeys.
 
 ## Validação
@@ -85,6 +89,9 @@ Gera atestação e assinatura, verifica challenge/origin e testa login rejeitado
 login aceite e remoção com confirmação. Usa localhost como RP de desenvolvimento,
 com verificação nativa do domínio, sem desativar segurança do browser.
 
-Isto não prova Face ID num iPhone físico nem valida endpoints remotos ainda
-desativados. Testar depois em Safari/PWA instalada, Android, cancelamento do
-pedido nativo, recuperação por email e remoção da última chave.
+Adicionalmente, o smoke real usou assets locais na origem de produção e
+encaminhou pedidos HTTPS Auth por curl com TLS verificado, mantendo a origem e
+a cerimónia nativa do browser. Não foi desativada a verificação TLS nem exportada
+qualquer chave privada. Isto valida a integração Auth real, mas não a distribuição
+do frontend, instalação iOS ou Face ID num iPhone físico. Validar Safari/PWA
+instalada e Android depois da publicação.
