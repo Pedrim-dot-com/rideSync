@@ -5,7 +5,7 @@
 > Grupos motards com vários dirigentes e voz/SOS estão implementados e propostos
 > para revisão na branch `feat/motard-groups-voice-sos`, enviada ao GitHub;
 > a abertura automática do PR está bloqueada pelo acesso à API GitHub.
-> migrations 007/008, função trip-voice e publicação aguardam autorização.
+> Migrations 007/008, função trip-voice e publicação aguardam autorização.
 > IA, fotos e validação completa em dispositivos/redes reais continuam pendentes.
 
 ## Objetivo
@@ -13,6 +13,93 @@ Validar que motards conseguem criar e partilhar uma viagem, escolher a mota, par
 
 ## Stack aprovada
 React + TypeScript + Vite; Tailwind; TanStack Query; Zustand quando necessário; MapLibre GL JS + MapTiler (tiles/style) + openrouteservice (routing/geocoding); Supabase Free Tier (Auth, PostgreSQL, Realtime, Storage, Edge Functions); motor de routing openrouteservice com adapter substituível; LiveKit Cloud para áudio WebRTC autorizado; fornecedor LLM por decidir; Cloudflare Pages.
+
+## Arquitetura da aplicação
+
+A PWA é servida pela Cloudflare Pages. O Supabase autentica e autoriza os dados;
+o MapTiler fornece cartografia e o openrouteservice calcula percursos reais.
+As ligações tracejadas representam a integração de voz/SOS, ainda com publicação
+pendente. Grupos e sedes usam a mesma PWA, PostgreSQL/RLS e cartografia; as suas
+tabelas/RPCs novas (migration 007) também aguardam publicação. IA e uploads de fotos continuam planeados e não
+estão representados como serviços disponíveis.
+
+```mermaid
+flowchart TB
+    GH["GitHub e CI"] -->|"build de main"| CF["Cloudflare Pages: HTTPS"]
+    CF --> PWA["PWA React / TypeScript<br/>UI, cache e GPS com consentimento"]
+    PWA -->|"login e passkeys"| AUTH["Supabase Auth"]
+    PWA -->|"queries e RPCs"| DB["PostgreSQL + RLS<br/>dados e regras de acesso"]
+    DB -->|"avisos de alteração"| RT["Realtime privado"]
+    PWA -->|"subscrever e reler snapshots"| RT
+    PWA --> MAP["MapLibre: mapa e percurso"]
+    MAP -->|"cartografia e chave pública"| MT["MapTiler"]
+    PWA -->|"JWT e pedidos de mapas"| MAPAPI["Edge Functions de mapas"]
+    MAPAPI -->|"chave privada"| ORS["openrouteservice"]
+    MAPAPI -->|"guardar rota validada"| DB
+    PWA -.->|"JWT e controlo de fala"| VOICEAPI["Edge trip-voice"]
+    VOICEAPI -.->|"validar participante e SOS"| DB
+    VOICEAPI -.->|"salas e tokens restritos"| LK["LiveKit Cloud: SFU e TURN"]
+    PWA -.->|"áudio WebRTC autorizado"| LK
+
+    classDef pending fill:#fff0df,stroke:#c55400,stroke-dasharray:5 5,color:#171717
+    class VOICEAPI,LK pending
+```
+
+O áudio passa pela LiveKit, enquanto o Supabase decide quem pode falar. As
+posições GPS pessoais só ficam acessíveis aos participantes autorizados; as
+sedes dos grupos são dados explicitamente publicados para contas autenticadas.
+O service worker guarda a aplicação estática, sem prometer GPS/voz em segundo
+plano ou mapas offline. [Arquitetura detalhada](docs/03-TECHNICAL-ARCHITECTURE.md).
+
+## Fluxos principais da aplicação
+
+O diagrama reúne acesso, garagem/perfil, convites, viagens, GPS, voz/SOS e grupos.
+Os percursos tracejados e nós a laranja pertencem às funcionalidades em revisão.
+Entrar num grupo motard não concede acesso automático a viagens privadas.
+
+```mermaid
+flowchart TB
+    OPEN["Abrir PWA ou convite"] --> SESSION{"Sessão válida?"}
+    SESSION -->|"Não"| LOGIN["Entrar ou registar<br/>Confirmar email, se necessário"]
+    LOGIN --> HOME["Painel e navegação"]
+    SESSION -->|"Sim"| HOME
+    HOME --> PROFILE["Perfil e garagem<br/>Dados, motas e passkeys"]
+    HOME --> INBOX["Convite guardado na conta<br/>Consultar Notificações"]
+    INBOX --> RESPONSE{"Convite válido: responder?"}
+    RESPONSE -->|"Recusar ou mais tarde"| KEEP["Guardar estado nas Notificações<br/>Sem acesso antes de aceitar"]
+    RESPONSE -->|"Aceitar"| BIKE["Entrar na viagem<br/>Mota própria ou nenhuma"]
+    HOME --> CREATE["Organizador cria viagem<br/>Data, hora e pontos"]
+    CREATE --> ROUTE["Calcular rota real<br/>Convidar por link, se necessário"]
+    ROUTE --> PLAN["Consultar viagem e mapa"]
+    BIKE --> PLAN
+    PLAN --> START["Organizador inicia a viagem"]
+    START --> ACTIVE["Viagem ativa e cronómetro"]
+    ACTIVE --> GPS["GPS opcional: consentir, partilhar<br/>ou parar a própria posição"]
+    ACTIVE --> FINISH["Organizador termina"]
+    FINISH --> HISTORY["Guardar tempo no histórico<br/>Apagar posições GPS"]
+
+    ACTIVE -.-> RADIO["Ouvir grupo, se ativado<br/>Organizador pode autorizar microfone e falar"]
+    ACTIVE -.-> SOS["Participante ativa SOS<br/>Alerta visual e interrupção do organizador"]
+    SOS -.-> PRIORITY["Voz prioritária se microfone permitido<br/>Caso contrário, manter alerta visual"]
+    PRIORITY -.-> RESOLVE["Resolver SOS ou expirar em 90 segundos<br/>Organizador retoma explicitamente"]
+    FINISH -.-> CLOSEVOICE["Desligar voz e limpar SOS"]
+
+    HOME -.-> DIRECTORY["Grupos: lista e mapa das sedes"]
+    DIRECTORY -.-> GROUPACTION{"Registar, pedir entrada ou gerir?"}
+    GROUPACTION -.->|"Registar"| NEWGROUP["Criar sede e primeiro dirigente"]
+    GROUPACTION -.->|"Pedir entrada"| APPROVAL["Aguardar aprovação de um dirigente<br/>Uma inscrição aceite por conta"]
+    GROUPACTION -.->|"Já inscrito ou pedido pendente"| MYGROUP["Consultar grupo ou pedido"]
+    APPROVAL -.-> MEMBER["Pedido aceite ou recusado<br/>Só aprovação dá inscrição"]
+    NEWGROUP -.-> LEADERS["Direção com vários dirigentes<br/>Aprovar, editar e promover membros<br/>Nunca remover o último dirigente"]
+    MYGROUP -.->|"Se dirigente"| LEADERS
+
+    classDef pending fill:#fff0df,stroke:#c55400,stroke-dasharray:5 5,color:#171717
+    class RADIO,SOS,PRIORITY,RESOLVE,CLOSEVOICE,DIRECTORY,GROUPACTION,NEWGROUP,APPROVAL,MYGROUP,MEMBER,LEADERS pending
+```
+
+GPS e voz exigem internet e a PWA ativa; desligar GPS ou voz é uma decisão
+individual. O SOS visual é independente da permissão de microfone, avisa apenas
+o grupo ligado à viagem e não contacta o 112. [Fluxos e estados detalhados](docs/07-UX-FLOWS.md).
 
 ## Ordem de leitura
 1. `CLAUDE.md` — instruções de execução

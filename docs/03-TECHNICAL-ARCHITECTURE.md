@@ -1,5 +1,7 @@
 # 03 — Arquitetura técnica
 
+A visão geral visual está no [fluxograma de arquitetura do README](../README.md#arquitetura-da-aplicação), com identificação dos componentes ainda por publicar.
+
 ## Princípios
 Monólito frontend modular + Supabase BaaS. Evitar backend próprio, Redis, broker e microserviços. Preferir soluções reversíveis e contratos explícitos.
 
