@@ -223,3 +223,20 @@ ações. Ver docs/15-INVITATIONS-AND-PARTICIPATION.md. Migration 006 aplicada co
 confirmada. Publicação autorizada e confirmada na Cloudflare após push de
 29f2c76: campos separados, RPCs de notificações, CSS e precache públicos verificados.
 Não alterar migrations já aplicadas.
+
+
+### Correção adicional em iPhone 12 mini
+
+A captura real do utilizador confirma a versão com campos separados e mostra
+ambos ainda mais largos do que o título. A separação e border-box não foram
+suficientes. Retirar padding/borda dos inputs nativos e aplicar a um invólucro
+com grid minmax(0,1fr); appearance none normaliza a caixa, preservando type date/
+time, seletores nativos, validação required, foco visível e fonte 16px.
+Não mascarar o problema com overflow hidden nem desativar zoom da página.
+
+O E2E verifica campos vazios e preenchidos a 280/320/375/390px, alinhamento com
+o título e contenção do input no invólucro, incluindo uma simulação de sizing
+content-box. Isto é uma regressão geométrica em Chromium, não uma execução real
+de Safari ou uma garantia sobre o hardware. Validar novamente no iPhone após
+publicação. Esta correção dá continuidade ao deploy já autorizado para o mesmo
+campo; não altera schema nem dados.

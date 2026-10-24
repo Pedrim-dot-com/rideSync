@@ -103,34 +103,38 @@ export function TripEditor({
               <div className="departure-inputs">
                 <label>
                   Data de partida
-                  <input
-                    name="departure_date"
-                    type="date"
-                    required
-                    defaultValue={
-                      detail
-                        ? toLocalDatetime(detail.trip.departure_at).split(
-                            "T",
-                          )[0]
-                        : ""
-                    }
-                  />
+                  <span className="departure-control">
+                    <input
+                      name="departure_date"
+                      type="date"
+                      required
+                      defaultValue={
+                        detail
+                          ? toLocalDatetime(detail.trip.departure_at).split(
+                              "T",
+                            )[0]
+                          : ""
+                      }
+                    />
+                  </span>
                 </label>
                 <label>
                   Hora de partida
-                  <input
-                    name="departure_time"
-                    type="time"
-                    step={60}
-                    required
-                    defaultValue={
-                      detail
-                        ? toLocalDatetime(detail.trip.departure_at).split(
-                            "T",
-                          )[1]
-                        : ""
-                    }
-                  />
+                  <span className="departure-control">
+                    <input
+                      name="departure_time"
+                      type="time"
+                      step={60}
+                      required
+                      defaultValue={
+                        detail
+                          ? toLocalDatetime(detail.trip.departure_at).split(
+                              "T",
+                            )[1]
+                          : ""
+                      }
+                    />
+                  </span>
                 </label>
               </div>
               <small>

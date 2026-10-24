@@ -206,21 +206,49 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
   await page.setViewportSize({ width: 320, height: 800 });
   await page.getByRole("button", { name: "Criar a primeira viagem" }).click();
   await page.getByLabel("Título da viagem").fill("Passeio ao Gerês");
-  await page.getByLabel("Data de partida").fill("2026-11-01");
-  await page.getByLabel("Hora de partida").fill("09:30");
-  for (const width of [280, 320, 375]) {
-    await page.setViewportSize({ width, height: 844 });
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    ).toBe(true);
-    for (const label of ["Data de partida", "Hora de partida"]) {
-      const bounds = await page.getByLabel(label).boundingBox();
-      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
-      await expect(page.getByLabel(label)).toHaveCSS("font-size", "16px");
+  // Match the iPhone screenshot too: empty controls, before a value is selected.
+  // Model native WebKit sizing that adds padding/borders outside width:100%.
+  const nativeSizing = await page.addStyleTag({
+    content: ".departure-inputs input { box-sizing: content-box !important; }",
+  });
+  async function checkDepartureBounds() {
+    for (const width of [280, 320, 375, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      const title = await page.getByLabel("Título da viagem").boundingBox();
+      for (const label of ["Data de partida", "Hora de partida"]) {
+        const input = page.getByLabel(label);
+        const bounds = await input.boundingBox();
+        const control = await input.locator("..").boundingBox();
+        expect(control!.x).toBeCloseTo(title!.x, 0);
+        expect(control!.x + control!.width).toBeCloseTo(
+          title!.x + title!.width,
+          0,
+        );
+        expect(bounds!.x).toBeGreaterThanOrEqual(control!.x);
+        expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(
+          control!.x + control!.width,
+        );
+        await expect(input).toHaveCSS("font-size", "16px");
+        await expect(input).toHaveCSS("padding-left", "0px");
+        await expect(input).toHaveCSS("padding-right", "0px");
+      }
     }
   }
+  await checkDepartureBounds();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.screenshot({
+    path: testInfo.outputPath("departure-empty-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByLabel("Data de partida").fill("2026-11-01");
+  await page.getByLabel("Hora de partida").fill("09:30");
+  await checkDepartureBounds();
+  await nativeSizing.evaluate((el) => el.remove());
   async function fill(
     index: number,
     label: string,

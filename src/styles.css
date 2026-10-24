@@ -1556,7 +1556,8 @@ details[open] > summary::after {
   overflow-wrap: anywhere;
 }
 
-/* Separate native date/time controls keep Safari's intrinsic width contained. */
+/* Keep padding/borders off iOS native date/time inputs: WebKit can add them
+   outside the declared width even when border-box is requested. */
 .departure-fields {
   min-inline-size: 0;
   width: 100%;
@@ -1573,16 +1574,46 @@ details[open] > summary::after {
 .departure-inputs > label {
   min-width: 0;
 }
-.departure-inputs input {
+.departure-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 13px;
+  border: 1px solid #b9b7af;
+  background: #fafaf8;
+}
+.departure-control:focus-within {
+  border-color: #a53e00;
+  background: white;
+}
+.departure-control input {
+  -webkit-appearance: none;
+  appearance: none;
   display: block;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-inline-size: 0;
   max-inline-size: 100%;
-  box-sizing: border-box;
-}
-.departure-inputs input::-webkit-date-and-time-value {
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 16px;
+  line-height: 24px;
   text-align: left;
-  min-height: 1.4em;
+}
+.departure-control input::-webkit-date-and-time-value {
+  min-width: 0;
+  min-height: 24px;
+  text-align: left;
+}
+.departure-control input::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
 }
 .notification-icon {
   position: relative;
