@@ -1,3 +1,4 @@
+import * as notifications from "./notifications-api";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   cleanup,
@@ -21,6 +22,10 @@ vi.mock("./participation-api", async (original) => ({
   revokeTripInvitation: vi.fn(),
   setTripMotorcycle: vi.fn(),
   respondTripInvitation: vi.fn(),
+}));
+vi.mock("./notifications-api", () => ({
+  rememberTripInvitation: vi.fn(),
+  respondReceivedInvitation: vi.fn(),
 }));
 afterEach(() => {
   cleanup();
@@ -169,7 +174,7 @@ describe("trip participation", () => {
     expect(api.respondTripInvitation).not.toHaveBeenCalled();
   });
   it("keeps an expired invitation visible with a recoverable explanation", async () => {
-    vi.mocked(api.respondTripInvitation).mockRejectedValue({
+    vi.mocked(notifications.rememberTripInvitation).mockRejectedValue({
       code: "P0001",
       message: "INVITATION_UNAVAILABLE",
     });
@@ -178,26 +183,35 @@ describe("trip participation", () => {
       <Invitation
         token={"a".repeat(64)}
         signedIn
+        userId="rider"
         onAccepted={accepted}
         onClose={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByText("Aceitar convite"));
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Pede um novo link",
     );
     expect(accepted).not.toHaveBeenCalled();
   });
   it("navigates only after successful acceptance", async () => {
-    vi.mocked(api.respondTripInvitation).mockResolvedValue("trip");
+    vi.mocked(notifications.rememberTripInvitation).mockResolvedValue(
+      "receipt",
+    );
+    vi.mocked(notifications.respondReceivedInvitation).mockResolvedValue(
+      "trip",
+    );
     const accepted = vi.fn();
     wrap(
       <Invitation
         token={"a".repeat(64)}
         signedIn
+        userId="rider"
         onAccepted={accepted}
         onClose={vi.fn()}
       />,
+    );
+    await waitFor(() =>
+      expect(screen.getByText("Aceitar convite")).toBeEnabled(),
     );
     fireEvent.click(screen.getByText("Aceitar convite"));
     await waitFor(() => expect(accepted).toHaveBeenCalledWith("trip"));

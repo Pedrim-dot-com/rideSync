@@ -10,8 +10,11 @@ function setup() {
   fireEvent.change(screen.getByLabelText("Título da viagem"), {
     target: { value: "Gerês" },
   });
-  fireEvent.change(screen.getByLabelText(/Data e hora de partida/), {
-    target: { value: "2026-11-01T09:00" },
+  fireEvent.change(screen.getByLabelText("Data de partida"), {
+    target: { value: "2026-11-01" },
+  });
+  fireEvent.change(screen.getByLabelText("Hora de partida"), {
+    target: { value: "09:00" },
   });
   return save;
 }
@@ -41,6 +44,9 @@ describe("itinerary editing", () => {
     fireEvent.click(screen.getByLabelText("Remover paragem 2"));
     fireEvent.click(screen.getByText("Guardar viagem"));
     expect(save).toHaveBeenCalledOnce();
+    expect(save.mock.calls[0][0].departure_at).toBe(
+      new Date(2026, 10, 1, 9, 0).toISOString(),
+    );
     expect(
       save.mock.calls[0][0].waypoints.map((p: { label: string }) => p.label),
     ).toEqual(["Porto", "Amares", "Gerês"]);

@@ -21,6 +21,17 @@ describe("invitation link privacy and auth redirects", () => {
     clearPendingInvitation();
     expect(readPendingInvitation()).toBeNull();
   });
+  it("does not clear a newer link when an older save finishes", () => {
+    window.history.replaceState(null, "", `/#invite=${token}`);
+    readPendingInvitation();
+    const newer = "b".repeat(64);
+    window.history.replaceState(null, "", `/#invite=${newer}`);
+    readPendingInvitation();
+    clearPendingInvitation(token);
+    expect(readPendingInvitation()).toBe(newer);
+    clearPendingInvitation(newer);
+    expect(readPendingInvitation()).toBeNull();
+  });
   it("preserves Supabase Auth recovery fragments", () => {
     window.history.replaceState(
       null,

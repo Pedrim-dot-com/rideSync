@@ -42,7 +42,11 @@ test("login, garage CRUD, primary motorcycle, profile and logout (mocked Supabas
         user,
       };
     else if (path.endsWith("/user")) body = user;
-    else if (path.endsWith("/passkeys")) body = [];
+    else if (
+      path.endsWith("/passkeys") ||
+      path.endsWith("/list_received_trip_invitations")
+    )
+      body = [];
     else if (path.endsWith("/trips")) body = [];
     else if (path.endsWith("/motorcycles")) {
       if (request.method() === "POST") {

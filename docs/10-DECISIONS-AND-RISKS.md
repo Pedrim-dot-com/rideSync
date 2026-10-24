@@ -199,3 +199,24 @@ virtual passaram, incluindo assinatura inválida recusada e revogação, com
 limpeza confirmada da conta temporária. Não há migrations ou chaves adicionais.
 Face ID num iPhone físico ainda requer validação do utilizador.
 Ver docs/18-INSTALLATION-AND-PASSKEYS.md.
+
+
+## ADR-015 — Recibos privados de convite e data/hora mobile
+
+Pedido: notificações persistentes para convites fechados e corrigir a data de
+partida que ultrapassa a largura de ecrãs pequenos. Sem novas dependências.
+Data e hora tornam-se dois controlos nativos, empilhados em mobile, com 16px,
+min-width zero e conversão conjunta pela validação local/ISO já existente.
+Sem remover zoom de acessibilidade. Chromium validado a 280/320/375px, incluindo
+submissão e edição; WebKit não disponível, download bloqueado com HTTP 403 pelo
+ambiente. Confirmar os seletores nativos em Safari/iPhone físico após publicação.
+
+Como os convites são links bearer sem destinatário, guardar um recibo na conta
+só após apresentar token válido e autenticar. Fechar banner não responde nem
+consome o link. Nova projeção mínima do título/partida/organizador antes de
+aceitar; detalhes da viagem continuam privados por RLS. Respostas por recibo
+exigem ownership e partilham a implementação atómica do token original. Não
+adicionar envio de email, push, localização ou acesso antecipado à viagem.
+Histórico retido enquanto convite/viagem/conta existir; só pedidos válidos têm
+ações. Ver docs/15-INVITATIONS-AND-PARTICIPATION.md. Migration 006 e publicação
+pendentes de autorização; não alterar migrations já aplicadas.

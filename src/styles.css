@@ -1230,7 +1230,7 @@ details[open] > summary::after {
     z-index: 50;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: 5px 12px max(5px, env(safe-area-inset-bottom));
     background: #151515;
     border-top: 1px solid #393939;
@@ -1554,4 +1554,74 @@ details[open] > summary::after {
 }
 .signup-confirmation strong {
   overflow-wrap: anywhere;
+}
+
+/* Separate native date/time controls keep Safari's intrinsic width contained. */
+.departure-fields {
+  min-inline-size: 0;
+  width: 100%;
+}
+.departure-fields legend {
+  padding: 0;
+  margin-bottom: 8px;
+}
+.departure-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.departure-inputs > label {
+  min-width: 0;
+}
+.departure-inputs input {
+  display: block;
+  width: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+}
+.departure-inputs input::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.4em;
+}
+.notification-icon {
+  position: relative;
+  display: inline-flex;
+}
+.notification-count {
+  position: absolute;
+  top: -9px;
+  right: -12px;
+  min-width: 17px;
+  padding: 1px 4px;
+  border-radius: 12px;
+  background: var(--accent, #ff6600);
+  color: #121212;
+  font-size: 10px;
+  font-weight: 800;
+}
+.notification-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.notification-card {
+  min-width: 0;
+  border: 1px solid var(--border, #444);
+  padding: clamp(12px, 3vw, 24px);
+  overflow-wrap: anywhere;
+}
+.notification-card h2 {
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .departure-inputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .app-header nav button {
+    min-width: 0;
+    padding-inline: 3px;
+    font-size: 10px;
+  }
 }

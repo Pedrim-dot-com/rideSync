@@ -32,9 +32,10 @@ export function readPendingInvitation() {
     return null;
   }
 }
-export function clearPendingInvitation() {
+export function clearPendingInvitation(token?: string) {
   try {
-    sessionStorage.removeItem(pendingKey);
+    if (!token || sessionStorage.getItem(pendingKey) === token)
+      sessionStorage.removeItem(pendingKey);
   } catch {
     /* Storage may be disabled. */
   }

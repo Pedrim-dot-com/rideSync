@@ -118,4 +118,6 @@ etapa. O convite pendente mantém-se durante este fluxo.
 Quando o servidor devolve `email_not_confirmed` no login, a mensagem volta a
 indicar como confirmar o email, em vez do erro genérico. Recuperação por email
 mantém a resposta neutra para não revelar contas existentes. Alteração apenas no
-frontend, testada com Auth simulado; publicação desta correção aguarda autorização.
+frontend, testada com Auth simulado. Publicação autorizada e confirmada em
+2026-10-24 após push do commit 79d988f: bundle e precache públicos incluem o
+ecrã de confirmação e as ações de entrada/correção do email.

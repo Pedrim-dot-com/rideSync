@@ -86,6 +86,7 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
         session: null,
         positions: [],
       };
+    else if (path.endsWith("/list_received_trip_invitations")) body = [];
     else if (path.endsWith("/list_trip_invitations")) body = [];
     else if (path.endsWith("/list_trip_members"))
       body = [
@@ -205,7 +206,21 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
   await page.setViewportSize({ width: 320, height: 800 });
   await page.getByRole("button", { name: "Criar a primeira viagem" }).click();
   await page.getByLabel("Título da viagem").fill("Passeio ao Gerês");
-  await page.getByLabel(/Data e hora de partida/).fill("2026-11-01T09:30");
+  await page.getByLabel("Data de partida").fill("2026-11-01");
+  await page.getByLabel("Hora de partida").fill("09:30");
+  for (const width of [280, 320, 375]) {
+    await page.setViewportSize({ width, height: 844 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    for (const label of ["Data de partida", "Hora de partida"]) {
+      const bounds = await page.getByLabel(label).boundingBox();
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+      await expect(page.getByLabel(label)).toHaveCSS("font-size", "16px");
+    }
+  }
   async function fill(
     index: number,
     label: string,

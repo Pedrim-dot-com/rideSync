@@ -155,6 +155,7 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
           motorcycle_model: null,
         },
       ];
+    else if (path.endsWith("/list_received_trip_invitations")) body = [];
     else if (path.endsWith("/list_trip_invitations")) body = [];
     else if (path.endsWith("/tracking_snapshot"))
       body = {

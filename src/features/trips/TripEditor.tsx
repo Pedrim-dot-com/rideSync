@@ -66,7 +66,9 @@ export function TripEditor({
     const data = new FormData(e.currentTarget);
     const parsed = tripSchema.safeParse({
       title: data.get("title"),
-      departure_at: fromLocalDatetime(String(data.get("departure_at"))),
+      departure_at: fromLocalDatetime(
+        `${data.get("departure_date")}T${data.get("departure_time")}`,
+      ),
       waypoints: points,
     });
     if (!parsed.success) {
@@ -96,20 +98,45 @@ export function TripEditor({
                 required
               />
             </label>
-            <label>
-              Data e hora de partida
-              <input
-                name="departure_at"
-                type="datetime-local"
-                defaultValue={
-                  detail ? toLocalDatetime(detail.trip.departure_at) : ""
-                }
-                required
-              />
+            <fieldset className="departure-fields">
+              <legend>Data e hora de partida</legend>
+              <div className="departure-inputs">
+                <label>
+                  Data de partida
+                  <input
+                    name="departure_date"
+                    type="date"
+                    required
+                    defaultValue={
+                      detail
+                        ? toLocalDatetime(detail.trip.departure_at).split(
+                            "T",
+                          )[0]
+                        : ""
+                    }
+                  />
+                </label>
+                <label>
+                  Hora de partida
+                  <input
+                    name="departure_time"
+                    type="time"
+                    step={60}
+                    required
+                    defaultValue={
+                      detail
+                        ? toLocalDatetime(detail.trip.departure_at).split(
+                            "T",
+                          )[1]
+                        : ""
+                    }
+                  />
+                </label>
+              </div>
               <small>
                 Hora local: {Intl.DateTimeFormat().resolvedOptions().timeZone}.
               </small>
-            </label>
+            </fieldset>
           </div>
           <h2>Itinerário</h2>
           <p className="coordinate-help">

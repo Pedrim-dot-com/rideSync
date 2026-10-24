@@ -8,7 +8,9 @@ revogado antes de ser utilizado. Não é enviado automaticamente por email.
 A interface permite copiar o link para o organizador o partilhar.
 
 Quem recebe o link pode iniciar sessão ou criar conta, confirmar o email e
-voltar ao convite. Só a aceitação revela a viagem e os seus pontos/rota.
+voltar ao convite. Abrir o link com sessão permite guardar título, partida e
+nome do organizador nas notificações. Só a aceitação revela os detalhes da
+viagem, participantes e pontos/rota.
 Recusar também consome o link e não concede acesso. Um link já usado, expirado,
 revogado, inválido ou para viagem bloqueada devolve a mesma mensagem.
 Um participante já confirmado não pode consumir outro convite dessa viagem.
@@ -28,7 +30,9 @@ automaticamente a mota principal nem se expõe o resto da garagem.
 - O link usa fragmento `#invite=…`, que não integra pedidos HTTP nem o referrer.
   O browser captura e remove o fragmento, guardando-o temporariamente em
   sessionStorage para permitir login/registo no mesmo separador. Não é guardado
-  em localStorage. Limpa-se ao aceitar, recusar ou fechar o convite.
+  em localStorage. Com a migration 006, limpa-se após o servidor confirmar
+  o recibo na conta; fechar o aviso mantém o token enquanto a gravação não
+  estiver confirmada. A limpeza de um token antigo não remove um novo convite.
 - Se a confirmação de email abrir outro separador/dispositivo, reabrir o link
   original. O convite nunca é incluído no redirect de Auth.
 - Tabela de convites com RLS e sem acesso direto para anon/authenticated;
@@ -86,3 +90,42 @@ removidos; limpeza confirmada no fim. Este teste não envia emails reais.
 Verificações locais após regeneração: tipagem, lint, formatação, 72 testes e
 build passam. SQL inalterado desde os 138 checks PostgreSQL aprovados; os três
 E2E com transporte simulado passaram na implementação da funcionalidade.
+
+
+## Notificações persistentes — migration 006 preparada
+
+Pedido: fechar o banner deve permitir responder mais tarde. Os links atuais
+não designam uma conta ou email: a receção acontece quando alguém abre o link
+válido e inicia sessão. Criar um link não envia notificações nem emails a uma
+pessoa ainda desconhecida. Não existem notificações push do sistema operativo.
+
+`202610240006_invitation_notifications.sql` cria recibos por convite/conta,
+com RLS e acesso apenas por RPC. Não guarda tokens em claro nem consome o convite
+quando o guarda. `remember_trip_invitation` valida o token e a identidade;
+`list_received_trip_invitations` devolve só os recibos próprios com título,
+partida, nome público do organizador, validade e estado; o identificador de
+viagem só é exposto se a conta já tiver acesso. Não expõe coordenadas, membros,
+hashes ou outras contas que abriram o mesmo link. O recibo mantém histórico até
+eliminação da viagem/convite/conta, com cascades.
+
+`respond_received_trip_invitation` exige recibo da própria conta e valida de
+novo validade, revogação, uso e estado da viagem no servidor. A resposta antiga
+por token mantém compatibilidade, através de uma função interna sem EXECUTE
+para papéis API. Ambas usam os mesmos locks viagem→convite. Se um link for
+partilhado por várias pessoas, só uma pode utilizá-lo; ter recibo não reserva
+o link nem alarga o acesso à viagem.
+
+Navegação inclui Notificações e contador de pedidos pendentes. A lista atualiza
+no foco, reconexão e a cada 30 segundos com a app ativa. Não usa o relógio do
+telemóvel para autorizar respostas. Convites expirados, revogados ou consumidos
+permanecem visíveis sem ações de resposta. Aceites permitem abrir a viagem
+quando a conta ainda tem acesso. Falhas de gravação mantêm o link temporário e
+oferecem nova tentativa. Fechar antes de iniciar sessão oculta o aviso mas
+permite gravar o recibo após login na mesma execução. Se a confirmação do email
+mudar de dispositivo/separador antes da gravação, reabrir o link original.
+
+Validação local da fase: 43 novos checks PostgreSQL (238 no total), 106 testes
+unitários, tipagem, lint, formatação, build e cinco E2E passaram. Incluem UI de
+recusa/histórico/rede e E2E que fecha antes e depois do login, recarrega e aceita
+a partir das notificações. Migration 006, validação remota com contas
+temporárias e publicação ainda aguardam autorização do utilizador.

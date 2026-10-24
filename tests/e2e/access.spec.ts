@@ -64,7 +64,11 @@ test("install instructions, real browser WebAuthn ceremonies, Auth session and p
       await route.fulfill({ status: 204, headers });
       return;
     } else if (path.endsWith("/user")) body = user;
-    else if (path.endsWith("/trips")) body = [];
+    else if (
+      path.endsWith("/trips") ||
+      path.endsWith("/list_received_trip_invitations")
+    )
+      body = [];
     else if (path.endsWith("/profiles"))
       body = { id: user.id, display_name: "Motard", username: "motard" };
     else if (path.endsWith("/passkeys/registration/options")) {

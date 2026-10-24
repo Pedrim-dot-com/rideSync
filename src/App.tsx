@@ -1,3 +1,5 @@
+import { Notifications } from "./features/trips/Notifications";
+import { useNotifications } from "./features/trips/notifications-api";
 import { InstallBanner } from "./InstallBanner";
 import { Invitation } from "./features/trips/Invitation";
 import {
@@ -8,7 +10,7 @@ import { UpdateNotice } from "./UpdateNotice";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
-import { Bike, UserRound, LogOut, ArrowUpRight, Map } from "lucide-react";
+import { Bike, UserRound, LogOut, ArrowUpRight, Map, Bell } from "lucide-react";
 import { supabase } from "./shared/supabase";
 import { Auth } from "./features/Auth";
 import { Garage } from "./features/Garage";
@@ -18,19 +20,36 @@ export default function App() {
   const cache = useQueryClient();
   const [invitation, setInvitation] = useState(readPendingInvitation);
   const [acceptedTrip, setAcceptedTrip] = useState<string | undefined>();
-  function closeInvitation() {
-    clearPendingInvitation();
-    setInvitation(null);
+  const [invitationVisible, setInvitationVisible] = useState(true);
+  function closeInvitation(saved: boolean) {
+    if (saved) {
+      clearPendingInvitation(invitation ?? undefined);
+      setInvitation(null);
+    } else setInvitationVisible(false);
   }
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(Boolean(supabase));
   const [authError, setAuthError] = useState(false);
   const [recovery, setRecovery] = useState(false);
-  const [page, setPage] = useState<"garage" | "profile" | "trips">("trips");
+  const [page, setPage] = useState<
+    "garage" | "profile" | "trips" | "notifications"
+  >("trips");
+  const notifications = useNotifications(
+    !recovery ? session?.user.id : undefined,
+  );
+  const pendingCount =
+    notifications.data?.filter((i) => i.status === "pending").length ?? 0;
+  function openTrip(tripId: string) {
+    setAcceptedTrip(tripId);
+    setPage("trips");
+    void cache.invalidateQueries({ queryKey: ["trips", session?.user.id] });
+  }
   useEffect(() => {
     function captureInvitation() {
-      if (new URLSearchParams(window.location.hash.slice(1)).has("invite"))
+      if (new URLSearchParams(window.location.hash.slice(1)).has("invite")) {
         setInvitation(readPendingInvitation());
+        setInvitationVisible(true);
+      }
     }
     window.addEventListener("hashchange", captureInvitation);
     return () => window.removeEventListener("hashchange", captureInvitation);
@@ -48,7 +67,12 @@ export default function App() {
         setSession(next);
         setLoading(false);
         if (event === "PASSWORD_RECOVERY") setRecovery(true);
-        if (event === "SIGNED_OUT") setRecovery(false);
+        if (event === "SIGNED_OUT") {
+          setRecovery(false);
+          setInvitation(readPendingInvitation());
+          setAcceptedTrip(undefined);
+          setPage("trips");
+        }
       }
     });
     void supabase.auth
@@ -113,6 +137,24 @@ export default function App() {
               Garagem
             </button>
             <button
+              aria-current={page === "notifications" ? "page" : undefined}
+              className={page === "notifications" ? "nav-active" : ""}
+              onClick={() => setPage("notifications")}
+            >
+              <span className="notification-icon">
+                <Bell size={18} />
+                {pendingCount > 0 && (
+                  <span
+                    className="notification-count"
+                    aria-label={`${pendingCount} ${pendingCount === 1 ? "convite" : "convites"} por responder`}
+                  >
+                    {pendingCount}
+                  </span>
+                )}
+              </span>
+              Notificações
+            </button>
+            <button
               aria-current={page === "profile" ? "page" : undefined}
               className={page === "profile" ? "nav-active" : ""}
               onClick={() => setPage("profile")}
@@ -147,14 +189,18 @@ export default function App() {
             key={`${session?.user.id ?? "anonymous"}-${invitation}`}
             token={invitation}
             signedIn={Boolean(session)}
+            userId={session?.user.id}
+            hidden={!invitationVisible}
+            onRemembered={() => {
+              if (!invitationVisible)
+                setInvitation((current) =>
+                  current === invitation ? null : current,
+                );
+            }}
             onClose={closeInvitation}
             onAccepted={(tripId) => {
-              closeInvitation();
-              setAcceptedTrip(tripId);
-              setPage("trips");
-              void cache.invalidateQueries({
-                queryKey: ["trips", session?.user.id],
-              });
+              closeInvitation(true);
+              openTrip(tripId);
             }}
           />
         )}
@@ -190,6 +236,8 @@ export default function App() {
                 userId={session.user.id}
                 initialTripId={acceptedTrip}
               />
+            ) : page === "notifications" ? (
+              <Notifications userId={session.user.id} onAccepted={openTrip} />
             ) : (
               <Profile userId={session.user.id} />
             )}

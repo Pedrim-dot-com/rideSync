@@ -19,6 +19,7 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
     updated_at: "2026-10-24T09:00:00Z",
   };
   let accepted = false;
+  let remembered = false;
   let selected = false;
   const invitations: {
     invitation_id: string;
@@ -211,10 +212,32 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
           (i) => i.invitation_id === data.p_invitation_id,
         )!.revoked_at = new Date().toISOString();
         body = null;
-      } else if (path.endsWith("/respond_trip_invitation")) {
+      } else if (path.endsWith("/remember_trip_invitation")) {
         expect(id).toBe(riderId);
-        const data = request.postDataJSON();
-        expect(data).toEqual({ p_token: "b".repeat(64), p_accept: true });
+        remembered = true;
+        body = "receipt-1";
+      } else if (path.endsWith("/list_received_trip_invitations")) {
+        body =
+          id === riderId && remembered
+            ? [
+                {
+                  receipt_id: "receipt-1",
+                  title: trip.title,
+                  departure_at: trip.departure_at,
+                  inviter_name: "Pedro",
+                  expires_at: invitations[1].expires_at,
+                  received_at: invitations[1].created_at,
+                  status: accepted ? "accepted" : "pending",
+                  trip_id: accepted ? tripId : null,
+                },
+              ]
+            : [];
+      } else if (path.endsWith("/respond_received_trip_invitation")) {
+        expect(id).toBe(riderId);
+        expect(request.postDataJSON()).toEqual({
+          p_receipt_id: "receipt-1",
+          p_accept: true,
+        });
         accepted = true;
         invitations[1].used_at = new Date().toISOString();
         invitations[1].response = "accepted";
@@ -296,9 +319,30 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
     await expect(
       rider.getByRole("heading", { name: "Recebeste um convite" }),
     ).toBeVisible();
+    await rider.getByRole("button", { name: "Fechar convite" }).click();
+    await expect(
+      rider.getByRole("heading", { name: "Recebeste um convite" }),
+    ).toHaveCount(0);
     await rider.getByLabel("Email", { exact: true }).fill("rider@example.test");
     await rider.getByLabel("Password", { exact: true }).fill("password123");
     await rider.getByRole("button", { name: "Entrar", exact: true }).click();
+    await expect(rider.getByLabel("1 convite por responder")).toBeVisible();
+    await rider.goto(invitationURL);
+    await expect(rider.getByText(/Guardado em Notificações/)).toBeVisible();
+    await rider.getByRole("button", { name: "Fechar convite" }).click();
+    await rider.reload();
+    await expect(
+      rider.getByRole("heading", { name: "Recebeste um convite" }),
+    ).toHaveCount(0);
+    await rider.getByRole("button", { name: /Notificações/ }).click();
+    await expect(
+      rider.getByRole("heading", { name: "Volta com amigos" }),
+    ).toBeVisible();
+    expect(accepted).toBe(false);
+    await rider.screenshot({
+      path: testInfo.outputPath("notifications-mobile.png"),
+      fullPage: true,
+    });
     await rider.getByRole("button", { name: "Aceitar convite" }).click();
     await expect(
       rider.getByRole("heading", { name: "Volta com amigos" }),

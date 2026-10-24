@@ -1,3 +1,4 @@
+import type { NotificationFunctions } from "../features/trips/notifications-api";
 import type { TrackingFunctions } from "../features/tracking/types";
 // Domain aliases derived from the generated Supabase schema.
 import type { Database as GeneratedDatabase } from "./database.generated";
@@ -7,10 +8,13 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
   public: Omit<GeneratedDatabase["public"], "Functions"> & {
     Functions: Omit<
       GeneratedDatabase["public"]["Functions"],
-      keyof ParticipationFunctions | keyof TrackingFunctions
+      | keyof ParticipationFunctions
+      | keyof TrackingFunctions
+      | keyof NotificationFunctions
     > &
       ParticipationFunctions &
-      TrackingFunctions;
+      TrackingFunctions &
+      NotificationFunctions;
   };
 };
 export type { Json } from "./database.generated";
