@@ -84,7 +84,7 @@ export default function TripMap({
         id: "trip-route",
         type: "line",
         source: "trip-route",
-        paint: { "line-color": "#1c6551", "line-width": 5 },
+        paint: { "line-color": "#e85d04", "line-width": 5 },
         layout: { "line-cap": "round", "line-join": "round" },
       });
       parsed.data.coordinates.forEach((point) => bounds.extend(point));
@@ -119,7 +119,9 @@ export default function TripMap({
       const stale = positionAge(position, now) >= 30;
       const name = own ? "Tu" : position.display_name || "Motard";
       const element = marker.getElement();
-      element.className = `gps-pin${own ? " gps-own" : ""}${stale ? " gps-stale" : ""}`;
+      element.classList.add("gps-pin");
+      element.classList.toggle("gps-own", own);
+      element.classList.toggle("gps-stale", stale);
       element.textContent = name;
       element.setAttribute(
         "aria-label",

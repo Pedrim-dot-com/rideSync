@@ -14,8 +14,8 @@ export default defineConfig({
         lang: "pt-PT",
         start_url: "/",
         display: "standalone",
-        theme_color: "#123c33",
-        background_color: "#f5f6ef",
+        theme_color: "#121212",
+        background_color: "#f3f2ef",
         icons: [
           {
             src: "/icon-192.png",
@@ -39,7 +39,7 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: "index.html",
-        globPatterns: ["**/*.{js,css,html,svg,png}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,woff2}"],
         runtimeCaching: [],
       },
     }),

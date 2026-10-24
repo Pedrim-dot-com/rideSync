@@ -71,6 +71,7 @@ async function setup(userId = "owner") {
   );
   fireEvent.click(await screen.findByLabelText("Ver viagem Serra"));
   await screen.findByText("Itinerário");
+  if (userId === "owner") fireEvent.click(screen.getByText("Gerir viagem"));
   return cache;
 }
 describe("trip permissions in the UI", () => {

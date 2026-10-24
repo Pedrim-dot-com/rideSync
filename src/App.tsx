@@ -25,7 +25,7 @@ export default function App() {
   const [loading, setLoading] = useState(Boolean(supabase));
   const [authError, setAuthError] = useState(false);
   const [recovery, setRecovery] = useState(false);
-  const [page, setPage] = useState<"garage" | "profile" | "trips">("garage");
+  const [page, setPage] = useState<"garage" | "profile" | "trips">("trips");
   useEffect(() => {
     function captureInvitation() {
       if (new URLSearchParams(window.location.hash.slice(1)).has("invite"))
@@ -77,23 +77,26 @@ export default function App() {
     else {
       cache.clear();
       setSession(null);
-      setPage("garage");
+      setPage("trips");
       setAcceptedTrip(undefined);
     }
   }
   return (
     <>
-      <header>
+      <a className="skip-link" href="#main-content">
+        Saltar para o conteúdo
+      </a>
+      <header className="app-header">
         <a className="brand" href="/" aria-label="RideSync início">
           <span className="brand-icon">
             R<ArrowUpRight size={14} aria-hidden="true" />
           </span>
           ride<span>sync</span>
-          <small>POC</small>
         </a>
         {session && !recovery && (
           <nav aria-label="Navegação principal">
             <button
+              aria-current={page === "trips" ? "page" : undefined}
               className={page === "trips" ? "nav-active" : ""}
               onClick={() => setPage("trips")}
             >
@@ -101,6 +104,7 @@ export default function App() {
               Viagens
             </button>
             <button
+              aria-current={page === "garage" ? "page" : undefined}
               className={page === "garage" ? "nav-active" : ""}
               onClick={() => setPage("garage")}
             >
@@ -108,25 +112,32 @@ export default function App() {
               Garagem
             </button>
             <button
+              aria-current={page === "profile" ? "page" : undefined}
               className={page === "profile" ? "nav-active" : ""}
               onClick={() => setPage("profile")}
             >
               <UserRound size={18} />
               Perfil
             </button>
-            <button aria-label="Terminar sessão" onClick={() => void logout()}>
-              <LogOut size={18} />
-              <span className="logout-label">Sair</span>
-            </button>
           </nav>
+        )}
+        {session && !recovery && (
+          <button
+            className="logout-button"
+            aria-label="Terminar sessão"
+            onClick={() => void logout()}
+          >
+            <LogOut size={18} />
+            <span className="logout-label">Sair</span>
+          </button>
         )}
         {!session && (
           <span className="header-note">
-            BONS CAMINHOS, EM BOA COMPANHIA <ArrowUpRight size={15} />
+            A PRÓXIMA SAÍDA É TUA <ArrowUpRight size={15} />
           </span>
         )}
       </header>
-      <main>
+      <main id="main-content">
         {invitation && !loading && !recovery && supabase && (
           <Invitation
             key={`${session?.user.id ?? "anonymous"}-${invitation}`}

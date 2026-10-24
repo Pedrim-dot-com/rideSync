@@ -53,18 +53,19 @@ export function Auth({
   }
   return (
     <section className="auth-layout">
-      <div>
-        <span className="eyebrow">A PRÓXIMA VIAGEM COMEÇA AQUI</span>
+      <div className="auth-hero">
+        <span className="eyebrow">RIDESYNC / VAI MAIS LONGE</span>
         <h1>
-          A tua mota.
-          <br />O teu grupo.
+          O próximo
           <br />
-          <em>O mesmo caminho.</em>
+          caminho
+          <br />
+          <em>é teu.</em>
         </h1>
-        <p>Prepara a garagem para as próximas aventuras.</p>
+        <p>Planeia a viagem. Junta o grupo. Vive o percurso.</p>
         <div className="route-art" aria-hidden="true">
           <ArrowUpRight size={76} strokeWidth={1} />
-          <span>RIDE TOGETHER</span>
+          <span>DUAS RODAS. O MESMO CAMINHO.</span>
         </div>
       </div>
       <form className="panel" onSubmit={submit}>
@@ -80,7 +81,7 @@ export function Auth({
         <p>
           {recovery
             ? "Escolhe uma password segura."
-            : "Entra no RideSync e organiza a tua garagem."}
+            : "As tuas viagens e o teu grupo, no mesmo lugar."}
         </p>
         {!recovery && (
           <label>

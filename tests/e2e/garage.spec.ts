@@ -42,6 +42,7 @@ test("login, garage CRUD, primary motorcycle, profile and logout (mocked Supabas
         user,
       };
     else if (path.endsWith("/user")) body = user;
+    else if (path.endsWith("/trips")) body = [];
     else if (path.endsWith("/motorcycles")) {
       if (request.method() === "POST") {
         const input = request.postDataJSON();
@@ -75,6 +76,7 @@ test("login, garage CRUD, primary motorcycle, profile and logout (mocked Supabas
   await page.getByLabel("Email", { exact: true }).fill("rider@example.test");
   await page.getByLabel("Password", { exact: true }).fill("password123");
   await page.getByRole("button", { name: "Entrar", exact: true }).click();
+  await page.getByRole("button", { name: "Garagem", exact: true }).click();
   await expect(page.getByText("O primeiro lugar é teu.")).toBeVisible();
   await page.getByRole("button", { name: "Adicionar a primeira mota" }).click();
   await page.getByLabel("Marca", { exact: true }).fill("Honda");

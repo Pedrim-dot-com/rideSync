@@ -289,6 +289,7 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
     path: testInfo.outputPath("trip-desktop.png"),
     fullPage: true,
   });
+  await page.getByText("Gerir viagem", { exact: true }).click();
   await page
     .getByRole("button", { name: "Editar viagem", exact: true })
     .click();
@@ -300,6 +301,7 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
     "Amares",
     "Gerês",
   ]);
+  await page.getByText("Gerir viagem", { exact: true }).click();
   await page.getByRole("button", { name: "Marcar como planeada" }).click();
   await expect(page.locator(".trip-status")).toHaveText("Planeada");
   await page.setViewportSize({ width: 390, height: 844 });

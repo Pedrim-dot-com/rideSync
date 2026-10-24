@@ -245,6 +245,7 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
   await page
     .getByRole("button", { name: "Ver viagem Volta com amigos" })
     .click();
+  await page.getByText("Grupo e convites", { exact: false }).click();
   await expect(page.getByText("Pedro (tu)")).toBeVisible();
   await page.getByRole("button", { name: "Criar link de convite" }).click();
   await expect(page.getByLabel("Link do convite")).toHaveValue(
@@ -295,6 +296,7 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
     await expect(
       rider.getByRole("heading", { name: "Volta com amigos" }),
     ).toBeVisible();
+    await rider.getByText("Grupo e convites", { exact: false }).click();
     await expect(rider.getByText("Ana (tu)")).toBeVisible();
     await expect(
       rider.getByRole("button", { name: "Criar link de convite" }),

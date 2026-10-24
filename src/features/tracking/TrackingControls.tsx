@@ -19,7 +19,20 @@ export function TrackingControls({
       className="panel tracking-controls"
       aria-labelledby="tracking-title"
     >
-      <h2 id="tracking-title">Acompanhar a viagem</h2>
+      <span className="eyebrow">
+        {active
+          ? "AGORA / NA ESTRADA"
+          : session?.ended_at
+            ? "SAÍDA CONCLUÍDA"
+            : "PRONTO PARA SAIR?"}
+      </span>
+      <h2 id="tracking-title">
+        {active
+          ? "A tua viagem"
+          : session?.ended_at
+            ? "Missão cumprida."
+            : "Vamos a isso."}
+      </h2>
       {query.isPending && <p role="status">A carregar estado da viagem…</p>}
       {query.isError && (
         <div role="alert">
@@ -32,8 +45,8 @@ export function TrackingControls({
       {data && !session && (
         <>
           <p>
-            O tempo começa quando o organizador inicia a viagem. A localização
-            só é partilhada com a tua autorização.
+            O organizador inicia a viagem e o cronómetro. O GPS é ativado à
+            parte, com a tua autorização.
           </p>
           {!hasRoute && <p>Calcula o percurso antes de iniciar.</p>}
           {owner && ["draft", "planned"].includes(data.status) && (
@@ -74,9 +87,8 @@ export function TrackingControls({
       {active && (
         <>
           <p>
-            Partilha a tua posição com os participantes confirmados, com a PWA
-            visível. Ao parar a partilha ou terminar, a posição é removida. Ao
-            trocar de aplicação ou bloquear o ecrã, o GPS pode parar.
+            Só os participantes confirmados veem a tua posição. Mantém a PWA
+            aberta durante a partilha.
           </p>
           <button
             className={gps.consent ? "secondary" : ""}
@@ -93,12 +105,20 @@ export function TrackingControls({
                 ? "PWA em segundo plano. O envio GPS está suspenso."
                 : gps.status || "Localização não partilhada."}
           </p>
-          <small>
-            {connection === "connected"
-              ? "Atualizações em tempo real ligadas."
-              : "A restabelecer tempo real; atualização de segurança a cada 10 segundos."}{" "}
-            Posições com mais de 30 segundos são assinaladas como antigas.
-          </small>
+          <details className="tracking-help">
+            <summary>GPS e privacidade</summary>
+            <p>
+              Ao parar ou terminar, a posição é removida. Ao trocar de aplicação
+              ou bloquear o ecrã, o GPS pode parar. Posições sem atualização
+              deixam de ser visíveis em 60 segundos.
+            </p>
+            <small>
+              {connection === "connected"
+                ? "Atualizações em tempo real ligadas."
+                : "A restabelecer tempo real; atualização de segurança a cada 10 segundos."}{" "}
+              Posições com mais de 30 segundos são assinaladas como antigas.
+            </small>
+          </details>
           <ul className="tracking-members">
             {positions.map((p) => (
               <li key={p.user_id}>

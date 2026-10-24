@@ -164,3 +164,19 @@ identidade se mantém. Migration 005 aplicada com autorização em 2026-10-24; t
 24 verificações HTTPS/WebSocket passaram, com limpeza confirmada das fixtures.
 PWA verifica novas versões ao retomar e a cada minuto, sempre com confirmação
 antes do reload. Ver `docs/16-TRIP-TRACKING.md`.
+
+
+## ADR-013 — Nova identidade e hierarquia de interface
+
+Pedido do utilizador: UI menos confusa e inspiração KTM. Direção laranja/preto,
+tipografia condensada e componentes direitos; marca RideSync própria, sem ativos
+KTM. Referência URL bloqueada por CONNECT 403 no ambiente; não afirmar inspeção
+da página atual. Fonte Barlow Condensed SIL OFL local e grafismo original.
+
+Entrada por Viagens, navegação mobile inferior e filtros por estado real.
+Mapa e ações de saída em destaque; grupo/convites e gestão em disclosures
+nativas, mantendo o GPS montado. Inputs 16px, confirmação de ações e consentimento
+continuam ativos. Corrigida a perda de classes de posicionamento do marcador
+MapLibre durante updates visuais. Sem alterações de backend ou dependências.
+Código e prévias locais prontos, publicação aguarda confirmação própria.
+Ver docs/17-UI-REDESIGN.md.

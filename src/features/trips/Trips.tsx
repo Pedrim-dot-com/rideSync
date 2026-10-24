@@ -56,6 +56,9 @@ export function Trips({
   const [editor, setEditor] = useState<"new" | TripDetail | null>(null);
   const [confirm, setConfirm] = useState<"cancel" | "delete" | null>(null);
   const [message, setMessage] = useState("");
+  const [filter, setFilter] = useState<
+    "all" | "active" | "planned" | "history"
+  >("all");
   const list = useQuery({ queryKey: ["trips", userId], queryFn: getTrips });
   const detail = useQuery({
     queryKey: ["trip", userId, selected],
@@ -123,6 +126,13 @@ export function Trips({
         }
       />
     );
+  const visibleTrips = list.data?.filter(
+    (item) =>
+      filter === "all" ||
+      (filter === "history"
+        ? ["completed", "cancelled"].includes(item.status)
+        : item.status === filter),
+  );
   const data = detail.data;
   const trip = data?.trip;
   const confirmedCount =
@@ -169,6 +179,42 @@ export function Trips({
                   {statusLabels[trip.status]}
                 </span>
               </div>
+              <aside className="panel route-summary">
+                <Route size={32} />
+                <h2>
+                  {data.route ? "Rota calculada" : "Percurso por calcular"}
+                </h2>
+                {data.route ? (
+                  <>
+                    <p>
+                      {(data.route.distance_m / 1000).toLocaleString("pt-PT", {
+                        maximumFractionDigits: 1,
+                      })}{" "}
+                      km · {Math.ceil(data.route.duration_s / 60)} min
+                    </p>
+                    <small>
+                      Fonte: {data.route.routing_provider}. Calculada em{" "}
+                      {formatDate(data.route.calculated_at)}.
+                    </small>
+                  </>
+                ) : (
+                  <p>
+                    Os pontos estão guardados. Calcula o percurso para obter a
+                    rota, distância e duração.
+                  </p>
+                )}
+                <div className="trip-members">
+                  <strong>{confirmedCount}</strong>
+                  <span>
+                    {confirmedCount === 1
+                      ? "participante confirmado"
+                      : "participantes confirmados"}
+                  </span>
+                </div>
+                <small>
+                  O GPS só é partilhado com consentimento durante a viagem.
+                </small>
+              </aside>
               <TripJourney
                 key={`journey:${trip.id}`}
                 detail={data}
@@ -202,108 +248,87 @@ export function Trips({
                     ))}
                   </ol>
                 </section>
-                <aside className="panel route-summary">
-                  <Route size={32} />
-                  <h2>
-                    {data.route ? "Rota calculada" : "Percurso por calcular"}
-                  </h2>
-                  {data.route ? (
-                    <>
-                      <p>
-                        {(data.route.distance_m / 1000).toLocaleString(
-                          "pt-PT",
-                          { maximumFractionDigits: 1 },
-                        )}{" "}
-                        km · {Math.ceil(data.route.duration_s / 60)} min
-                      </p>
-                      <small>
-                        Fonte: {data.route.routing_provider}. Calculada em{" "}
-                        {formatDate(data.route.calculated_at)}.
-                      </small>
-                    </>
-                  ) : (
-                    <p>
-                      Os pontos estão guardados. Calcula o percurso para obter a
-                      rota, distância e duração.
+              </div>
+              <details className="panel trip-disclosure">
+                <summary>
+                  Grupo e convites{" "}
+                  <span>
+                    {confirmedCount}{" "}
+                    {confirmedCount === 1 ? "participante" : "participantes"}
+                  </span>
+                </summary>
+                <Participation
+                  key={`participants:${trip.id}`}
+                  detail={data}
+                  userId={userId}
+                />
+              </details>
+              {isOwner && (
+                <details className="panel trip-management">
+                  <summary>Gerir viagem</summary>
+                  {canEdit && (
+                    <div className="actions trip-actions">
+                      <button
+                        disabled={mutation.isPending}
+                        onClick={() => {
+                          reset();
+                          setEditor(data);
+                        }}
+                      >
+                        Editar viagem
+                      </button>
+                      <button
+                        className="secondary"
+                        disabled={mutation.isPending}
+                        onClick={() => {
+                          reset();
+                          mutation.mutate({
+                            kind: "status",
+                            trip,
+                            status:
+                              trip.status === "draft" ? "planned" : "draft",
+                          });
+                        }}
+                      >
+                        {trip.status === "draft"
+                          ? "Marcar como planeada"
+                          : "Voltar a rascunho"}
+                      </button>
+                      <button
+                        className="text-button"
+                        disabled={mutation.isPending}
+                        onClick={() => {
+                          reset();
+                          setConfirm("cancel");
+                        }}
+                      >
+                        Cancelar viagem
+                      </button>
+                    </div>
+                  )}
+                  {!canEdit && (
+                    <p className="note">
+                      {isOwner
+                        ? "O itinerário está bloqueado neste estado."
+                        : "Só o organizador pode alterar esta viagem."}
                     </p>
                   )}
-                  <div className="trip-members">
-                    <strong>{confirmedCount}</strong>
-                    <span>
-                      {confirmedCount === 1
-                        ? "participante confirmado"
-                        : "participantes confirmados"}
-                    </span>
-                  </div>
-                  <small>
-                    O GPS só é partilhado com consentimento durante a viagem.
-                  </small>
-                </aside>
-              </div>
-              <Participation
-                key={`participants:${trip.id}`}
-                detail={data}
-                userId={userId}
-              />
-              {canEdit && (
-                <div className="actions trip-actions">
-                  <button
-                    disabled={mutation.isPending}
-                    onClick={() => {
-                      reset();
-                      setEditor(data);
-                    }}
-                  >
-                    Editar viagem
-                  </button>
-                  <button
-                    className="secondary"
-                    disabled={mutation.isPending}
-                    onClick={() => {
-                      reset();
-                      mutation.mutate({
-                        kind: "status",
-                        trip,
-                        status: trip.status === "draft" ? "planned" : "draft",
-                      });
-                    }}
-                  >
-                    {trip.status === "draft"
-                      ? "Marcar como planeada"
-                      : "Voltar a rascunho"}
-                  </button>
-                  <button
-                    className="text-button"
-                    disabled={mutation.isPending}
-                    onClick={() => {
-                      reset();
-                      setConfirm("cancel");
-                    }}
-                  >
-                    Cancelar viagem
-                  </button>
-                </div>
+                  {isOwner &&
+                    (trip.status === "draft" ||
+                      trip.status === "cancelled") && (
+                      <button
+                        className="text-button danger-text"
+                        disabled={mutation.isPending}
+                        onClick={() => {
+                          reset();
+                          setConfirm("delete");
+                        }}
+                      >
+                        Remover viagem
+                      </button>
+                    )}
+                </details>
               )}
-              {!canEdit && (
-                <p className="note">
-                  {isOwner
-                    ? "O itinerário está bloqueado neste estado."
-                    : "Só o organizador pode alterar esta viagem."}
-                </p>
-              )}
-              {isOwner &&
-                (trip.status === "draft" || trip.status === "cancelled") && (
-                  <button
-                    className="text-button danger-text"
-                    disabled={mutation.isPending}
-                    onClick={() => {
-                      reset();
-                      setConfirm("delete");
-                    }}
-                  >
-                    Remover viagem
-                  </button>
-                )}
               {confirm && (
                 <section
                   className="panel editor"
@@ -350,11 +375,11 @@ export function Trips({
         </>
       ) : (
         <>
-          <div className="page-heading">
+          <div className="page-heading trips-hero">
             <div>
-              <span className="eyebrow">HÁ SEMPRE UM NOVO CAMINHO</span>
+              <span className="eyebrow">01 / O PRÓXIMO PERCURSO</span>
               <h1>Viagens</h1>
-              <p>Um destino. As tuas paragens. Boa companhia.</p>
+              <p>Planeia a saída. Junta o grupo. Faz-te à estrada.</p>
             </div>
             <button
               onClick={() => {
@@ -365,6 +390,29 @@ export function Trips({
               <Plus size={18} />
               Criar viagem
             </button>
+          </div>
+          <div
+            className="trip-filters"
+            role="group"
+            aria-label="Filtrar viagens"
+          >
+            {(
+              [
+                { key: "all", label: "Todas" },
+                { key: "active", label: "Em curso" },
+                { key: "planned", label: "Planeadas" },
+                { key: "history", label: "Histórico" },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.key}
+                className="filter-button"
+                aria-pressed={filter === item.key}
+                onClick={() => setFilter(item.key)}
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
           {list.isPending && <p role="status">A carregar viagens…</p>}
           {list.isError && (
@@ -390,9 +438,24 @@ export function Trips({
               </button>
             </div>
           )}
+          {list.data && list.data.length > 0 && visibleTrips?.length === 0 && (
+            <div className="panel empty">
+              <h2>Sem viagens nesta vista.</h2>
+              <p>Escolhe outro filtro para ver as tuas viagens.</p>
+              <button className="secondary" onClick={() => setFilter("all")}>
+                Ver todas as viagens
+              </button>
+            </div>
+          )}
           <div className="trip-list">
-            {list.data?.map((item) => (
-              <article className="panel trip-card" key={item.id}>
+            {visibleTrips?.map((item, index) => (
+              <article
+                className={`panel trip-card trip-card-${item.status}`}
+                key={item.id}
+              >
+                <span className="trip-card-index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <div>
                   <span className={`trip-status status-${item.status}`}>
                     {statusLabels[item.status]}
@@ -409,7 +472,7 @@ export function Trips({
                   </small>
                 </div>
                 <button
-                  className="secondary"
+                  className="trip-open"
                   aria-label={`Ver viagem ${item.title}`}
                   onClick={() => {
                     reset();

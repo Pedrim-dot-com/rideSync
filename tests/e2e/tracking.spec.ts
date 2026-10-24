@@ -220,6 +220,16 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
     });
   });
   await page.goto("/");
+  await page.screenshot({
+    path: testInfo.outputPath("login-mobile.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.screenshot({
+    path: testInfo.outputPath("login-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
   const email = page.getByLabel("Email", { exact: true });
   await email.tap();
   await email.fill("rider@example.test");
@@ -230,6 +240,19 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
   await page.getByLabel("Password", { exact: true }).fill("password123");
   await page.getByRole("button", { name: "Entrar", exact: true }).click();
   await page.getByRole("button", { name: "Viagens", exact: true }).click();
+  await page.screenshot({
+    path: testInfo.outputPath("dashboard-mobile.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.screenshot({
+    path: testInfo.outputPath("dashboard-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Em curso", exact: true }).click();
+  await expect(page.getByText("Sem viagens nesta vista.")).toBeVisible();
+  await page.getByRole("button", { name: "Todas", exact: true }).click();
   await page.getByRole("button", { name: "Criar viagem", exact: true }).click();
   await expect(page.getByLabel("Título da viagem")).not.toBeFocused();
   await page.getByLabel("Título da viagem").tap();
@@ -262,6 +285,20 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
     .click();
   await expect(page.locator(".gps-own")).toHaveCount(1);
   expect(publishCount).toBe(1);
+  await expect
+    .poll(async () =>
+      page.locator(".gps-own").evaluate((el) => {
+        const bounds = el.getBoundingClientRect();
+        const map = el.closest(".trip-map")!.getBoundingClientRect();
+        return (
+          bounds.left >= map.left &&
+          bounds.right <= map.right &&
+          bounds.top >= map.top &&
+          bounds.bottom <= map.bottom
+        );
+      }),
+    )
+    .toBe(true);
   await expect(page.locator(".maplibregl-canvas")).toHaveAttribute(
     "data-same-canvas",
     "true",

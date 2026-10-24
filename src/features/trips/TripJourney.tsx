@@ -11,7 +11,7 @@ export function TripJourney({
 }) {
   const tracking = useTracking(detail.trip, userId);
   return (
-    <>
+    <div className="journey-layout">
       <RouteControls
         detail={detail}
         userId={userId}
@@ -23,6 +23,6 @@ export function TripJourney({
         owner={detail.trip.created_by === userId}
         hasRoute={Boolean(detail.route)}
       />
-    </>
+    </div>
   );
 }
