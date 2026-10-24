@@ -38,10 +38,12 @@ export default function App() {
     if (!supabase) return;
     let active = true;
     let eventReceived = false;
+    let currentUserId: string | undefined;
     const { data } = supabase.auth.onAuthStateChange((event, next) => {
       eventReceived = true;
       if (active) {
-        cache.clear();
+        if (currentUserId !== next?.user.id) cache.clear();
+        currentUserId = next?.user.id;
         setSession(next);
         setLoading(false);
         if (event === "PASSWORD_RECOVERY") setRecovery(true);
@@ -52,6 +54,7 @@ export default function App() {
       .getSession()
       .then(({ data, error }) => {
         if (active && !eventReceived) {
+          currentUserId = data.session?.user.id;
           setSession(data.session);
           setAuthError(Boolean(error));
           setLoading(false);

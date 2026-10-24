@@ -48,8 +48,8 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid #b09324;
-  outline-offset: 4px;
+  outline: 2px solid #537b65;
+  outline-offset: 2px;
 }
 header {
   height: 96px;
@@ -269,7 +269,10 @@ label {
   margin-bottom: 20px;
 }
 input,
-select {
+select,
+textarea {
+  font-size: 16px;
+  line-height: 1.5;
   border: 1px solid #cbd5c6;
   border-radius: 7px;
   padding: 13px;
@@ -889,4 +892,46 @@ h3 {
   .invitation-list li {
     flex-wrap: wrap;
   }
+}
+
+.tracking-controls {
+  margin-block: 24px;
+}
+.trip-timer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: baseline;
+}
+.trip-timer strong {
+  font-size: 32px;
+  font-variant-numeric: tabular-nums;
+}
+.tracking-members {
+  padding-left: 20px;
+}
+.tracking-members li {
+  margin-block: 10px;
+}
+.gps-pin {
+  background: #235cb0;
+  color: white;
+  padding: 5px 10px;
+  border: 3px solid white;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px #0005;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.gps-pin.gps-own {
+  background: #6a32ae;
+}
+.gps-pin.gps-stale {
+  background: #666;
+}
+.follow-position {
+  margin-top: 10px;
 }

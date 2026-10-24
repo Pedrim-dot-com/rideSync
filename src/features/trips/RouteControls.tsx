@@ -1,3 +1,4 @@
+import type { RiderPosition } from "../tracking/types";
 import { lazy, Suspense, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Route } from "lucide-react";
@@ -11,9 +12,13 @@ const TripMap = lazy(() => import("./TripMap"));
 export function RouteControls({
   detail,
   userId,
+  positions = [],
+  now = 0,
 }: {
   detail: TripDetail;
   userId: string;
+  positions?: RiderPosition[];
+  now?: number;
 }) {
   const cache = useQueryClient();
   const [avoid, setAvoid] = useState(false);
@@ -47,7 +52,13 @@ export function RouteControls({
   return (
     <section className="route-section">
       <Suspense fallback={<p role="status">A preparar mapa…</p>}>
-        <TripMap waypoints={detail.waypoints} route={detail.route} />
+        <TripMap
+          waypoints={detail.waypoints}
+          route={detail.route}
+          positions={positions}
+          userId={userId}
+          now={now}
+        />
       </Suspense>
       {canCalculate && (
         <div className="route-toolbar">

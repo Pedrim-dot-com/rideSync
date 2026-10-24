@@ -78,6 +78,14 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
       };
     else if (path.endsWith("/user")) body = user;
     else if (path.endsWith("/motorcycles")) body = [];
+    else if (path.endsWith("/tracking_snapshot"))
+      body = {
+        server_now: new Date().toISOString(),
+        status: trip?.status ?? "draft",
+        revision: trip?.revision ?? 1,
+        session: null,
+        positions: [],
+      };
     else if (path.endsWith("/list_trip_invitations")) body = [];
     else if (path.endsWith("/list_trip_members"))
       body = [

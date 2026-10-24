@@ -94,7 +94,6 @@ export function TripEditor({
                 maxLength={120}
                 defaultValue={detail?.trip.title}
                 required
-                autoFocus
               />
             </label>
             <label>

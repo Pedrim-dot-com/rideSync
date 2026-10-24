@@ -13,10 +13,10 @@
 - DEC-002: **RESOLVIDO — openrouteservice** para routing/geocoding; confirmar quotas e opções realmente suportadas antes de implementar filtros.
 - DEC-003: fornecedor/modelo de LLM e orçamento máximo por mês.
 - DEC-004: **RESOLVIDO — Cloudflare Pages ligada ao GitHub**; endereço indicado: https://ridesync-8z1.pages.dev.
-- DEC-005: política exata de retenção de snapshots GPS (sugestão: apagar ao parar/terminar).
+- DEC-005: **RESOLVIDO — guardar só a última posição e apagar ao parar/terminar**, confirmado pelo utilizador em 2026-10-24; tempo permanece no histórico.
 - DEC-006: **RESOLVIDO — link com login ou registo**, confirmado pelo utilizador em 2026-10-24.
 - DEC-007: se fotos da mota são P0 ou P1 (sugestão P1).
-- DEC-008: mecanismo de confiança de Broadcast (publicação autenticada server-side se necessário).
+- DEC-008: **RESOLVIDO tecnicamente — notificações pela BD e releitura de snapshots autorizados**; não aceitar coordenadas em eventos do cliente.
 
 ## Registo de riscos
 | Risco | Impacto | Mitigação |
@@ -137,3 +137,28 @@ Migration 004 aplicada com autorização em 2026-10-24 (Europe/Lisbon); tipos
 regenerados e 25 verificações remotas de convites/participação aprovadas, com
 limpeza confirmada dos dados temporários.
 Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.
+
+
+## ADR-012 — Sessões cronometradas e GPS foreground (implementação local)
+
+Pedido do utilizador: iniciar/terminar viagens, controlar tempo e acompanhar
+posições no percurso. Sem novas dependências. Transições draft/planned → active
+→ completed só pelo organizador, via RPC com revisão/locks e hora do servidor.
+Exigir rota calculada antes de iniciar. Fim manual com confirmação; não inferir
+chegada automática nem implementar turn-by-turn interno.
+
+Retenção confirmada pelo utilizador (DEC-005): apenas última posição,
+remoção ao parar/fim; invisibilidade após 60 s sem updates, stale aos 30 s,
+purga física adicional em leituras. Não instalar cron ou guardar histórico GPS.
+Falhas de rede podem impedir apagar imediatamente; documentar essa diferença.
+Opt-in por geração impede reativação por pedidos atrasados e cleanup de outra
+instância. Notificações pequenas e privadas emitidas pela BD; frontend relê dados
+sob autorização, com polling de segurança de 10 s. Sem confiar em coordenadas
+recebidas por Broadcast/Presence de clientes. Quota por pessoa persiste durante
+stop/start, sem guardar histórico de coordenadas.
+
+O utilizador confirmou zoom ao tocar e deslocamento da página em iOS.
+Input 16 px e remoção de autofocus corrigem causas comuns de zoom/foco em
+mobile, mantendo acessibilidade. Refresh Auth não deve limpar cache quando a
+identidade se mantém. Migration 005 está apenas local e requer aprovação antes
+de aplicação/publicação. Ver `docs/16-TRIP-TRACKING.md`.

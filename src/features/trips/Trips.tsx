@@ -1,5 +1,5 @@
 import { Participation } from "./Participation";
-import { RouteControls } from "./RouteControls";
+import { TripJourney } from "./TripJourney";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -169,7 +169,11 @@ export function Trips({
                   {statusLabels[trip.status]}
                 </span>
               </div>
-              <RouteControls detail={data} userId={userId} />
+              <TripJourney
+                key={`journey:${trip.id}`}
+                detail={data}
+                userId={userId}
+              />
               <div className="trip-detail-grid">
                 <section className="panel">
                   <div className="section-heading">
@@ -231,10 +235,16 @@ export function Trips({
                         : "participantes confirmados"}
                     </span>
                   </div>
-                  <small>A partilha GPS ainda não está disponível.</small>
+                  <small>
+                    O GPS só é partilhado com consentimento durante a viagem.
+                  </small>
                 </aside>
               </div>
-              <Participation key={trip.id} detail={data} userId={userId} />
+              <Participation
+                key={`participants:${trip.id}`}
+                detail={data}
+                userId={userId}
+              />
               {canEdit && (
                 <div className="actions trip-actions">
                   <button

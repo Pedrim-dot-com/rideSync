@@ -19,7 +19,9 @@ validados com uma sessão Supabase real em 2026-10-23.
 Convites e participação estão implementados; a migration 004 foi aplicada com
 autorização e passou 25 verificações com sessões reais.
 Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.
-Tracking, uploads e IA ainda não estão implementados.
+Início/fim de viagem, cronómetro e tracking foreground estão implementados
+localmente, com migration 005 ainda por autorizar. Ver `docs/16-TRIP-TRACKING.md`.
+Uploads e IA ainda não estão implementados.
 Não são apresentados dados fictícios como dados de utilizadores reais.
 A instalação e GPS em iOS/Android exigem testes futuros em dispositivos reais.
 

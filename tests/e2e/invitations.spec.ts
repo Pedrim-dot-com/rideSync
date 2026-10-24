@@ -87,6 +87,14 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
       else if (path.endsWith("/signup"))
         body = { user: profile(id), session: null };
       else if (path.endsWith("/user")) body = profile(id);
+      else if (path.endsWith("/tracking_snapshot"))
+        body = {
+          server_now: new Date().toISOString(),
+          status: trip.status,
+          revision: trip.revision,
+          session: null,
+          positions: [],
+        };
       else if (path.endsWith("/motorcycles"))
         body =
           id === riderId
