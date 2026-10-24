@@ -2,7 +2,7 @@
 
 ## Estado desta entrega
 
-A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Interface publicada e bundle/service worker confirmados; recibo em docs/25.
 Não são necessárias novas chaves nem alterações à função de voz.
 
 ## Regras confirmadas
@@ -61,7 +61,7 @@ e invalidação de cache após ações; não prometem notificações push em bac
 O snapshot de tipos remotos foi regenerado após a aplicação da 010; os aliases
 locais refinam os contratos usados pela interface.
 
-## Como testar após ativação
+## Como testar na PWA publicada
 
 1. A cria grupo; B candidata-se. A aprova B, que fica membro comum.
 2. B propõe convite para C (sem grupo): B vê “Aguarda revisão da direção”.
@@ -102,5 +102,17 @@ confirmada. Não comprova Safari num iPhone físico nem notificações em backgr
 - Snapshot de tipos públicos regenerado; nenhuma chave privada no repositório.
 - Não reaplicar 010. Recibos históricos de 007–009 preservados em docs/24.
 
-Publicação da UI autorizada e em curso; confirmar bundle e service worker antes
-de considerar a atualização pública concluída.
+## Publicação confirmada
+
+Push de `99e9199` e `0d7e5b2` para main concluído. Cloudflare Pages serve
+`/assets/index-CUFv1z09.js`, e o service worker público precacheia o mesmo bundle.
+Verificação HTTPS em UTC `2026-10-24T16:46:31.830487+00:00` confirmou os contratos de convites,
+revisão de propostas, aceitação e grupo/candidatura no Perfil no JavaScript
+público. Sem nova publicação de Edge Functions.
+
+Na PWA instalada: ligar à internet, abrir a app e aplicar o aviso Atualizar
+quando aparecer. Depois abrir Perfil → O meu grupo; dirigentes/membros aceites
+também encontram os convites na página do grupo. Sair e voltar a abrir a app
+pode ser necessário para o service worker detetar a versão. A publicação
+verificada não comprova que um iPhone individual já recebeu a atualização.
+

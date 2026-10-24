@@ -7,8 +7,8 @@
 > requerem validação física. IA e uploads de fotos continuam por implementar.
 
 > Migration 010 aplicada: convites de grupo com revisão pela direção e
-> grupo/candidatura no Perfil; 34 verificações HTTPS aprovadas. Publicação da
-> interface em curso. [Estado e testes](docs/25-GROUP-INVITATIONS-AND-PROFILE.md).
+> grupo/candidatura no Perfil; 34 verificações HTTPS aprovadas e interface
+> publicada na PWA. [Estado e testes](docs/25-GROUP-INVITATIONS-AND-PROFILE.md).
 
 ## Objetivo
 Validar que motards conseguem criar e partilhar uma viagem, escolher a mota, participar em grupos e ver as posições uns dos outros em tempo real **com a PWA aberta**. Um planeador com IA transforma pedidos em itinerários validados por um motor de rotas.

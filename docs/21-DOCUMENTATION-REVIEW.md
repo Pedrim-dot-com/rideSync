@@ -157,3 +157,10 @@ temporários, removidos com limpeza verificada. A revisão anterior era evidênc
 da fase local, não o estado atual. Docs/25 contém recibo e roteiro; recibos
 001–009 preservados. README e documentos afetados atualizados para distinguir
 a aplicação remota da confirmação de publicação, ainda em curso nesta etapa.
+
+
+Confirmação pública desta ativação: push para main concluído; bundle
+`/assets/index-CUFv1z09.js` servido pela Cloudflare e presente no precache do service worker.
+README e estado atual de docs/25 atualizados após a verificação HTTPS.
+A confirmação no aparelho individual depende de aplicar o aviso Atualizar;
+sem alegar teste físico em iPhone. Registos locais anteriores são históricos.

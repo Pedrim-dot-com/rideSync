@@ -68,9 +68,9 @@ conta dirigente exige tratamento explícito do grupo pelo operador.
 Roteiro de teste e pré-condições: [docs/23-FEATURE-TEST-GUIDE.md](23-FEATURE-TEST-GUIDE.md).
 
 
-## Convites e Perfil — evolução da entrega (2026-10-24)
+## Convites e Perfil — entrega publicada (2026-10-24)
 
-**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Interface publicada e bundle/service worker confirmados; recibo em docs/25.
 
 Registo da fase local anterior:
 

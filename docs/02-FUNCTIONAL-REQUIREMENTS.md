@@ -89,9 +89,9 @@ passam a MAP-001…006. Os FR-021…024 da tabela principal mantêm o significad
 VOZ-006 é um gate de validação manual, ainda pendente. Ver docs/20-VOICE-AND-SOS.md.
 
 
-## Convites e Perfil — evolução da entrega (2026-10-24)
+## Convites e Perfil — entrega publicada (2026-10-24)
 
-**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Interface publicada e bundle/service worker confirmados; recibo em docs/25.
 
 Registo da fase local anterior:
 
