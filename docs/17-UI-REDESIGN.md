@@ -58,7 +58,13 @@ SQL e políticas remotas não foram alterados; não há migrations nem segredos 
 
 Prévia gerada com dados de teste explicitamente simulados, fora do bundle:
 /workspace/ridesync-ui-preview (login/dashboard desktop e dashboard/GPS mobile).
-Código preparado localmente; **não enviado para main nem publicado nesta fase**.
-A publicação requer confirmação conforme CLAUDE.md. Após autorização: push main,
-confirmar novo bundle e service worker na Cloudflare, depois aceitar Atualizar
-na PWA. Uma prévia local não demonstra atualização do telemóvel.
+Publicação autorizada pelo utilizador e push para main concluído em 2026-10-24
+(commit de UI `453c62b`). Confirmados em https://ridesync-8z1.pages.dev:
+HTML HTTP 200, JS `/assets/index-BjMBwqQy.js`, CSS `/assets/index-B7GyhKP5.css`,
+laranja/preto e Barlow Condensed servidos. Manifesto com theme-color #121212 e
+woff2 local HTTP 200; service worker precacheia o JS atual e a fonte.
+
+Na instalação existente, aceitar Atualizar quando surgir o aviso. Em iOS,
+se necessário guardar edições, fechar completamente a PWA e voltar a abrir
+com internet. A confirmação de assets publicados não prova que o telemóvel
+já aplicou a atualização; não começar por desinstalar ou apagar dados.

@@ -178,5 +178,6 @@ Mapa e ações de saída em destaque; grupo/convites e gestão em disclosures
 nativas, mantendo o GPS montado. Inputs 16px, confirmação de ações e consentimento
 continuam ativos. Corrigida a perda de classes de posicionamento do marcador
 MapLibre durante updates visuais. Sem alterações de backend ou dependências.
-Código e prévias locais prontos, publicação aguarda confirmação própria.
+Publicação autorizada e confirmada na Cloudflare em 2026-10-24: tema, fonte,
+manifesto e precache da nova UI verificados após push do commit 453c62b.
 Ver docs/17-UI-REDESIGN.md.
