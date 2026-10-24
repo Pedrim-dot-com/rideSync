@@ -23,36 +23,14 @@ export const trackingSchema = z.object({
 });
 export type RiderPosition = z.infer<typeof positionSchema>;
 export type TrackingSnapshot = z.infer<typeof trackingSchema>;
-// Contract for pending migration 005, until remote approval and type generation.
+// The generator omits nullable SQL RPC arguments; preserve the generated schema.
+type PublishFunction =
+  import("../../shared/database.generated").Database["public"]["Functions"]["publish_rider_location"];
 export type TrackingFunctions = {
-  start_trip: {
-    Args: { p_trip_id: string; p_expected_revision: number };
-    Returns: string;
-  };
-  finish_trip: {
-    Args: { p_trip_id: string; p_expected_revision: number };
-    Returns: undefined;
-  };
-  tracking_snapshot: {
-    Args: { p_trip_id: string };
-    Returns: import("../../shared/database.generated").Json;
-  };
-  start_location_sharing: { Args: { p_session_id: string }; Returns: string };
-  stop_location_sharing: {
-    Args: { p_session_id: string; p_share_id: string };
-    Returns: undefined;
-  };
-  publish_rider_location: {
-    Args: {
-      p_session_id: string;
-      p_share_id: string;
-      p_latitude: number;
-      p_longitude: number;
-      p_accuracy_m: number;
+  publish_rider_location: Omit<PublishFunction, "Args"> & {
+    Args: Omit<PublishFunction["Args"], "p_heading"> & {
       p_heading: number | null;
-      p_recorded_at: string;
     };
-    Returns: undefined;
   };
 };
 export function trackingError(error: unknown) {

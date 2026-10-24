@@ -1,6 +1,6 @@
 # Iniciar, acompanhar e terminar viagens
 
-## Fluxo implementado (migration 005 ainda por autorizar)
+## Fluxo implementado
 
 1. O organizador calcula e guarda um percurso real.
 2. Em rascunho ou planeada, escolhe **Iniciar viagem**. O servidor cria uma
@@ -53,7 +53,8 @@ utilizador em 2026-10-24.
 
 A base de dados emite `tracking_changed` via `realtime.send` para o canal
 privado `trip:<uuid>`, depois de alterar sessões/posições. A notificação contém
-apenas `{changed:true}`; nenhuma coordenada vem de mensagens do browser.
+`{changed:true}` e um ID de mensagem gerado pelo Supabase; não inclui
+coordenadas. Nenhuma coordenada vem de mensagens do browser.
 O frontend invalida a query e relê o snapshot autorizado. Mesmo uma mensagem
 fabricada só poderia provocar uma releitura, não inventar marcadores.
 
@@ -82,25 +83,29 @@ Cria `tracking_sessions`, `location_shares`, `rider_locations`, RPCs de início/
 opt-in/stop/publicação/snapshot, helpers RLS, notificações DB e policy de receção
 Realtime. Não altera migrations anteriores ou dados de viagens existentes.
 
-A existência das funções reais `realtime.send(jsonb,text,text,boolean)` e
-`realtime.topic()` foi confirmada por leitura da API de gestão. **A migration 005
-não foi aplicada nem esta funcionalidade publicada.** Precisa de autorização
-conforme `CLAUDE.md`. Sem novos fornecedores, dependências ou segredos.
+A migration 005 foi aplicada com autorização do utilizador em 2026-10-24,
+com recibo UTC `2026-10-24 07:26:29.04432+00`.
+SHA-256: `56d9814594806fe6c01d7763c783e39b52a338ccf596145db50356c3e30fff56`.
+RLS, ausência de escritas diretas pelo cliente e policy privada confirmadas.
+Não reaplicar nem editar esta migration. Sem novos fornecedores ou segredos.
 
-Depois da autorização: rever policies de Realtime existentes, aplicar apenas
-005, regenerar tipos da API, executar smoke remoto com dados temporários,
-verificar subscrição privada/negação a outsider e publicar o frontend por Git.
-Não executar o bootstrap de testes contra Supabase real.
+`database.generated.ts` foi regenerado da API após a 005. O wrapper corrige
+apenas a nulabilidade de heading que o gerador não infere na RPC SQL.
+O frontend é publicado via push para `main` depois dos testes remotos.
+Nunca executar o bootstrap local no Supabase real.
 
-`database.generated.ts` continua a refletir 004 remota; o wrapper acrescenta os
-contratos 005 pendentes, de forma explícita.
+Passaram **24 verificações HTTPS/WebSocket reais**: rota real ORS, ciclo
+início/fim, tempo persistido, opt-in, quota, stop/anti-replay e limpeza de
+posições. Os canais privados de organizador e participante receberam seis
+notificações cada; outsider foi recusado. Notificações contêm só mudança/ID,
+sem coordenadas. Contas, viagem, convites, sessões e posições de teste removidos.
 
 ## Validação e limites
 
 - PostgreSQL descartável: 195 checks, incluindo 57 de tracking, transições,
   concorrência, membership, timestamps, quota, expiração e cleanup. O contrato
   local de realtime testa policies/notificações, não um servidor WebSocket real.
-- 81 testes unitários, incluindo watcher sem consentimento, permissões negadas,
+- 83 testes unitários, incluindo watcher sem consentimento, permissões negadas,
   background, desmontagem com resposta atrasada, fim, erro de acesso e eventos
   sem confiança na payload.
 - Quatro E2E: garagem, viagens, convites e novo fluxo mobile de início/GPS/fim.
@@ -109,3 +114,18 @@ contratos 005 pendentes, de forma explícita.
   final persiste após reload. Não comprova sensores/dispositivos reais.
 - Tipagem, lint, formatação e build passam. iOS Safari/Android Chrome reais,
   3–5 telemóveis e perda/retorno de rede continuam por validar após publicação.
+
+
+## Atualizações da PWA
+
+Uma alteração local não chega ao telemóvel antes de push e deploy Pages.
+O service worker continua em modo prompt: não força reload nem interrompe
+edições ou tracking. A aplicação verifica novas versões no registo, ao voltar
+ao primeiro plano/ganhar ligação e a cada minuto enquanto visível, com throttle.
+Falhas offline não impedem usar a aplicação. A atualização só é aplicada quando
+o utilizador escolhe **Atualizar** no aviso; pode escolher **Mais tarde**.
+
+Para uma instalação antiga que ainda não tenha esta verificação, fechar
+completamente a PWA no seletor de aplicações do iPhone e voltar a abrir online.
+Guardar edições e aceitar o aviso. Os headers de `sw.js` e manifesto usam
+`no-cache`; assets têm nomes com hash. Não apagar dados locais como primeiro passo.

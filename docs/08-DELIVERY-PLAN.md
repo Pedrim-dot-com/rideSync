@@ -31,12 +31,12 @@
 - [x] Migration 004 aplicada, tipos regenerados e 25 verificações remotas aprovadas.
 
 ## Fase 4 — Tracking
-- [x] Sessões de tracking e regras de estado (local; migration 005 por autorizar).
+- [x] Sessões de tracking e regras de estado (migration 005 aplicada com autorização e smoke remoto aprovado).
 - [x] Consentimento GPS e `watchPosition`, pausa foreground e cleanup.
-- [x] Canal privado Realtime e autorização implementados; integração remota por validar.
+- [x] Canal privado Realtime e autorização verificados via WebSocket real.
 - [x] Notificações Broadcast emitidas pela BD e snapshot autorizado da última posição; sem confiar em Presence como prova de GPS.
 - [x] Stale/offline, reconexão, expiração e cleanup (testados localmente).
-- [ ] Autorizar/aplicar migration 005 e validar Realtime/sessões no Supabase real.
+- [x] Migration 005 aplicada; 24 verificações HTTPS/WebSocket reais aprovadas.
 - [ ] Testes em 3–5 telemóveis e redes distintas.
 
 ## Fase 5 — AI Planner

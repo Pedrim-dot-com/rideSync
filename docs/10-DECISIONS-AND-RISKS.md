@@ -139,7 +139,7 @@ limpeza confirmada dos dados temporários.
 Ver `docs/15-INVITATIONS-AND-PARTICIPATION.md`.
 
 
-## ADR-012 — Sessões cronometradas e GPS foreground (implementação local)
+## ADR-012 — Sessões cronometradas e GPS foreground
 
 Pedido do utilizador: iniciar/terminar viagens, controlar tempo e acompanhar
 posições no percurso. Sem novas dependências. Transições draft/planned → active
@@ -160,5 +160,7 @@ stop/start, sem guardar histórico de coordenadas.
 O utilizador confirmou zoom ao tocar e deslocamento da página em iOS.
 Input 16 px e remoção de autofocus corrigem causas comuns de zoom/foco em
 mobile, mantendo acessibilidade. Refresh Auth não deve limpar cache quando a
-identidade se mantém. Migration 005 está apenas local e requer aprovação antes
-de aplicação/publicação. Ver `docs/16-TRIP-TRACKING.md`.
+identidade se mantém. Migration 005 aplicada com autorização em 2026-10-24; tipos regenerados e
+24 verificações HTTPS/WebSocket passaram, com limpeza confirmada das fixtures.
+PWA verifica novas versões ao retomar e a cada minuto, sempre com confirmação
+antes do reload. Ver `docs/16-TRIP-TRACKING.md`.

@@ -82,3 +82,15 @@ criação/edição de viagem, mapa/atribuição e erros recuperáveis. Confirmar
 separador Network que não há chaves privadas no frontend e que as chamadas de
 routing vão para Edge Functions, não diretamente para openrouteservice.
 A API Supabase e as Edge Functions são separadas do site estático Pages.
+
+
+## Receber atualizações na PWA instalada
+
+Depois de um push, confirmar primeiro que o build Pages terminou e serve o
+novo bundle. A PWA instalada pode continuar na versão anterior até aceitar o
+aviso **Há uma nova versão do RideSync → Atualizar**. Guardar edições primeiro.
+
+A versão com GPS verifica atualizações ao voltar ao primeiro plano e a cada
+minuto enquanto visível. Para versões anteriores, fechar completamente a PWA
+no seletor de aplicações iOS e abrir de novo com rede para iniciar a verificação.
+Não é necessário desinstalar ou apagar os dados como primeiro passo.

@@ -1,4 +1,4 @@
-// Generated from the Supabase public schema after migration 202610240004.
+// Generated from the Supabase public schema after migration 202610240005.
 export type Json =
   | string
   | number
@@ -15,6 +15,45 @@ export type Database = {
   };
   public: {
     Tables: {
+      location_shares: {
+        Row: {
+          expires_at: string;
+          last_published_at: string | null;
+          session_id: string;
+          share_id: string;
+          user_id: string;
+        };
+        Insert: {
+          expires_at?: string;
+          last_published_at?: string | null;
+          session_id: string;
+          share_id?: string;
+          user_id: string;
+        };
+        Update: {
+          expires_at?: string;
+          last_published_at?: string | null;
+          session_id?: string;
+          share_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "location_shares_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "tracking_sessions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "location_shares_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       map_request_limits: {
         Row: {
           action: string;
@@ -114,6 +153,103 @@ export type Database = {
           username?: string | null;
         };
         Relationships: [];
+      };
+      rider_locations: {
+        Row: {
+          accuracy_m: number;
+          heading: number | null;
+          latitude: number;
+          longitude: number;
+          received_at: string;
+          recorded_at: string;
+          session_id: string;
+          trip_id: string;
+          user_id: string;
+        };
+        Insert: {
+          accuracy_m: number;
+          heading?: number | null;
+          latitude: number;
+          longitude: number;
+          received_at?: string;
+          recorded_at: string;
+          session_id: string;
+          trip_id: string;
+          user_id: string;
+        };
+        Update: {
+          accuracy_m?: number;
+          heading?: number | null;
+          latitude?: number;
+          longitude?: number;
+          received_at?: string;
+          recorded_at?: string;
+          session_id?: string;
+          trip_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "rider_locations_session_id_user_id_fkey";
+            columns: ["session_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "location_shares";
+            referencedColumns: ["session_id", "user_id"];
+          },
+          {
+            foreignKeyName: "rider_locations_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "rider_locations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tracking_sessions: {
+        Row: {
+          ended_at: string | null;
+          id: string;
+          started_at: string;
+          started_by: string;
+          trip_id: string;
+        };
+        Insert: {
+          ended_at?: string | null;
+          id?: string;
+          started_at?: string;
+          started_by: string;
+          trip_id: string;
+        };
+        Update: {
+          ended_at?: string | null;
+          id?: string;
+          started_at?: string;
+          started_by?: string;
+          trip_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tracking_sessions_started_by_fkey";
+            columns: ["started_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tracking_sessions_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: true;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       trip_invitations: {
         Row: {
@@ -344,7 +480,15 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      can_read_location: {
+        Args: { p_session_id: string; p_trip_id: string; p_user_id: string };
+        Returns: boolean;
+      };
       can_read_trip: { Args: { p_trip_id: string }; Returns: boolean };
+      can_receive_trip_tracking: {
+        Args: { p_topic: string };
+        Returns: boolean;
+      };
       consume_map_request: { Args: { p_action: string }; Returns: undefined };
       create_trip: {
         Args: { p_departure_at: string; p_title: string; p_waypoints: Json };
@@ -359,6 +503,10 @@ export type Database = {
         }[];
       };
       delete_trip: {
+        Args: { p_expected_revision: number; p_trip_id: string };
+        Returns: undefined;
+      };
+      finish_trip: {
         Args: { p_expected_revision: number; p_trip_id: string };
         Returns: undefined;
       };
@@ -383,6 +531,18 @@ export type Database = {
           user_id: string;
           username: string;
         }[];
+      };
+      publish_rider_location: {
+        Args: {
+          p_accuracy_m: number;
+          p_heading: number;
+          p_latitude: number;
+          p_longitude: number;
+          p_recorded_at: string;
+          p_session_id: string;
+          p_share_id: string;
+        };
+        Returns: undefined;
       };
       replace_trip_waypoints: {
         Args: { p_trip_id: string; p_waypoints: Json };
@@ -412,6 +572,18 @@ export type Database = {
         };
         Returns: undefined;
       };
+      start_location_sharing: {
+        Args: { p_session_id: string };
+        Returns: string;
+      };
+      start_trip: {
+        Args: { p_expected_revision: number; p_trip_id: string };
+        Returns: string;
+      };
+      stop_location_sharing: {
+        Args: { p_session_id: string; p_share_id: string };
+        Returns: undefined;
+      };
       store_trip_route: {
         Args: {
           p_actor: string;
@@ -424,6 +596,7 @@ export type Database = {
         };
         Returns: undefined;
       };
+      tracking_snapshot: { Args: { p_trip_id: string }; Returns: Json };
       update_trip: {
         Args: {
           p_departure_at: string;
