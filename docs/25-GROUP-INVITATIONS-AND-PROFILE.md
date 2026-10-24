@@ -115,4 +115,3 @@ quando aparecer. Depois abrir Perfil → O meu grupo; dirigentes/membros aceites
 também encontram os convites na página do grupo. Sair e voltar a abrir a app
 pode ser necessário para o service worker detetar a versão. A publicação
 verificada não comprova que um iPhone individual já recebeu a atualização.
-
