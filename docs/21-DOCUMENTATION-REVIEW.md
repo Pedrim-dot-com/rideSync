@@ -124,3 +124,26 @@ correspondem à versão ativada. Verificações locais finais: 127 unitários,
 316 checks PostgreSQL e seis E2E simulados aprovados; 49 checks HTTPS reais
 com limpeza confirmada. O proxy recusou WebSocket LiveKit como Domain forbidden,
 pelo que o áudio físico continua sujeito ao roteiro em aparelhos reais.
+
+
+## Revisão — convites de grupo e Perfil (010 local)
+
+Revistos README e todos os documentos 01–25. Atualizados PRD, requisitos,
+arquitetura, dados/RLS, API, UX, plano, testes, decisões, operação, desenvolvimento,
+grupos e roteiro. README inclui os três caminhos: candidatura espontânea,
+convite de dirigente e proposta de membro com revisão antes da entrega.
+
+A interpretação inicial de aceitação como candidatura foi corrigida antes de
+qualquer aplicação remota. ADR-019 e docs/25 registam a regra final e distinguem
+a extensão local da produção com 001–009. Restantes documentos e recibos
+históricos de mapas, convites de viagem, tracking, instalação, voz e publicação
+mantêm-se aplicáveis e foram preservados. Sem novas decisões de mapas/voz.
+
+Validação final: typecheck, lint, formatação e build/PWA aprovados; 137 testes
+unitários, 371 checks PostgreSQL (55 novos) e sete E2E com transporte simulado
+aprovados. Novo E2E mobile com três contas confirma proposta invisível ao alvo,
+aprovação exclusiva de dirigente, aceitação com entrada imediata e grupo/papel
+no Perfil, sem overflow horizontal. Não demonstra Safari num iPhone físico nem
+valida a 010 por HTTPS no Supabase real. Links Markdown locais e unicidade dos
+IDs das tabelas de requisitos/testes verificados. Aplicação remota, regeneração
+de tipos e publicação continuam pendentes de confirmação.

@@ -63,3 +63,10 @@ ativo o atalho abre o painel; sem alerta envia SOS com o motivo selecionado.
 
 A presença destes separadores/controlos na PWA não confirma backend instalado.
 O estado remoto e os passos de teste estão em docs/23-FEATURE-TEST-GUIDE.md.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Grupo → Convidar pessoas: dirigente envia; membro propõe. Direção aprova/recusa propostas antes da entrega. Perfil e Notificações mostram convites aprovados persistentes, aceitar/recusar e prazo. Aceitar dá inscrição imediata. Perfil separa grupo aceite/papel, candidatura pendente e ausência de grupo.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

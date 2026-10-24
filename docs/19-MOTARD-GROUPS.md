@@ -66,3 +66,10 @@ financeira não fazem parte desta entrega. Exclusão administrativa da última
 conta dirigente exige tratamento explícito do grupo pelo operador.
 
 Roteiro de teste e pré-condições: [docs/23-FEATURE-TEST-GUIDE.md](23-FEATURE-TEST-GUIDE.md).
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Clarificação final: a aprovação de entradas pode anteceder o convite. Dirigente convida diretamente; membro comum propõe e direção revê antes de entregar. Aceitar convite aprovado cria inscrição aceite imediatamente. Candidaturas espontâneas continuam pendentes até aprovação. Perfil mostra grupo/papel ou candidatura pendente. Implementação local na 010, ainda não publicada.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

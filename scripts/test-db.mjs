@@ -1,3 +1,4 @@
+import { runGroupInvitationChecks } from "../tests/integration/group-invitations.mjs";
 import { runGroupChecks } from "../tests/integration/groups.mjs";
 import { runVoiceChecks } from "../tests/integration/voice.mjs";
 import { runNotificationChecks } from "../tests/integration/notifications.mjs";
@@ -216,6 +217,7 @@ try {
   checks += await runNotificationChecks({ db, asUser, url });
   checks += await runGroupChecks({ db, asUser, url });
   checks += await runVoiceChecks({ db, asUser });
+  checks += await runGroupInvitationChecks({ db, asUser, url });
   console.log(
     `${checks} database checks passed (ownership, RLS, primary switch, constraints, anonymous access).`,
   );

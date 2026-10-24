@@ -242,3 +242,10 @@ python3 scripts/deploy-map-functions.py --project-ref isyhpoyihcbkujtjadzc --fun
 Sem --function, o script mantém a publicação das duas funções de mapas. Usa API
 de gestão HTTPS e metadados verify_jwt=false, com getUser dentro do handler.
 Ficheiros/fontes e dependências Deno são enviados sem obter segredos remotos.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Executar as migrations locais até 010 no PostgreSQL descartável com npm run test:db:local. A 010 ainda não foi aplicada remotamente; snapshot gerado reflete 009 e contratos locais refinam os novos RPCs. Publicação depende da ativação autorizada descrita em docs/25.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

@@ -60,3 +60,10 @@ fornecedor nem guarda tokens LiveKit em storage/offline cache.
 
 Ver docs/12-MAPS-AND-NAVIGATION.md, docs/19-MOTARD-GROUPS.md e
 docs/20-VOICE-AND-SOS.md para contratos, CORS, quotas e lifecycle.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Contratos locais novos: invite_group_member, review_group_invitation, list_sent_group_invitations, revoke_group_invitation, list_received_group_invitations, respond_group_invitation. Assinaturas e regras completas em docs/25; estas seis RPCs ainda não estão disponíveis em produção. Sem novos canais Realtime/push: polling/invalidação.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

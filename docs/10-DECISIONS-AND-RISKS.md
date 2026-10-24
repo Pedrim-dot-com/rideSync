@@ -287,3 +287,16 @@ Teste remoto inicial do conflito expirou sem resposta; a resposta explícita HTT
 409 passou após a correção. Chaves LiveKit válidas confirmadas por operações de
 salas/tokens, sem recuperar ou imprimir segredos. Documentar separadamente a
 aceitação acústica em hardware que não foi comprovada por testes de API.
+
+
+## ADR-019 — Revisão de propostas antes de entregar convites de grupo
+
+Clarificação final do utilizador: dirigentes convidam diretamente; membros comuns
+propõem convites que só dirigentes podem aprovar/recusar antes de entregar ao
+destinatário. Aceitar convite já aprovado cria inscrição aceite imediatamente,
+sem candidatura/segunda aprovação. Candidaturas espontâneas são um fluxo separado
+com decisão da direção. Substitui a interpretação inicial, nunca publicada, de
+que toda aceitação de convite criaria candidatura. Pertença voluntária, zero ou
+um grupo e direção plural mantêm-se. Perfil mostra pertença/papel aceite ou
+candidatura pendente. Migration 010 local; remota/publicação pendentes.
+Ver [contratos e roteiro](25-GROUP-INVITATIONS-AND-PROFILE.md).

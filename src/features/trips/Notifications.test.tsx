@@ -11,6 +11,9 @@ import { Notifications } from "./Notifications";
 import { Invitation } from "./Invitation";
 import { readPendingInvitation } from "./invitation-link";
 const rpc = vi.hoisted(() => vi.fn());
+vi.mock("../groups/ReceivedGroupInvitations", () => ({
+  ReceivedGroupInvitations: () => null,
+}));
 vi.mock("../../shared/supabase", () => ({ client: () => ({ rpc }) }));
 const invitation = {
   receipt_id: "receipt",
@@ -93,7 +96,7 @@ describe("received invitations", () => {
       await screen.findByRole("button", { name: "Tentar novamente" }),
     );
     expect(
-      await screen.findByText(/Ainda não tens convites recebidos/),
+      await screen.findByText(/Ainda não tens convites de viagem/),
     ).toBeVisible();
   });
   it("retains the bearer until saving succeeds, including while its banner is closed", async () => {

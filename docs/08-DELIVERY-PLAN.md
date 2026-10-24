@@ -83,3 +83,10 @@ Objetivo, requisitos, alterações, migration/RLS, testes executados, screenshot
 
 Os checks históricos das fases anteriores descrevem execuções datadas, não
 uma alegação de que todas as validações de campo estão concluídas.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Convites de grupo e pertença no Perfil implementados localmente. Pendente: autorização e aplicação da 010, tipos remotos, teste HTTPS e publicação ordenada. Não confundir esta extensão com a ativação já concluída de 007–009.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

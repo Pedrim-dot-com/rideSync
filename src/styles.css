@@ -1748,3 +1748,29 @@ details[open] > summary::after {
     box-shadow: 0 3px 12px #0004;
   }
 }
+
+.group-invitation-manager,
+.received-group-invitations {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+.group-invite-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.group-invite-list > li {
+  border: 1px solid var(--line);
+  padding: 16px;
+  overflow-wrap: anywhere;
+}
+.profile-group {
+  margin-block: 24px;
+  overflow-wrap: anywhere;
+}
+.profile-group h3 {
+  margin-bottom: 8px;
+}

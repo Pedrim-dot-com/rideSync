@@ -1,3 +1,4 @@
+import { useGroupInvites } from "./features/groups/invitations-api";
 import { Groups } from "./features/groups/Groups";
 import { Notifications } from "./features/trips/Notifications";
 import { useNotifications } from "./features/trips/notifications-api";
@@ -29,6 +30,7 @@ export default function App() {
   const cache = useQueryClient();
   const [invitation, setInvitation] = useState(readPendingInvitation);
   const [acceptedTrip, setAcceptedTrip] = useState<string | undefined>();
+  const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>();
   const [invitationVisible, setInvitationVisible] = useState(true);
   function closeInvitation(saved: boolean) {
     if (saved) {
@@ -46,8 +48,16 @@ export default function App() {
   const notifications = useNotifications(
     !recovery ? session?.user.id : undefined,
   );
+  const groupInvites = useGroupInvites(
+    !recovery ? session?.user.id : undefined,
+  );
   const pendingCount =
-    notifications.data?.filter((i) => i.status === "pending").length ?? 0;
+    (notifications.data?.filter((i) => i.status === "pending").length ?? 0) +
+    (groupInvites.data?.filter((i) => i.status === "pending").length ?? 0);
+  function openGroups(id?: string) {
+    setSelectedGroupId(id);
+    setPage("groups");
+  }
   function openTrip(tripId: string) {
     setAcceptedTrip(tripId);
     setPage("trips");
@@ -80,6 +90,7 @@ export default function App() {
           setRecovery(false);
           setInvitation(readPendingInvitation());
           setAcceptedTrip(undefined);
+          setSelectedGroupId(undefined);
           setPage("trips");
         }
       }
@@ -113,6 +124,7 @@ export default function App() {
       setSession(null);
       setPage("trips");
       setAcceptedTrip(undefined);
+      setSelectedGroupId(undefined);
     }
   }
   return (
@@ -166,7 +178,7 @@ export default function App() {
             <button
               aria-current={page === "groups" ? "page" : undefined}
               className={page === "groups" ? "nav-active" : ""}
-              onClick={() => setPage("groups")}
+              onClick={() => openGroups()}
             >
               <Users size={18} />
               Grupos
@@ -254,11 +266,18 @@ export default function App() {
                 initialTripId={acceptedTrip}
               />
             ) : page === "notifications" ? (
-              <Notifications userId={session.user.id} onAccepted={openTrip} />
+              <Notifications
+                userId={session.user.id}
+                onAccepted={openTrip}
+                onOpenGroup={openGroups}
+              />
             ) : page === "groups" ? (
-              <Groups userId={session.user.id} />
+              <Groups
+                userId={session.user.id}
+                initialGroupId={selectedGroupId}
+              />
             ) : (
-              <Profile userId={session.user.id} />
+              <Profile userId={session.user.id} onOpenGroups={openGroups} />
             )}
           </div>
         )}

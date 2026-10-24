@@ -72,3 +72,10 @@ antiga ficar ocupada por clientes adulterados após falha de remoção, encerrá
 no painel LiveKit; automatização desta limpeza continua pendente.
 
 Ativação remota, hashes/recibos e provas: docs/24-GROUPS-VOICE-ACTIVATION.md.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Extensão de convites depende da migration 010, ainda local. Após autorização: aplicar 010 antes da UI, regenerar tipos, testar permissões com contas temporárias, limpar fixtures e publicar/verificar a PWA. Sem novas chaves/Edge Functions; não reaplicar 001–009.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

@@ -1,10 +1,17 @@
+import { ProfileGroup } from "./groups/ProfileGroup";
 import { PasskeySettings } from "./access/PasskeySettings";
 import { useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProfile, saveProfile } from "../shared/api";
 import { profileSchema } from "../shared/validation";
 import { errorMessage } from "../shared/supabase";
-export function Profile({ userId }: { userId: string }) {
+export function Profile({
+  userId,
+  onOpenGroups,
+}: {
+  userId: string;
+  onOpenGroups?: (id?: string) => void;
+}) {
   const cache = useQueryClient();
   const [message, setMessage] = useState("");
   const key = ["profile", userId];
@@ -83,6 +90,7 @@ export function Profile({ userId }: { userId: string }) {
           )}
         </form>
       )}
+      <ProfileGroup userId={userId} onOpenGroups={onOpenGroups} />
       {query.data && (
         <PasskeySettings key={`passkeys:${userId}`} userId={userId} />
       )}

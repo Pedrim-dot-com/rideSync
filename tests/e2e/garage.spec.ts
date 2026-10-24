@@ -32,7 +32,9 @@ test("login, garage CRUD, primary motorcycle, profile and logout (mocked Supabas
       });
       return;
     }
-    if (path.endsWith("/token"))
+    if (path.endsWith("/list_received_group_invitations")) body = [];
+    else if (path.endsWith("/list_sent_group_invitations")) body = [];
+    else if (path.endsWith("/token"))
       body = {
         access_token: "test-access-token",
         refresh_token: "test-refresh-token",
@@ -64,7 +66,8 @@ test("login, garage CRUD, primary motorcycle, profile and logout (mocked Supabas
     } else if (path.endsWith("/set_primary_motorcycle")) {
       bikes = bikes.map((b) => ({ ...b, is_primary: true }));
       body = null;
-    } else if (path.endsWith("/profiles")) {
+    } else if (path.endsWith("/group_memberships")) body = [];
+    else if (path.endsWith("/profiles")) {
       if (request.method() === "PATCH") {
         profile = { ...profile, ...request.postDataJSON() };
         body = { id: user.id };

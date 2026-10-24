@@ -65,3 +65,18 @@ datadas. Novos cenários:
 
 Executar npm run test:db:local, npm test, npm run test:e2e e check:edge. Testes
 simulados não substituem a validação LiveKit real nem a aceitação em hardware.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Extensão 010: 137 unitários e 371 checks PostgreSQL locais; 55 checks novos cobrem propostas, autorização exclusiva da direção, invisibilidade antes da aprovação, convites diretos, consentimento, revogação, expiração e concorrência. O novo E2E simula proposta→revisão→aceitação→Perfil mobile; validação HTTPS da 010 ainda pendente.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).
+
+
+| ID | Cenário da extensão local 010 | Resultado esperado |
+|---|---|---|
+| GRP-T06 | Membro propõe convite | Só direção vê controlos de revisão; destinatário não recebe antes da aprovação |
+| GRP-T07 | Direção convida ou aprova proposta | Entrega convite; aceitar cria inscrição aceite imediatamente, sem nova candidatura |
+| GRP-T08 | Revogação, recusa, expiração e aceitação concorrente | Sem entrada indevida nem dois grupos; RLS e destinatário validados no servidor |
+| GRP-T09 | Consultar Perfil e voltar a abrir Notificações | Grupo/papel ou candidatura distinguíveis; convites entregues persistem |

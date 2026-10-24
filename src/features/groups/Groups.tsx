@@ -1,3 +1,4 @@
+import { GroupInvitationManager } from "./GroupInvitationManager";
 import { lazy, Suspense, useCallback, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MapPin, Users } from "lucide-react";
@@ -246,10 +247,18 @@ function GroupRoster({
     </section>
   );
 }
-export function Groups({ userId }: { userId: string }) {
+export function Groups({
+  userId,
+  initialGroupId,
+}: {
+  userId: string;
+  initialGroupId?: string;
+}) {
   const cache = useQueryClient();
   const [view, setView] = useState<"list" | "map">("list");
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(
+    initialGroupId ?? null,
+  );
   const [editor, setEditor] = useState<"new" | MotardGroup | null>(null);
   const [search, setSearch] = useState("");
   const [confirmation, setConfirmation] = useState<{
@@ -267,6 +276,9 @@ export function Groups({ userId }: { userId: string }) {
       cache.invalidateQueries({ queryKey: ["groups"] }),
       cache.invalidateQueries({ queryKey: ["group-memberships"] }),
       cache.invalidateQueries({ queryKey: ["group-members"] }),
+      cache.invalidateQueries({ queryKey: ["group-summary"] }),
+      cache.invalidateQueries({ queryKey: ["group-invites"] }),
+      cache.invalidateQueries({ queryKey: ["sent-group-invites"] }),
     ]);
   };
   const mutation = useMutation({
@@ -407,6 +419,13 @@ export function Groups({ userId }: { userId: string }) {
             >
               Pedir entrada no grupo
             </button>
+          )}
+          {membership?.status === "accepted" && (
+            <GroupInvitationManager
+              groupId={group.id}
+              userId={userId}
+              leader={Boolean(leader)}
+            />
           )}
           {membership?.status === "accepted" && (
             <GroupRoster

@@ -59,7 +59,9 @@ test("install instructions, real browser WebAuthn ceremonies, Auth session and p
       return;
     }
     let body: unknown;
-    if (path.endsWith("/token")) body = session();
+    if (path.endsWith("/list_received_group_invitations")) body = [];
+    else if (path.endsWith("/list_sent_group_invitations")) body = [];
+    else if (path.endsWith("/token")) body = session();
     else if (path.endsWith("/logout")) {
       await route.fulfill({ status: 204, headers });
       return;
@@ -69,6 +71,7 @@ test("install instructions, real browser WebAuthn ceremonies, Auth session and p
       path.endsWith("/list_received_trip_invitations")
     )
       body = [];
+    else if (path.endsWith("/group_memberships")) body = [];
     else if (path.endsWith("/profiles"))
       body = { id: user.id, display_name: "Motard", username: "motard" };
     else if (path.endsWith("/passkeys/registration/options")) {

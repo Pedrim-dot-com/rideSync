@@ -63,3 +63,10 @@ Ver docs/19-MOTARD-GROUPS.md e docs/20-VOICE-AND-SOS.md.
 
 Estado operacional atual: grupos/voz com backend ativo (007–009 e trip-voice),
 validação HTTPS real concluída; áudio físico ainda por testar. Ver docs/23 e docs/24.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+A extensão local 010 usa RPCs PostgreSQL e a mesma autenticação/RLS, sem novo serviço. Perfil e Notificações consultam convites aprovados; gestão do grupo mostra propostas a dirigentes. Polling e invalidação de TanStack Query atualizam os estados.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

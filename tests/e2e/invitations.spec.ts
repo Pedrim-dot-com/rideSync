@@ -76,7 +76,9 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
         return;
       }
       const path = url.pathname;
-      if (path.endsWith("/token"))
+      if (path.endsWith("/list_received_group_invitations")) body = [];
+      else if (path.endsWith("/list_sent_group_invitations")) body = [];
+      else if (path.endsWith("/token"))
         body = {
           access_token: `${id}-access`,
           refresh_token: `${id}-refresh`,

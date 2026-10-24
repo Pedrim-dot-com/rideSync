@@ -77,6 +77,8 @@ passam a MAP-001…006. Os FR-021…024 da tabela principal mantêm o significad
 | GRP-003 | P0 | Aprovar entradas | Só dirigentes aprovam/recusam; membro não se promove nem altera pedidos alheios |
 | GRP-004 | P0 | Vários dirigentes | Poderes iguais; impedir remover/despromover/sair do último dirigente, incluindo concorrência |
 | GRP-005 | P0 | Associação e sede física | Nome/morada/coordenadas; denominação e registo opcionais; sem selo de verificação legal |
+| GRP-006 | P0 | Convites e revisão | Dirigente convida diretamente; membro propõe; só direção aprova antes da entrega; destinatário aceita e entra sem nova candidatura |
+| GRP-007 | P0 | Grupo no Perfil | Mostrar grupo e papel aceite, candidatura pendente ou ausência de grupo; convites recebidos persistem até resposta/expiração |
 | VOZ-001 | P0 | Voz do organizador | Só organizador ou emissor de SOS ativo recebe autorização de publicar microfone |
 | VOZ-002 | P0 | Prioridade SOS | SOS interrompe organizador; um SOS ativo; expiração 90 s e resolução pelo próprio/organizador |
 | VOZ-003 | P0 | Alerta sem microfone | Falha/permissão negada mantém SOS visual; sem alegação de contacto com 112 |
@@ -85,3 +87,10 @@ passam a MAP-001…006. Os FR-021…024 da tabela principal mantêm o significad
 | VOZ-006 | P0 | Validação real | Três dispositivos, iPhone/Android e redes móveis distintas; medir latência/interrupção e verificar headset |
 
 VOZ-006 é um gate de validação manual, ainda pendente. Ver docs/20-VOICE-AND-SOS.md.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+Convites por nickname: dirigente envia diretamente; membro aceite propõe e só dirigente aprova/recusa antes da entrega. Destinatário aceita voluntariamente e entra imediatamente. Candidaturas espontâneas continuam a exigir aprovação. Perfil mostra grupo/papel aceite ou candidatura pendente.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

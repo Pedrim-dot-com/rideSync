@@ -67,7 +67,9 @@ test("trip creation, ordered stops, editing, lifecycle and deletion (mocked Supa
       });
       return;
     }
-    if (path.endsWith("/token"))
+    if (path.endsWith("/list_received_group_invitations")) body = [];
+    else if (path.endsWith("/list_sent_group_invitations")) body = [];
+    else if (path.endsWith("/token"))
       body = {
         access_token: "test-access-token",
         refresh_token: "test-refresh-token",

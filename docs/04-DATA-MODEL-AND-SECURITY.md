@@ -63,3 +63,10 @@ SDKs de áudio não concedem acesso a dados de perfis/garagens/grupos ou viagens
 Remoção administrativa de conta que seja último dirigente exige transferência
 ou tratamento do grupo; não existe ainda eliminação de conta na UI. Não confundir
 a proteção de saída na app com gestão administrativa de cascades no Supabase.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+A migration local 010 acrescenta group_invitations com RLS e sem acesso direto. RPCs validam membro/dirigente/destinatário. Propostas review são ocultas do alvo; aprovação gera pending; aceitação insere member/accepted. Locks e unicidade preservam grupo único. Ver contratos, quotas e privacidade em docs/25.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

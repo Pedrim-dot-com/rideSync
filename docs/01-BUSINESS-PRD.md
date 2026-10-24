@@ -68,3 +68,10 @@ ou despromoção do último dirigente pela app. Grupos podem declarar denominaç
 legal e registo/NIPC, sem certificação automática pela plataforma. Todas as contas
 autenticadas consultam o diretório e o mapa de sedes publicáveis. A inscrição
 num grupo não concede acesso a viagens privadas nem cargos de organizador.
+
+
+## Extensão local — convites e Perfil (2026-10-24)
+
+A pertença permanece opcional. Dirigentes convidam diretamente; membros propõem convites que só são entregues após revisão de um dirigente. Aceitar convite aprovado dá entrada imediata, sem nova candidatura.
+
+Detalhes e estado: [Convites de grupo e Perfil](25-GROUP-INVITATIONS-AND-PROFILE.md).

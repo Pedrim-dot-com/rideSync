@@ -1,3 +1,4 @@
+import type { GroupInvitationFunctions } from "../features/groups/invitations-api";
 import type { VoiceFunctions } from "../features/voice/api";
 import type { GroupFunctions, GroupTables } from "../features/groups/api";
 import type { NotificationFunctions } from "../features/trips/notifications-api";
@@ -16,12 +17,14 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
       | keyof NotificationFunctions
       | keyof GroupFunctions
       | keyof VoiceFunctions
+      | keyof GroupInvitationFunctions
     > &
       ParticipationFunctions &
       TrackingFunctions &
       NotificationFunctions &
       GroupFunctions &
-      VoiceFunctions;
+      VoiceFunctions &
+      GroupInvitationFunctions;
   };
 };
 export type { Json } from "./database.generated";

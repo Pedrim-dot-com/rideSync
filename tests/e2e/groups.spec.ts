@@ -75,7 +75,9 @@ test("directory, public headquarters map, approval requests and multiple leaders
       return;
     }
     let body: unknown;
-    if (path.endsWith("/token"))
+    if (path.endsWith("/list_received_group_invitations")) body = [];
+    else if (path.endsWith("/list_sent_group_invitations")) body = [];
+    else if (path.endsWith("/token"))
       body = {
         access_token: "groups-token",
         refresh_token: "groups-refresh",

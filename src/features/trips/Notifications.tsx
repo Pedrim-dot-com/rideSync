@@ -1,3 +1,4 @@
+import { ReceivedGroupInvitations } from "../groups/ReceivedGroupInvitations";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import { participationError } from "./participation-api";
@@ -114,9 +115,11 @@ function InvitationNotification({
 export function Notifications({
   userId,
   onAccepted,
+  onOpenGroup,
 }: {
   userId: string;
   onAccepted: (id: string) => void;
+  onOpenGroup?: (id: string) => void;
 }) {
   const query = useNotifications(userId);
   return (
@@ -126,9 +129,11 @@ export function Notifications({
       </span>
       <h1>Notificações</h1>
       <p>
-        Os convites ficam aqui quando abres o link e inicias sessão. Fechar o
-        aviso não recusa o convite.
+        Convites para viagens e grupos. Podes responder mais tarde, enquanto
+        estiverem válidos. Os convites de viagem ficam guardados ao abrir o link
+        com sessão iniciada.
       </p>
+      <h2>Convites de viagens</h2>
       {query.isPending && <p role="status">A carregar notificações…</p>}
       {query.isError && (
         <div role="alert">
@@ -143,8 +148,8 @@ export function Notifications({
       )}
       {query.data?.length === 0 && (
         <p className="empty">
-          Ainda não tens convites recebidos. Abre um link de convite para o
-          guardar aqui.
+          Ainda não tens convites de viagem guardados. Abre um link de viagem
+          para o guardar aqui.
         </p>
       )}
       <ul className="notification-list">
@@ -157,6 +162,7 @@ export function Notifications({
           />
         ))}
       </ul>
+      <ReceivedGroupInvitations userId={userId} onOpenGroup={onOpenGroup} />
     </section>
   );
 }

@@ -108,6 +108,15 @@ export async function getGroups() {
     if (data.length < 500) return groups;
   }
 }
+export async function getGroupSummary(groupId: string) {
+  const { data, error } = await client()
+    .from("motard_groups")
+    .select("id,name,headquarters_address")
+    .eq("id", groupId)
+    .single();
+  if (error) throw error;
+  return data;
+}
 export async function getOwnMemberships(userId: string) {
   const { data, error } = await client()
     .from("group_memberships")
@@ -155,6 +164,12 @@ export function groupError(error: unknown) {
     error && typeof error === "object" && "message" in error
       ? error.message
       : "";
+  if (message === "GROUP_RECIPIENT_UNAVAILABLE")
+    return "Não encontrámos uma conta elegível com esse nickname exato. A pessoa tem de estar sem grupo nem candidatura pendente. Se já se candidatou a este grupo, a direção pode aprovar o pedido existente.";
+  if (message === "GROUP_INVITATION_UNAVAILABLE")
+    return "Este convite expirou, foi revogado ou já foi respondido. Atualiza os convites.";
+  if (message === "GROUP_INVITATION_RATE_LIMITED")
+    return "Atingiste o limite de convites do grupo. Aguarda e tenta novamente.";
   if (message === "GROUP_LAST_LEADER")
     return "O grupo precisa de pelo menos um dirigente. Promove outro membro antes de sair ou retirar esse cargo.";
   if (message === "GROUP_MEMBERSHIP_EXISTS")

@@ -108,7 +108,9 @@ test("mobile inputs, timed trip, explicit foreground GPS, map continuity and fin
       return;
     }
     let body: unknown = null;
-    if (path.endsWith("/token"))
+    if (path.endsWith("/list_received_group_invitations")) body = [];
+    else if (path.endsWith("/list_sent_group_invitations")) body = [];
+    else if (path.endsWith("/token"))
       body = {
         access_token: "test-access",
         refresh_token: "test-refresh",
