@@ -3,7 +3,8 @@
 > Estado revisto em 2026-10-24: Auth, garagem, viagens, mapas, convites,
 > tracking foreground e notificações estão publicados (migrations 001–006).
 > Grupos motards com vários dirigentes e voz/SOS estão implementados e propostos
-> para revisão na branch `feat/motard-groups-voice-sos`;
+> para revisão na branch `feat/motard-groups-voice-sos`, enviada ao GitHub;
+> a abertura automática do PR está bloqueada pelo acesso à API GitHub.
 > migrations 007/008, função trip-voice e publicação aguardam autorização.
 > IA, fotos e validação completa em dispositivos/redes reais continuam pendentes.
 
@@ -36,6 +37,7 @@ React + TypeScript + Vite; Tailwind; TanStack Query; Zustand quando necessário;
 20. [Grupos motards](docs/19-MOTARD-GROUPS.md)
 21. [Voz e SOS](docs/20-VOICE-AND-SOS.md)
 22. [Revisão documental](docs/21-DOCUMENTATION-REVIEW.md)
+23. [Proposta de pull request e publicação pendente](docs/22-PULL-REQUEST.md)
 
 ## Limites explícitos
 Não prometer GPS ou voz com ecrã bloqueado/segundo plano no iOS. SOS avisa apenas o grupo da viagem, não é contacto com emergência/112. Diretório de grupos e sedes é visível a utilizadores autenticados; dados legais são autodeclarados. Chat, pagamentos, navegação turn-by-turn, monetização e app nativa continuam fora do âmbito. GPS e microfone exigem consentimentos independentes.

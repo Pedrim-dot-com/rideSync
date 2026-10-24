@@ -68,3 +68,10 @@ revisão documental e a regra permanente de manutenção do README/documentaçã
 O envio da branch/PR não equivale a aplicar migrations 007/008, publicar a Edge
 Function ou integrar em main. Esses passos mantêm a autorização e validação
 próprias descritas em docs/19 e docs/20.
+
+
+Envio confirmado para a branch remota. A API GitHub respondeu Forbidden tanto
+na listagem de PRs como no POST de criação; por isso não foi criado um número
+ou URL de PR. A descrição completa está em docs/22-PULL-REQUEST.md, incluída
+no índice do README, para criação pelo formulário GitHub. Main mantém a versão
+anterior e as migrations/Edge Function novas continuam pendentes de publicação.
