@@ -2,9 +2,7 @@
 
 ## Estado desta entrega
 
-Implementado e validado localmente em 2026-10-24. A migration
-`202610240010_group_invitations.sql` ainda não foi aplicada no rideSync-app;
-a interface nova ainda não foi publicada. Produção mantém migrations 001–009.
+A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
 Não são necessárias novas chaves nem alterações à função de voz.
 
 ## Regras confirmadas
@@ -60,8 +58,8 @@ Perfil consulta a inscrição própria e resumo público do grupo, apresenta nom
 sede e papel para inscrição aceite, ou candidatura pendente de forma distinta.
 Sem inscrição continua possível criar grupo/candidatar-se. As listas usam polling
 e invalidação de cache após ações; não prometem notificações push em background.
-O snapshot de tipos remotos continua pela 009, com contratos locais tipados da
-010; regenerar snapshot após a aplicação autorizada.
+O snapshot de tipos remotos foi regenerado após a aplicação da 010; os aliases
+locais refinam os contratos usados pela interface.
 
 ## Como testar após ativação
 
@@ -85,9 +83,24 @@ com permissões, privacidade, expiração e concorrência. O E2E de transporte
 simulado cobre três contas: proposta, revisão, aceitação e Perfil em mobile.
 Sete E2E de transporte simulado, typecheck, lint, formatação e build/PWA
 aprovados; resultados registados na revisão documental.
-Isto não equivale a testes HTTPS da migration 010 no projeto real.
+A validação real acrescentou 34 checks HTTPS: criação sem grupo, candidatura
+e aprovação, proposta por membro, destinatário sem acesso antes da revisão,
+revisão exclusiva de dirigentes, entrega e consentimento, inscrição imediata
+sem nova candidatura, Perfil/grupo/papel, inbox privada, impossibilidade de ler
+convites enviados por outros membros, convite direto, recusa da proposta e do
+destinatário, revogação, expiração, replay, anonymous e corrida de duas aceitações
+com apenas um grupo aceite. Contas e grupos temporários removidos; limpeza
+confirmada. Não comprova Safari num iPhone físico nem notificações em background.
 
-Após confirmação exigida pelo CLAUDE.md: aplicar só a 010, regenerar tipos,
-validar com contas temporárias e limpar os dados, publicar frontend e confirmar
-bundle/atualização PWA. Nunca publicar a UI dependente da 010 antes da migration.
-Preservar recibos de 007–009 em docs/24; registar separadamente a nova execução.
+## Recibo remoto — 010
+
+- Projeto: rideSync-app (`isyhpoyihcbkujtjadzc`).
+- Verificação UTC: `2026-10-24 16:42:52.321289+00`.
+- Ficheiro: `202610240010_group_invitations.sql`.
+- SHA-256: `9309799c0f723f2574123c4bef23f9e32da8adc6e4ae51345f5d4ca34ed84136`.
+- RLS ativo; authenticated sem SELECT direto na tabela.
+- Snapshot de tipos públicos regenerado; nenhuma chave privada no repositório.
+- Não reaplicar 010. Recibos históricos de 007–009 preservados em docs/24.
+
+Publicação da UI autorizada e em curso; confirmar bundle e service worker antes
+de considerar a atualização pública concluída.

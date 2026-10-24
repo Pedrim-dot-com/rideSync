@@ -85,7 +85,11 @@ Os checks históricos das fases anteriores descrevem execuções datadas, não
 uma alegação de que todas as validações de campo estão concluídas.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Convites de grupo e pertença no Perfil implementados localmente. Pendente: autorização e aplicação da 010, tipos remotos, teste HTTPS e publicação ordenada. Não confundir esta extensão com a ativação já concluída de 007–009.
 

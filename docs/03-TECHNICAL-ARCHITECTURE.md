@@ -65,7 +65,11 @@ Estado operacional atual: grupos/voz com backend ativo (007–009 e trip-voice),
 validação HTTPS real concluída; áudio físico ainda por testar. Ver docs/23 e docs/24.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 A extensão local 010 usa RPCs PostgreSQL e a mesma autenticação/RLS, sem novo serviço. Perfil e Notificações consultam convites aprovados; gestão do grupo mostra propostas a dirigentes. Polling e invalidação de TanStack Query atualizam os estados.
 

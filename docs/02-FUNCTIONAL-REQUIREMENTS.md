@@ -89,7 +89,11 @@ passam a MAP-001…006. Os FR-021…024 da tabela principal mantêm o significad
 VOZ-006 é um gate de validação manual, ainda pendente. Ver docs/20-VOICE-AND-SOS.md.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Convites por nickname: dirigente envia diretamente; membro aceite propõe e só dirigente aprova/recusa antes da entrega. Destinatário aceita voluntariamente e entra imediatamente. Candidaturas espontâneas continuam a exigir aprovação. Perfil mostra grupo/papel aceite ou candidatura pendente.
 

@@ -1,13 +1,14 @@
 # RideSync — documentação da PoC
 
-> Estado atualizado em 2026-10-24: migrations 001–009 aplicadas no Supabase.
+> Estado atualizado em 2026-10-24: migrations 001–010 aplicadas no Supabase.
 > Grupos e voz/SOS têm backend ativo; `trip-voice` publicada e acesso real ao
 > LiveKit validado por API. Grupos continuam opcionais: zero ou um por conta.
 > O áudio entre telemóveis/headsets e o comportamento em redes móveis ainda
 > requerem validação física. IA e uploads de fotos continuam por implementar.
 
-> Em desenvolvimento local, sem publicação: migration 010, convites de grupo
-> com revisão pela direção e grupo/candidatura no Perfil. [Estado e testes](docs/25-GROUP-INVITATIONS-AND-PROFILE.md).
+> Migration 010 aplicada: convites de grupo com revisão pela direção e
+> grupo/candidatura no Perfil; 34 verificações HTTPS aprovadas. Publicação da
+> interface em curso. [Estado e testes](docs/25-GROUP-INVITATIONS-AND-PROFILE.md).
 
 ## Objetivo
 Validar que motards conseguem criar e partilhar uma viagem, escolher a mota, participar em grupos e ver as posições uns dos outros em tempo real **com a PWA aberta**. Um planeador com IA transforma pedidos em itinerários validados por um motor de rotas.
@@ -63,7 +64,7 @@ flowchart TB
     SESSION -->|"Não"| LOGIN["Entrar ou registar<br/>Confirmar email, se necessário"]
     LOGIN --> HOME["Painel e navegação"]
     SESSION -->|"Sim"| HOME
-    HOME --> PROFILE["Perfil e garagem<br/>Dados, motas, passkeys e grupo¹"]
+    HOME --> PROFILE["Perfil e garagem<br/>Dados, motas, passkeys e grupo"]
     HOME --> INBOX["Convite guardado na conta<br/>Consultar Notificações"]
     INBOX --> RESPONSE{"Convite válido: responder?"}
     RESPONSE -->|"Recusar ou mais tarde"| KEEP["Guardar estado nas Notificações<br/>Sem acesso antes de aceitar"]
@@ -92,17 +93,17 @@ flowchart TB
     APPROVAL --> MEMBER["Pedido aceite ou recusado<br/>Só aprovação dá inscrição"]
     NEWGROUP --> LEADERS["Direção com vários dirigentes<br/>Aprovar, editar e promover membros<br/>Nunca remover o último dirigente"]
     MYGROUP -->|"Se dirigente"| LEADERS
-    MYGROUP -->|"Membro comum¹"| PROPOSAL["Propor convite por nickname"]
+    MYGROUP -->|"Membro comum"| PROPOSAL["Propor convite por nickname"]
     PROPOSAL --> REVIEW["Dirigente aprova ou recusa proposta"]
     REVIEW -->|"Aprovar"| GROUPINVITE["Entregar convite: válido por sete dias"]
-    LEADERS -->|"Convidar diretamente¹"| GROUPINVITE
+    LEADERS -->|"Convidar diretamente"| GROUPINVITE
     GROUPINVITE --> CONSENT{"Pessoa aceita?"}
     CONSENT -->|"Sim"| JOINED["Inscrição aceite imediatamente<br/>Mostrar grupo e papel no Perfil"]
     CONSENT -->|"Recusa ou expira"| UNGROUPED["Sem nova inscrição"]
 
 ```
 
-¹ Convites de grupo e apresentação no Perfil dependem da migration 010 e da publicação, ainda pendentes. Aceitar um convite aprovado dá entrada direta; candidaturas espontâneas aguardam aprovação.
+Convites de grupo e apresentação no Perfil usam a migration 010 já aplicada. Aceitar um convite aprovado dá entrada direta; candidaturas espontâneas aguardam aprovação.
 
 GPS e voz exigem internet e a PWA ativa; desligar GPS ou voz é uma decisão
 individual. O SOS visual é independente da permissão de microfone, avisa apenas
@@ -135,7 +136,7 @@ o grupo ligado à viagem e não contacta o 112. [Fluxos e estados detalhados](do
 24. [Estado real e roteiro de teste de grupos e voz](docs/23-FEATURE-TEST-GUIDE.md)
 25. [Ativação remota de grupos e voz](docs/24-GROUPS-VOICE-ACTIVATION.md)
 
-26. [Convites de grupo e grupo no Perfil — implementação local](docs/25-GROUP-INVITATIONS-AND-PROFILE.md)
+26. [Convites de grupo e grupo no Perfil](docs/25-GROUP-INVITATIONS-AND-PROFILE.md)
 
 ## Limites explícitos
 Não prometer GPS ou voz com ecrã bloqueado/segundo plano no iOS. SOS avisa apenas o grupo da viagem, não é contacto com emergência/112. Diretório de grupos e sedes é visível a utilizadores autenticados; dados legais são autodeclarados. Chat, pagamentos, navegação turn-by-turn, monetização e app nativa continuam fora do âmbito. GPS e microfone exigem consentimentos independentes.

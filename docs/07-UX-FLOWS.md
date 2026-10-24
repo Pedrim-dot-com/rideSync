@@ -65,7 +65,11 @@ A presença destes separadores/controlos na PWA não confirma backend instalado.
 O estado remoto e os passos de teste estão em docs/23-FEATURE-TEST-GUIDE.md.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Grupo → Convidar pessoas: dirigente envia; membro propõe. Direção aprova/recusa propostas antes da entrega. Perfil e Notificações mostram convites aprovados persistentes, aceitar/recusar e prazo. Aceitar dá inscrição imediata. Perfil separa grupo aceite/papel, candidatura pendente e ausência de grupo.
 

@@ -147,3 +147,13 @@ no Perfil, sem overflow horizontal. Não demonstra Safari num iPhone físico nem
 valida a 010 por HTTPS no Supabase real. Links Markdown locais e unicidade dos
 IDs das tabelas de requisitos/testes verificados. Aplicação remota, regeneração
 de tipos e publicação continuam pendentes de confirmação.
+
+
+## Ativação autorizada — 010
+
+Após confirmação do utilizador, migration 010 aplicada, RLS confirmado e tipos
+remotos regenerados. Passaram 34 checks HTTPS com quatro contas e dois grupos
+temporários, removidos com limpeza verificada. A revisão anterior era evidência
+da fase local, não o estado atual. Docs/25 contém recibo e roteiro; recibos
+001–009 preservados. README e documentos afetados atualizados para distinguir
+a aplicação remota da confirmação de publicação, ainda em curso nesta etapa.

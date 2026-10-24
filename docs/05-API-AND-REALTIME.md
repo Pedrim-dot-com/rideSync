@@ -62,7 +62,11 @@ Ver docs/12-MAPS-AND-NAVIGATION.md, docs/19-MOTARD-GROUPS.md e
 docs/20-VOICE-AND-SOS.md para contratos, CORS, quotas e lifecycle.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Contratos locais novos: invite_group_member, review_group_invitation, list_sent_group_invitations, revoke_group_invitation, list_received_group_invitations, respond_group_invitation. Assinaturas e regras completas em docs/25; estas seis RPCs ainda não estão disponíveis em produção. Sem novos canais Realtime/push: polling/invalidação.
 

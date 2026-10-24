@@ -300,3 +300,9 @@ que toda aceitação de convite criaria candidatura. Pertença voluntária, zero
 um grupo e direção plural mantêm-se. Perfil mostra pertença/papel aceite ou
 candidatura pendente. Migration 010 local; remota/publicação pendentes.
 Ver [contratos e roteiro](25-GROUP-INVITATIONS-AND-PROFILE.md).
+
+
+Atualização de execução ADR-019: utilizador autorizou aplicar/publicar. Migration
+010 aplicada e 34 checks HTTPS reais aprovados, tipos regenerados, fixtures
+removidas e limpeza confirmada. Registo local anterior preservado como histórico;
+recibo e confirmação de publicação em docs/25.

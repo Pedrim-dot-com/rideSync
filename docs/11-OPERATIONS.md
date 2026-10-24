@@ -74,7 +74,11 @@ no painel LiveKit; automatização desta limpeza continua pendente.
 Ativação remota, hashes/recibos e provas: docs/24-GROUPS-VOICE-ACTIVATION.md.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Extensão de convites depende da migration 010, ainda local. Após autorização: aplicar 010 antes da UI, regenerar tipos, testar permissões com contas temporárias, limpar fixtures e publicar/verificar a PWA. Sem novas chaves/Edge Functions; não reaplicar 001–009.
 

@@ -95,7 +95,11 @@ conta/role (sem credenciais), ação, texto exato do erro e estado da viagem.
 Nunca incluir API secrets, tokens, SDP ou ICE candidates no relato.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 O estado publicado e os testes acima referem-se a 001–009. Convites de grupo, revisão de propostas e grupo no Perfil são uma extensão local dependente da 010, ainda sem deploy. Seguir o roteiro separado em docs/25 depois da ativação; não esperar estes controlos na PWA publicada atual.
 

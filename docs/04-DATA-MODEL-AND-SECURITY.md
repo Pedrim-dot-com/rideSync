@@ -65,7 +65,11 @@ ou tratamento do grupo; não existe ainda eliminação de conta na UI. Não conf
 a proteção de saída na app com gestão administrativa de cascades no Supabase.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 A migration local 010 acrescenta group_invitations com RLS e sem acesso direto. RPCs validam membro/dirigente/destinatário. Propostas review são ocultas do alvo; aprovação gera pending; aceitação insere member/accepted. Locks e unicidade preservam grupo único. Ver contratos, quotas e privacidade em docs/25.
 

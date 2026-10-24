@@ -244,7 +244,11 @@ de gestão HTTPS e metadados verify_jwt=false, com getUser dentro do handler.
 Ficheiros/fontes e dependências Deno são enviados sem obter segredos remotos.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Executar as migrations locais até 010 no PostgreSQL descartável com npm run test:db:local. A 010 ainda não foi aplicada remotamente; snapshot gerado reflete 009 e contratos locais refinam os novos RPCs. Publicação depende da ativação autorizada descrita em docs/25.
 

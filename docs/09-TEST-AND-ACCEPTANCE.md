@@ -67,7 +67,11 @@ Executar npm run test:db:local, npm test, npm run test:e2e e check:edge. Testes
 simulados não substituem a validação LiveKit real nem a aceitação em hardware.
 
 
-## Extensão local — convites e Perfil (2026-10-24)
+## Convites e Perfil — evolução da entrega (2026-10-24)
+
+**Estado após autorização:** A migration 010 foi aplicada com autorização no rideSync-app. Tipos remotos regenerados e 34 checks HTTPS reais aprovados, com contas/grupos temporários removidos e limpeza verificada. Publicação frontend em curso; confirmação do bundle será registada abaixo.
+
+Registo da fase local anterior:
 
 Extensão 010: 137 unitários e 371 checks PostgreSQL locais; 55 checks novos cobrem propostas, autorização exclusiva da direção, invisibilidade antes da aprovação, convites diretos, consentimento, revogação, expiração e concorrência. O novo E2E simula proposta→revisão→aceitação→Perfil mobile; validação HTTPS da 010 ainda pendente.
 

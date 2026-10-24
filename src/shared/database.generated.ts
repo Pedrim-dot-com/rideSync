@@ -14,6 +14,74 @@ export type Database = {
   };
   public: {
     Tables: {
+      group_invitations: {
+        Row: {
+          approved_at: string | null;
+          approved_by: string | null;
+          created_at: string;
+          expires_at: string;
+          group_id: string;
+          id: string;
+          invited_by: string | null;
+          recipient_id: string;
+          responded_at: string | null;
+          status: string;
+        };
+        Insert: {
+          approved_at?: string | null;
+          approved_by?: string | null;
+          created_at?: string;
+          expires_at?: string;
+          group_id: string;
+          id?: string;
+          invited_by?: string | null;
+          recipient_id: string;
+          responded_at?: string | null;
+          status?: string;
+        };
+        Update: {
+          approved_at?: string | null;
+          approved_by?: string | null;
+          created_at?: string;
+          expires_at?: string;
+          group_id?: string;
+          id?: string;
+          invited_by?: string | null;
+          recipient_id?: string;
+          responded_at?: string | null;
+          status?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "group_invitations_approved_by_fkey";
+            columns: ["approved_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "group_invitations_group_id_fkey";
+            columns: ["group_id"];
+            isOneToOne: false;
+            referencedRelation: "motard_groups";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "group_invitations_invited_by_fkey";
+            columns: ["invited_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "group_invitations_recipient_id_fkey";
+            columns: ["recipient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       group_memberships: {
         Row: {
           group_id: string;
@@ -769,6 +837,10 @@ export type Database = {
         Args: { p_operation_id: string; p_success: boolean; p_trip_id: string };
         Returns: boolean;
       };
+      invite_group_member: {
+        Args: { p_group_id: string; p_username: string };
+        Returns: string;
+      };
       is_group_leader: { Args: { p_group_id: string }; Returns: boolean };
       list_group_members: {
         Args: { p_group_id: string };
@@ -778,6 +850,18 @@ export type Database = {
           status: string;
           user_id: string;
           username: string;
+        }[];
+      };
+      list_received_group_invitations: {
+        Args: never;
+        Returns: {
+          created_at: string;
+          expires_at: string;
+          group_id: string;
+          group_name: string;
+          invitation_id: string;
+          inviter_name: string;
+          status: string;
         }[];
       };
       list_received_trip_invitations: {
@@ -791,6 +875,17 @@ export type Database = {
           status: string;
           title: string;
           trip_id: string;
+        }[];
+      };
+      list_sent_group_invitations: {
+        Args: { p_group_id: string };
+        Returns: {
+          created_at: string;
+          display_name: string;
+          expires_at: string;
+          invitation_id: string;
+          status: string;
+          username: string;
         }[];
       };
       list_trip_invitations: {
@@ -837,6 +932,10 @@ export type Database = {
         Returns: undefined;
       };
       resolve_trip_sos: { Args: { p_trip_id: string }; Returns: undefined };
+      respond_group_invitation: {
+        Args: { p_accept: boolean; p_invitation_id: string };
+        Returns: string;
+      };
       respond_invitation_internal: {
         Args: { p_accept: boolean; p_invitation_id: string };
         Returns: string;
@@ -848,6 +947,18 @@ export type Database = {
       respond_trip_invitation: {
         Args: { p_accept: boolean; p_token: string };
         Returns: string;
+      };
+      review_group_invitation: {
+        Args: {
+          p_approve: boolean;
+          p_group_id: string;
+          p_invitation_id: string;
+        };
+        Returns: undefined;
+      };
+      revoke_group_invitation: {
+        Args: { p_group_id: string; p_invitation_id: string };
+        Returns: undefined;
       };
       revoke_trip_invitation: {
         Args: { p_invitation_id: string; p_trip_id: string };
