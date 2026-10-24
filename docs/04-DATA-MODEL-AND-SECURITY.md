@@ -43,7 +43,7 @@ Consentimento explícito, revogação imediata, retenção mínima, exclusão do
 Sem `service_role` no browser; sem tokens no git; HTTPS; Storage policies; validação server-side; limites de input; rate limits para convites, IA e routing; secrets nas Edge Functions. Confirmar configuração de verificação JWT por função.
 
 
-## Grupos e voz/SOS (migrations 007/008 preparadas)
+## Grupos e voz/SOS (migrations 007–009 aplicadas)
 
 - `motard_groups`: nome, descrição, denominação/registo opcionais, sede e revisão.
   SELECT autenticado apenas de colunas do diretório; não expor UUID de criador.

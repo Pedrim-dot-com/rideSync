@@ -74,10 +74,10 @@ Objetivo, requisitos, alterações, migration/RLS, testes executados, screenshot
 - [x] Edge trip-voice, áudio LiveKit, floor exclusivo e interrupção SOS.
 - [x] Alertas visuais independentes de microfone, cleanup de media e estados de erro.
 - [x] Nomes dos três segredos LiveKit presentes no Supabase (read-only).
-- [ ] Aplicar 007/008 e publicar trip-voice após autorização.
-- [ ] Regenerar tipos e validar contratos/provider com contas temporárias reais.
+- [x] Aplicar 007/008 e correção 009, publicar trip-voice com autorização.
+- [x] Regenerar tipos e validar contratos/provider com contas temporárias reais; limpeza confirmada.
 - [x] Interface de grupos/voz presente no bundle público Cloudflare (verificação read-only).
-- [ ] Completar backend ausente e confirmar funcionamento ponta a ponta; interface publicada não significa ativação concluída.
+- [x] Completar backend e validar fluxos por HTTPS; teste acústico em dispositivos reais mantém-se pendente.
 - [ ] Executar VOZ-006: três dispositivos, headset, rede móvel e medição de latência.
 - [ ] Rever billing e política de limpeza de salas órfãs no fornecedor.
 

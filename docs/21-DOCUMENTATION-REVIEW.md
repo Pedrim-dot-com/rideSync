@@ -106,3 +106,14 @@ pedido pendente pode criar um. Não houve mudança desta regra no SQL: o limite
 único já era máximo, não uma obrigação de inscrição. Criado docs/23 com roteiro
 que separa pré-condições de publicação dos testes do utilizador. Nenhuma migration
 ou função remota foi alterada por esta verificação.
+
+
+## Ativação autorizada após o merge
+
+O histórico Git confirmou merge do PR #3 em main. A autorização posterior para
+terminar a tarefa permitiu aplicar 007/008, publicar trip-voice e corrigir o
+conflito de edição por migration 009. Passaram 49 verificações HTTPS reais com
+limpeza confirmada das fixtures. README, fluxogramas, plano, arquitetura e guias
+foram atualizados para backend ativo, preservando os registos anteriores como
+históricos. Recibos e limites da validação em docs/24; testes de áudio em aparelhos
+reais mantêm-se distintos da validação do provider/roles por API.

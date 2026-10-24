@@ -57,7 +57,8 @@ Free Tier não implica custo zero de serviços externos. Validar quotas e pricin
 
 ## Operação de grupos e voz
 
-Grupos/SOS acrescentam migrations 007/008; não reaplicar 001–006. Criar os
+Grupos/SOS usam migrations 007/008 e correção 009. No projeto rideSync-app,
+001–009 já foram aplicadas: não reaplicar. Num ambiente novo autorizado, criar os
 segredos LIVEKIT_URL (wss://...), LIVEKIT_API_KEY e LIVEKIT_API_SECRET nas Edge
 Functions, nunca no frontend. APP_ORIGINS mantém a origem PWA exata. Publicar
 trip-voice só depois da migration e validação de roles; regenerar tipos remotos.
@@ -69,3 +70,5 @@ Nunca registar JWT LiveKit, segredos, SDP, ICE candidates ou conteúdos de áudi
 em logs da app. Usar apenas códigos de erro e contadores agregados. Se uma sala
 antiga ficar ocupada por clientes adulterados após falha de remoção, encerrá-la
 no painel LiveKit; automatização desta limpeza continua pendente.
+
+Ativação remota, hashes/recibos e provas: docs/24-GROUPS-VOICE-ACTIVATION.md.

@@ -1,11 +1,13 @@
 # 22 — Proposta de pull request
 
-Estado da tentativa automática: branch enviada; este ambiente não conseguiu
-criar o PR. O estado atual de PRs externos não foi consultado. A API GitHub devolveu
-Forbidden nas tentativas de listagem/criação, enquanto o push Git funciona.
-Não foi possível consultar o resultado remoto do CI neste ambiente.
+Histórico: a criação automática de PR neste ambiente foi bloqueada pela API.
+O utilizador integrou as alterações; o histórico Git confirmou o merge do PR #3
+em main (`0cd0c3e`). A ativação remota posterior aplicou 007–009 e publicou
+trip-voice. O estado corrente está em [docs/23](23-FEATURE-TEST-GUIDE.md) e os
+recibos em [docs/24](24-GROUPS-VOICE-ACTIVATION.md).
 
-Base: `main`. Head: `feat/motard-groups-voice-sos`.
+A descrição abaixo conserva a proposta anterior ao merge/ativação; as pendências
+históricas indicadas nesse texto não substituem o estado atual acima.
 
 ## Título proposto
 

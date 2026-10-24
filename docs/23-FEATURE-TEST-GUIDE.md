@@ -2,27 +2,28 @@
 
 ## Estado confirmado no projeto atual
 
-Verificação read-only em 2026-10-24, PWA https://ridesync-8z1.pages.dev e Supabase
-rideSync-app. Interface de grupos/voz presente no bundle público
-`/assets/index-DJftS0LK.js`. Ref main observada: e732666729cd6d3c181ed965986365e925064061.
+Ativação concluída com autorização em 2026-10-24, PWA
+https://ridesync-8z1.pages.dev e Supabase rideSync-app. Migrations 007/008 e a
+correção 009 aplicadas; trip-voice ativa e credenciais de API LiveKit validadas
+por criação de salas e tokens reais. Recibos em [docs/24](24-GROUPS-VOICE-ACTIVATION.md).
 
 | Camada | Grupos | Voz/SOS |
 |---|---|---|
-| Código | Implementado, incluindo RLS/RPCs e UI | Implementado: arbitragem, Edge Function e cliente LiveKit |
-| Interface na PWA | Presente | Presente |
-| Base de dados | Tabelas e RPC de criação ausentes | Tabela de voz e RPC de snapshot ausentes |
-| Edge Function | Não necessita de nova função própria | trip-voice ausente; só funções de mapas publicadas |
-| Teste real completo | Bloqueado pela migration 007 em falta | Bloqueado pela migration 008/função em falta |
+| Código/interface | Implementados e publicados | Implementados e publicados |
+| Base de dados | Tabelas/RPCs 007 e correção 009 instaladas | Tabelas/RPCs 008 instaladas |
+| Edge Function | Usa RPCs e mapas existentes | trip-voice ativa com autenticação própria |
+| Validação real | Criação, aprovação, vários dirigentes e restrições por HTTPS | Salas/tokens LiveKit e prioridade SOS por HTTPS |
+| Aceitação manual | Testar o fluxo abaixo com as próprias contas | Som/latência/headsets em três aparelhos ainda por confirmar |
 
-Chaves LiveKit guardadas não aplicam migrations nem publicam a função. Ter botões
-na interface não confirma que os serviços correspondentes estão instalados.
-Não atribuir estes erros a permissões de microfone antes de completar o backend.
+O bloqueio anterior de backend ausente foi resolvido. Se ainda aparecerem erros
+antigos na PWA, aplicar o aviso Atualizar e voltar a abrir o ecrã. Guardar chaves,
+por si só, não era suficiente; agora migrations e função estão efetivamente ativas.
 
 ## Regra dos grupos
 
 Pertencer a um grupo é opcional. Uma conta pode ter zero ou uma inscrição aceite.
 Não há associação automática no registo. Sem grupo é possível usar garagem,
-viagens e, quando ativada, voz — sem pertencer a um motoclube.
+viagens e voz — sem pertencer a um motoclube.
 
 Qualquer conta sem inscrição aceite/pedido pendente pode registar o seu grupo,
 fornecer sede publicável e tornar-se primeiro dirigente. Um pedido pendente tem
@@ -35,17 +36,14 @@ Todas as contas autenticadas veem diretório/mapa. Entrada num grupo existente
 exige aprovação; vários dirigentes podem aprovar e gerir. Dados legais são
 declarados, sem certificação automática pela plataforma.
 
-## O que falta antes dos testes na PWA
+## Ativação já executada neste projeto
 
-1. Aplicar migrations 007 e 008 no projeto certo, com autorização.
-2. Publicar trip-voice com validação JWT interna e APP_ORIGINS para a PWA.
-3. Regenerar tipos e validar RPCs/RLS, configurações e emissão de token LiveKit
-   com contas temporárias, limpando os dados de teste.
-4. Confirmar frontend compatível, service worker atualizado e ausência de erros
-   de configuração. Só então avançar para ensaios reais em vários dispositivos.
-
-Nenhum destes passos remotos foi executado nesta verificação. Não executar o
-bootstrap de PostgreSQL local no Supabase real.
+Migrations 007–009 aplicadas, trip-voice publicada, tipos regenerados e testes
+com contas temporárias concluídos, com limpeza confirmada. Não reaplicar essas
+migrations nem executar o bootstrap PostgreSQL local no Supabase real.
+Atualizar a PWA e seguir os testes abaixo; não é necessário novo projeto ou
+novas chaves para os casos que já passaram na API. A aceitação de áudio exige
+os aparelhos, permissões e rede descritos no roteiro.
 
 ## Testar grupos depois da ativação
 

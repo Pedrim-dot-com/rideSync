@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { groupSchema } from "./api";
+import { groupSchema, groupError } from "./api";
 const group = {
   name: "Grupo motard",
   description: "",
@@ -27,4 +27,10 @@ describe("public headquarters validation", () => {
     for (const latitude of [NaN, Infinity, "91"])
       expect(groupSchema.safeParse({ ...group, latitude }).success).toBe(false);
   });
+});
+
+it("explains an explicit HTTP conflict from another group leader", () => {
+  expect(groupError({ code: "PT409", message: "GROUP_CHANGED" })).toContain(
+    "Outro dirigente alterou",
+  );
 });

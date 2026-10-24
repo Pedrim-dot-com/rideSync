@@ -252,7 +252,7 @@ PRD/README. Não implementa certificação jurídica. Papéis member/leader; qua
 dirigente pode aprovar/editar; não existe dirigente principal ou UUID criador com
 privilégio permanente. Índices únicos e locks protegem grupo único/última direção.
 Morada e coordenadas de sede são divulgação explícita a contas autenticadas;
-GPS pessoal permanece privado. Migration 007 preparada, não aplicada.
+GPS pessoal permanece privado. Migration 007 aplicada com autorização; ver recibos em docs/24.
 
 ## ADR-017 — Voz por LiveKit e SOS de prioridade
 
@@ -272,6 +272,18 @@ acrescenta latência a medir; não prometer intercomunicador background em iOS.
 
 SDKs Apache-2.0; custos/minutos/tráfego e salas órfãs exigem revisão operacional.
 Só a presença dos nomes dos segredos foi verificada; valores/provider ainda não
-validados. Migration 008 e publicação dependem de autorização; teste de três
+validados. Migration 008 aplicada e trip-voice publicada com autorização; teste de três
 telefones/headset e limpeza administrativa de salas antigas ainda pendentes.
 Ver docs/20-VOICE-AND-SOS.md. Fotos, IA e app nativa mantêm o estado anterior.
+
+
+## ADR-018 — Ativação remota e conflitos de edição de grupos
+
+Autorização explícita para terminar a tarefa pendente. Migrations 007/008 aplicadas,
+trip-voice publicada e integração HTTPS real validada. Preservar SQL já aplicado;
+correção de conflito de revisão em migration 009 usa PT409/GROUP_CHANGED em vez
+de 40001, para distinguir conflito esperado de falha de serialização transacional.
+Teste remoto inicial do conflito expirou sem resposta; a resposta explícita HTTP
+409 passou após a correção. Chaves LiveKit válidas confirmadas por operações de
+salas/tokens, sem recuperar ou imprimir segredos. Documentar separadamente a
+aceitação acústica em hardware que não foi comprovada por testes de API.

@@ -71,26 +71,31 @@ considerar este mecanismo adequado a cenários de segurança mais exigentes.
 5. Rever plano, https://livekit.io/pricing, limites de participantes/minutos,
    tráfego e alertas de custo do projeto. Não assumir tráfego grátis ilimitado,
    nem ativar upgrades pagos implicitamente. Os valores atuais dependem do plano.
-6. Aplicar migration 008 após 007, publicar trip-voice e então frontend, com
+6. Num ambiente novo autorizado, aplicar 007/008 e a correção 009, publicar trip-voice e então frontend, com
    confirmação prevista no CLAUDE.md. Regenerar tipos após aplicação remota.
 
-O utilizador confirmou que guardou os segredos. Consulta read-only confirmou
-presença dos três nomes; isto não valida o URL, valores, billing ou ligação real.
+Os segredos foram configurados pelo utilizador. A função trip-voice foi
+publicada com verify_jwt=false e getUser interno ativo. Testes HTTPS reais
+criaram salas LiveKit e emitiram tokens de ouvinte/organizador/SOS com a
+identidade, sala e fontes corretas. Isto valida credenciais/acesso à API sem
+imprimir ou obter os segredos LiveKit no ambiente de desenvolvimento. Plano/
+billing continuam a depender das definições da conta do fornecedor.
 
 ## Validação e limites da entrega
 
-Código implementado e testado localmente; interface já observada na PWA.
-Verificação read-only em 2026-10-24 confirmou ausência de `trip_voice_state`,
-`trip_voice_snapshot` e da Edge Function `trip-voice`. Guardar segredos não
-publica a função nem aplica a migration 008. A voz e o SOS ainda não podem ser
-validados de ponta a ponta neste projeto. 46 checks PostgreSQL adicionais cobrem roles,
+Migration 008 aplicada com autorização em 2026-10-24, função trip-voice ativa
+(versão 1), RLS/service-only e tipos verificados. Casos reais por HTTPS cobrem
+prioridade SOS, organizador bloqueado durante SOS, emissor autorizado, resolução,
+retoma explícita, fim de viagem, outsider e origem CORS recusados. As fixtures
+foram removidas e a limpeza confirmada. Ver recibos em docs/24.
+
+46 checks PostgreSQL adicionais cobrem roles,
 prioridade, sala/época, JWT replay isolado, expiração, operações abandonadas,
 privilégios service-only, Realtime privado e término. Unitários cobrem Edge/CORS,
 identidade, falhas, subscrição autorizada, microfone negado/tardio e cleanup.
 Testes simulados não provam latência/entrega WebRTC nem áudio de um headset.
 
-Após autorização: aplicar migrations, validar provider e token real com contas
-fictícias, limpar dados de teste e publicar. Antes de aceitação em estrada,
+A ativação remota e os testes de API estão concluídos. Antes de aceitação em estrada,
 executar em três dispositivos (iOS e Android) e redes móveis distintas:
 organizador fala, participante A interrompe com SOS, B ouve o SOS, permissões
 negadas mantêm alerta, resolver/retomar, perda de rede, foreground/background,

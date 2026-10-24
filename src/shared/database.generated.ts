@@ -14,6 +14,45 @@ export type Database = {
   };
   public: {
     Tables: {
+      group_memberships: {
+        Row: {
+          group_id: string;
+          role: string;
+          status: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          group_id: string;
+          role?: string;
+          status: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          group_id?: string;
+          role?: string;
+          status?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "group_memberships_group_id_fkey";
+            columns: ["group_id"];
+            isOneToOne: false;
+            referencedRelation: "motard_groups";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "group_memberships_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       location_shares: {
         Row: {
           expires_at: string;
@@ -76,6 +115,59 @@ export type Database = {
           {
             foreignKeyName: "map_request_limits_user_id_fkey";
             columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      motard_groups: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          description: string;
+          headquarters_address: string;
+          id: string;
+          latitude: number;
+          legal_name: string;
+          longitude: number;
+          name: string;
+          registration_number: string;
+          revision: number;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          description?: string;
+          headquarters_address: string;
+          id?: string;
+          latitude: number;
+          legal_name?: string;
+          longitude: number;
+          name: string;
+          registration_number?: string;
+          revision?: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          description?: string;
+          headquarters_address?: string;
+          id?: string;
+          latitude?: number;
+          legal_name?: string;
+          longitude?: number;
+          name?: string;
+          registration_number?: string;
+          revision?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "motard_groups_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
@@ -434,6 +526,125 @@ export type Database = {
           },
         ];
       };
+      trip_sos_alerts: {
+        Row: {
+          expires_at: string;
+          raised_at: string;
+          raised_by: string;
+          reason: string;
+          resolved_at: string | null;
+          trip_id: string;
+        };
+        Insert: {
+          expires_at?: string;
+          raised_at?: string;
+          raised_by: string;
+          reason: string;
+          resolved_at?: string | null;
+          trip_id: string;
+        };
+        Update: {
+          expires_at?: string;
+          raised_at?: string;
+          raised_by?: string;
+          reason?: string;
+          resolved_at?: string | null;
+          trip_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "trip_sos_alerts_raised_by_fkey";
+            columns: ["raised_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_sos_alerts_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: true;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      trip_voice_limits: {
+        Row: {
+          requests: number;
+          user_id: string;
+          window_start: string;
+        };
+        Insert: {
+          requests?: number;
+          user_id: string;
+          window_start?: string;
+        };
+        Update: {
+          requests?: number;
+          user_id?: string;
+          window_start?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "trip_voice_limits_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      trip_voice_state: {
+        Row: {
+          epoch_started_at: string;
+          operation_id: string | null;
+          operation_until: string | null;
+          ready: boolean;
+          room_epoch: string;
+          speaker_id: string | null;
+          speaker_kind: string | null;
+          speaker_until: string | null;
+          trip_id: string;
+        };
+        Insert: {
+          epoch_started_at?: string;
+          operation_id?: string | null;
+          operation_until?: string | null;
+          ready?: boolean;
+          room_epoch?: string;
+          speaker_id?: string | null;
+          speaker_kind?: string | null;
+          speaker_until?: string | null;
+          trip_id: string;
+        };
+        Update: {
+          epoch_started_at?: string;
+          operation_id?: string | null;
+          operation_until?: string | null;
+          ready?: boolean;
+          room_epoch?: string;
+          speaker_id?: string | null;
+          speaker_kind?: string | null;
+          speaker_until?: string | null;
+          trip_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "trip_voice_state_speaker_id_fkey";
+            columns: ["speaker_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_voice_state_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: true;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       trip_waypoints: {
         Row: {
           id: string;
@@ -515,6 +726,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      begin_trip_voice_operation: {
+        Args: { p_action: string; p_actor: string; p_trip_id: string };
+        Returns: Json;
+      };
       can_read_location: {
         Args: { p_session_id: string; p_trip_id: string; p_user_id: string };
         Returns: boolean;
@@ -523,6 +738,11 @@ export type Database = {
       can_receive_trip_tracking: {
         Args: { p_topic: string };
         Returns: boolean;
+      };
+      can_receive_trip_voice: { Args: { p_topic: string }; Returns: boolean };
+      change_group_membership: {
+        Args: { p_action: string; p_group_id: string; p_user_id?: string };
+        Returns: undefined;
       };
       consume_map_request: { Args: { p_action: string }; Returns: undefined };
       create_trip: {
@@ -544,6 +764,21 @@ export type Database = {
       finish_trip: {
         Args: { p_expected_revision: number; p_trip_id: string };
         Returns: undefined;
+      };
+      finish_trip_voice_operation: {
+        Args: { p_operation_id: string; p_success: boolean; p_trip_id: string };
+        Returns: boolean;
+      };
+      is_group_leader: { Args: { p_group_id: string }; Returns: boolean };
+      list_group_members: {
+        Args: { p_group_id: string };
+        Returns: {
+          display_name: string;
+          role: string;
+          status: string;
+          user_id: string;
+          username: string;
+        }[];
       };
       list_received_trip_invitations: {
         Args: never;
@@ -592,11 +827,16 @@ export type Database = {
         };
         Returns: undefined;
       };
+      raise_trip_sos: {
+        Args: { p_reason: string; p_trip_id: string };
+        Returns: undefined;
+      };
       remember_trip_invitation: { Args: { p_token: string }; Returns: string };
       replace_trip_waypoints: {
         Args: { p_trip_id: string; p_waypoints: Json };
         Returns: undefined;
       };
+      resolve_trip_sos: { Args: { p_trip_id: string }; Returns: undefined };
       respond_invitation_internal: {
         Args: { p_accept: boolean; p_invitation_id: string };
         Returns: string;
@@ -612,6 +852,20 @@ export type Database = {
       revoke_trip_invitation: {
         Args: { p_invitation_id: string; p_trip_id: string };
         Returns: undefined;
+      };
+      save_motard_group: {
+        Args: {
+          p_address: string;
+          p_description: string;
+          p_group_id: string;
+          p_latitude: number;
+          p_legal_name: string;
+          p_longitude: number;
+          p_name: string;
+          p_registration_number: string;
+          p_revision: number;
+        };
+        Returns: string;
       };
       set_primary_motorcycle: {
         Args: { motorcycle_id: string };
@@ -654,6 +908,7 @@ export type Database = {
         Returns: undefined;
       };
       tracking_snapshot: { Args: { p_trip_id: string }; Returns: Json };
+      trip_voice_snapshot: { Args: { p_trip_id: string }; Returns: Json };
       update_trip: {
         Args: {
           p_departure_at: string;

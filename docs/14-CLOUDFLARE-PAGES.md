@@ -94,3 +94,13 @@ A versão com GPS verifica atualizações ao voltar ao primeiro plano e a cada
 minuto enquanto visível. Para versões anteriores, fechar completamente a PWA
 no seletor de aplicações iOS e abrir de novo com rede para iniciar a verificação.
 Não é necessário desinstalar ou apagar os dados como primeiro passo.
+
+
+## Grupos e voz ativados no backend
+
+Migrations 007–009 e trip-voice foram aplicadas/publicadas com autorização. O
+frontend já inclui os controlos; os testes HTTPS reais validaram grupos, tokens
+LiveKit e prioridade SOS. Uma correção de mensagem de conflito de edição é
+publicada via main/Pages. Depois de atualizar, seguir docs/23 para teste em
+aparelhos; Cloudflare Pages não publica funções Supabase nem aplica migrations.
+Recibos e limites de validação em docs/24-GROUPS-VOICE-ACTIVATION.md.

@@ -135,7 +135,7 @@ export async function runGroupChecks({ db, asUser, url }) {
       "select public.save_motard_group($1,1,'Stale group','','','','Public place',40,-7)",
       [group],
     ),
-    (e) => e.code === "40001",
+    (e) => e.code === "PT409" && e.message === "GROUP_CHANGED",
   );
   checks++;
   await action(a, group, "leave");

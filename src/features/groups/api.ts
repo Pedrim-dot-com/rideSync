@@ -165,7 +165,7 @@ export function groupError(error: unknown) {
     return "Atingiste o limite de criação de grupos de hoje.";
   const code =
     error && typeof error === "object" && "code" in error ? error.code : "";
-  if (code === "40001")
+  if (code === "40001" || code === "PT409" || message === "GROUP_CHANGED")
     return "Outro dirigente alterou o grupo. Volta a abrir a edição para atualizar os dados.";
   return "Não foi possível concluir. Verifica a ligação, atualiza os dados e tenta novamente.";
 }

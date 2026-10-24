@@ -1,6 +1,6 @@
 # 03 — Arquitetura técnica
 
-A visão geral visual está no [fluxograma de arquitetura do README](../README.md#arquitetura-da-aplicação), com identificação das integrações cujo backend ainda falta ativar.
+A visão geral visual está no [fluxograma de arquitetura do README](../README.md#arquitetura-da-aplicação), com os componentes ativos e fornecedores externos.
 
 ## Princípios
 Monólito frontend modular + Supabase BaaS. Evitar backend próprio, Redis, broker e microserviços. Preferir soluções reversíveis e contratos explícitos.
@@ -61,5 +61,5 @@ publicação para a audiência atual. Isto acrescenta um breve reconnect à muda
 de fala; medir em dispositivos reais. Credenciais e SDK de servidor só na Edge.
 Ver docs/19-MOTARD-GROUPS.md e docs/20-VOICE-AND-SOS.md.
 
-Estado operacional atual de grupos/voz: interface publicada, migrations 007/008
-e trip-voice ausentes na verificação remota. Ver docs/23-FEATURE-TEST-GUIDE.md.
+Estado operacional atual: grupos/voz com backend ativo (007–009 e trip-voice),
+validação HTTPS real concluída; áudio físico ainda por testar. Ver docs/23 e docs/24.

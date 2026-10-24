@@ -222,12 +222,23 @@ alterar HOME para contornar autenticação. Erros ORS 401/403 são apresentados 
 indisponibilidade de credenciais do serviço; logs incluem apenas operação/status.
 
 
-## Extensão local — grupos e voz/SOS (2026-10-24)
+## Grupos e voz/SOS (2026-10-24)
 
-Migrations 007/008 e função trip-voice preparadas; autorização remota pendente.
-Contratos temporários tipados refinam o snapshot gerado até regeneração após
-aplicação. Novas pastas src/features/groups e src/features/voice. SDK de áudio
+Migrations 007/008/009 aplicadas e trip-voice publicada com autorização.
+Snapshot remoto regenerado após aplicação; contratos refinam nulabilidade e estados SQL. Novas pastas src/features/groups e src/features/voice. SDK de áudio
 cliente é lazy; servidor LiveKit só na Edge. Ver docs/19 e docs/20 pelo nome
 completo dos ficheiros. Adicionar trip-voice/index.ts ao check:edge e manter
 RLS/integration tests em scripts/test-db.mjs. Segredos já presentes no projeto
 foram confirmados por nome, sem obter ou imprimir os seus valores.
+
+
+Publicação seletiva da função de voz, só após autorização:
+
+```sh
+python3 scripts/deploy-map-functions.py --project-ref isyhpoyihcbkujtjadzc --function trip-voice --dry-run
+python3 scripts/deploy-map-functions.py --project-ref isyhpoyihcbkujtjadzc --function trip-voice
+```
+
+Sem --function, o script mantém a publicação das duas funções de mapas. Usa API
+de gestão HTTPS e metadados verify_jwt=false, com getUser dentro do handler.
+Ficheiros/fontes e dependências Deno são enviados sem obter segredos remotos.

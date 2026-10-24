@@ -47,10 +47,17 @@ associações em seeds. Não incluir dados reais de grupos sem autorização.
 
 ## Estado e validação
 
-Verificação read-only em 2026-10-24: a interface está publicada na PWA, mas
-`motard_groups`, `group_memberships` e `save_motard_group` não existem no Supabase.
-A migration 007 ainda precisa de aplicação autorizada; os grupos não podem ser
-criados/consultados de ponta a ponta enquanto faltar este backend.
+Migrations 007 e 009 aplicadas com autorização em 2026-10-24, RLS/privilégios
+verificados e tipos remotos regenerados. Os testes HTTPS reais confirmaram
+criação por conta sem grupo, consulta das sedes, pedidos/aprovação, promoção de
+segundo dirigente, saída e proteção do último dirigente. Grupos não dependem de
+inscrição obrigatória nem de uma viagem. Ver recibos em docs/24.
+
+A migration 009 altera apenas o conflito de revisão em save_motard_group para
+`PT409 / GROUP_CHANGED`, devolvendo HTTP 409 explícito. O teste remoto inicial
+com 40001 ficou sem resposta; o novo teste de edição desatualizada foi aprovado.
+Não editar/reaplicar a 007 já instalada.
+
 Testes de BD cobrem outsider/anon, RLS, approval, privilégios, vários dirigentes,
 último dirigente, concorrência e grupo único. E2E simulado cobre mapa/lista,
 pedido, aprovação por outro dirigente e direção partilhada em viewport mobile.

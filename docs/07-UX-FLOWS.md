@@ -1,6 +1,6 @@
 # 07 — UX, navegação e ecrãs
 
-O [fluxograma dos principais percursos no README](../README.md#fluxos-principais-da-aplicação) resume estes fluxos e distingue as funcionalidades em revisão.
+O [fluxograma dos principais percursos no README](../README.md#fluxos-principais-da-aplicação) resume os fluxos implementados.
 
 ## Princípios
 Mobile-first, interface legível sob luz solar, contraste elevado, alvos táteis adequados, operações críticas acessíveis em poucas interações. Não incentivar interação durante a condução; planeamento e edição são para quando estiver parado.

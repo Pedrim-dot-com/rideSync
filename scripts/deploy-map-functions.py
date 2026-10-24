@@ -1,4 +1,4 @@
-"""Deploy approved map functions through the Supabase Management API.
+"""Deploy approved Supabase Edge Functions through the Supabase Management API.
 
 Uses injected SUPABASE_ACCESS_TOKEN directly over HTTPS. Never prints or stores
 credentials. Run only after the project owner authorizes the deployment.
@@ -13,16 +13,18 @@ import subprocess
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--project-ref', required=True)
 parser.add_argument('--dry-run', action='store_true')
+parser.add_argument('--function', dest='function_name', choices=['search-places', 'calculate-route', 'trip-voice'])
 options = parser.parse_args()
 if not re.fullmatch('[a-z]{20}', options.project_ref):
     parser.error('Expected a 20-letter Supabase project ref')
 root = Path(__file__).resolve().parents[1] / 'supabase' / 'functions'
 shared = [root / '_shared' / name for name in
           ['contracts.ts', 'handler.ts', 'providers.ts', 'runtime.ts']]
-for slug in ['search-places', 'calculate-route']:
+for slug in ([options.function_name] if options.function_name else ['search-places', 'calculate-route']):
     metadata = {'name': slug, 'entrypoint_path': slug + '/index.ts',
                 'import_map_path': 'deno.json', 'verify_jwt': False}
-    files = [root / slug / 'index.ts', root / 'deno.json', root / 'deno.lock', *shared]
+    sources = [root / slug / 'handler.ts'] if slug == 'trip-voice' else shared
+    files = [root / slug / 'index.ts', root / 'deno.json', root / 'deno.lock', *sources]
     for file in files:
         if not file.is_file():
             raise SystemExit('Missing source file: ' + str(file))
