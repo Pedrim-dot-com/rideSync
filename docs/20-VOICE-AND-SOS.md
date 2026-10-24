@@ -79,7 +79,11 @@ presença dos três nomes; isto não valida o URL, valores, billing ou ligação
 
 ## Validação e limites da entrega
 
-Implementado e testado localmente. 46 checks PostgreSQL adicionais cobrem roles,
+Código implementado e testado localmente; interface já observada na PWA.
+Verificação read-only em 2026-10-24 confirmou ausência de `trip_voice_state`,
+`trip_voice_snapshot` e da Edge Function `trip-voice`. Guardar segredos não
+publica a função nem aplica a migration 008. A voz e o SOS ainda não podem ser
+validados de ponta a ponta neste projeto. 46 checks PostgreSQL adicionais cobrem roles,
 prioridade, sala/época, JWT replay isolado, expiração, operações abandonadas,
 privilégios service-only, Realtime privado e término. Unitários cobrem Edge/CORS,
 identidade, falhas, subscrição autorizada, microfone negado/tardio e cleanup.
@@ -91,3 +95,5 @@ executar em três dispositivos (iOS e Android) e redes móveis distintas:
 organizador fala, participante A interrompe com SOS, B ouve o SOS, permissões
 negadas mantêm alerta, resolver/retomar, perda de rede, foreground/background,
 headset e conclusão. Registar latência medida e falhas, sem prometer um SLA.
+
+Roteiro com três contas/dispositivos: [docs/23-FEATURE-TEST-GUIDE.md](23-FEATURE-TEST-GUIDE.md). A inscrição num grupo motard não é pré-condição; o acesso vem do convite aceite na viagem.

@@ -59,7 +59,9 @@ ligado à viagem. Um SOS de cada vez, até resolver ou expirar em 90 segundos;
 a prioridade é do primeiro alerta ativo. O organizador retoma explicitamente a
 fala após resolução, sem ligar microfones automaticamente.
 
-Cada conta pertence a no máximo um grupo motard. Entradas exigem aprovação de
+Pertencer a um grupo motard é opcional: cada conta pode não ter grupo ou
+pertencer a no máximo um. Qualquer conta sem inscrição/pedido pendente pode
+criar o seu próprio grupo e tornar-se o primeiro dirigente. Entradas exigem aprovação de
 um dirigente. Pode haver vários dirigentes com os mesmos poderes: aprovar,
 recusar, promover/despromover, remover membros e editar sede/dados. Impedir saída
 ou despromoção do último dirigente pela app. Grupos podem declarar denominação

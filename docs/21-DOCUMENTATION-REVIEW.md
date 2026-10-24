@@ -89,3 +89,20 @@ na mesma branch de revisão, sem aplicar migrations ou publicar funcionalidades.
 
 Os dois diagramas foram validados pelo parser Mermaid 11.12 e renderizados em
 Chromium sem erros. Links locais e âncoras do README foram verificados.
+
+
+## Verificação remota após relato de dificuldades
+
+Em 2026-10-24, a PWA pública serviu `/assets/index-DJftS0LK.js`, contendo grupos
+e chamadas de voz. A consulta apenas de leitura devolveu NULL para as tabelas
+motard_groups/group_memberships/trip_voice_state e para as RPCs save_motard_group/
+trip_voice_snapshot. A lista de Edge Functions contém apenas search-places e
+calculate-route. Conclusão: interface publicada, backend das duas features ausente.
+O estado anterior “só local/por publicar” descrevia a entrega anterior; esta
+verificação atualiza o estado operacional sem afirmar que a ativação terminou.
+
+Reforçada a pertença opcional: zero ou um grupo; qualquer conta sem inscrição/
+pedido pendente pode criar um. Não houve mudança desta regra no SQL: o limite
+único já era máximo, não uma obrigação de inscrição. Criado docs/23 com roteiro
+que separa pré-condições de publicação dos testes do utilizador. Nenhuma migration
+ou função remota foi alterada por esta verificação.

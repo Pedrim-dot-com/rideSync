@@ -76,7 +76,8 @@ Objetivo, requisitos, alterações, migration/RLS, testes executados, screenshot
 - [x] Nomes dos três segredos LiveKit presentes no Supabase (read-only).
 - [ ] Aplicar 007/008 e publicar trip-voice após autorização.
 - [ ] Regenerar tipos e validar contratos/provider com contas temporárias reais.
-- [ ] Publicar frontend e confirmar bundle/precache Cloudflare.
+- [x] Interface de grupos/voz presente no bundle público Cloudflare (verificação read-only).
+- [ ] Completar backend ausente e confirmar funcionamento ponta a ponta; interface publicada não significa ativação concluída.
 - [ ] Executar VOZ-006: três dispositivos, headset, rede móvel e medição de latência.
 - [ ] Rever billing e política de limpeza de salas órfãs no fornecedor.
 
