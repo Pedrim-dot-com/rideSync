@@ -2,7 +2,8 @@
 
 > Estado revisto em 2026-10-24: Auth, garagem, viagens, mapas, convites,
 > tracking foreground e notificações estão publicados (migrations 001–006).
-> Grupos motards com vários dirigentes e voz/SOS estão implementados localmente;
+> Grupos motards com vários dirigentes e voz/SOS estão implementados e propostos
+> para revisão na branch `feat/motard-groups-voice-sos`;
 > migrations 007/008, função trip-voice e publicação aguardam autorização.
 > IA, fotos e validação completa em dispositivos/redes reais continuam pendentes.
 

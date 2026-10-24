@@ -58,3 +58,13 @@ afetados, incluindo resultados após publicação e testes reais. Não alterar
 recibos históricos nem apresentar implementação local como publicação concluída.
 O índice do README passa a incluir todos os documentos de docs/01 a docs/21.
 Esta atualização documental não altera a autorização pendente para 007/008/voz.
+
+
+## Envio para revisão no GitHub
+
+O utilizador pediu envio das alterações e abertura de PR. Branch de revisão:
+`feat/motard-groups-voice-sos`, com base em `main`. Inclui grupos/voz/SOS,
+revisão documental e a regra permanente de manutenção do README/documentação.
+O envio da branch/PR não equivale a aplicar migrations 007/008, publicar a Edge
+Function ou integrar em main. Esses passos mantêm a autorização e validação
+próprias descritas em docs/19 e docs/20.
