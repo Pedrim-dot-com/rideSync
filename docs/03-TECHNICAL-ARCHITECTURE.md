@@ -1,6 +1,6 @@
 # 03 — Arquitetura técnica
 
-A visão geral visual está no [fluxograma de arquitetura do README](../README.md#arquitetura-da-aplicação), com identificação dos componentes ainda por publicar.
+A visão geral visual está no [fluxograma de arquitetura do README](../README.md#arquitetura-da-aplicação), com identificação das integrações cujo backend ainda falta ativar.
 
 ## Princípios
 Monólito frontend modular + Supabase BaaS. Evitar backend próprio, Redis, broker e microserviços. Preferir soluções reversíveis e contratos explícitos.
@@ -60,3 +60,6 @@ Uma época de sala por mudança de interlocutor impede que um JWT antigo autoriz
 publicação para a audiência atual. Isto acrescenta um breve reconnect à mudança
 de fala; medir em dispositivos reais. Credenciais e SDK de servidor só na Edge.
 Ver docs/19-MOTARD-GROUPS.md e docs/20-VOICE-AND-SOS.md.
+
+Estado operacional atual de grupos/voz: interface publicada, migrations 007/008
+e trip-voice ausentes na verificação remota. Ver docs/23-FEATURE-TEST-GUIDE.md.

@@ -45,7 +45,8 @@ Teclado, labels, foco visível, texto escalável, contraste WCAG AA, não depend
 ## Grupos, direção e voz/SOS
 
 Grupos tem Lista/Mapa das sedes, pesquisa e detalhe. Inscrição mostra estados
-sem grupo, pedido pendente, aceite e dirigente. Vários dirigentes gerem o mesmo
+sem grupo (situação válida e opcional), pedido pendente, aceite e dirigente.
+Qualquer pessoa sem grupo/pedido pendente pode criar um e ser o primeiro dirigente. Vários dirigentes gerem o mesmo
 grupo; indicar que não é possível sair ou remover o último. Dados legais são
 opcionais e declarados; nenhuma marca de certificação. Sede tem aviso de
 visibilidade antes da gravação.
@@ -59,3 +60,6 @@ Não reativar microfone depois de SOS, background ou perda de ligação.
 Em mobile há um atalho SOS fixo acima da navegação durante a viagem ativa,
 para não obrigar a percorrer mapa/controlos até ao painel de voz. Com alerta
 ativo o atalho abre o painel; sem alerta envia SOS com o motivo selecionado.
+
+A presença destes separadores/controlos na PWA não confirma backend instalado.
+O estado remoto e os passos de teste estão em docs/23-FEATURE-TEST-GUIDE.md.

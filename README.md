@@ -1,12 +1,11 @@
 # RideSync — documentação da PoC
 
-> Estado revisto em 2026-10-24: Auth, garagem, viagens, mapas, convites,
-> tracking foreground e notificações estão publicados (migrations 001–006).
-> Grupos motards com vários dirigentes e voz/SOS estão implementados e propostos
-> para revisão na branch `feat/motard-groups-voice-sos`, enviada ao GitHub;
-> a abertura automática do PR está bloqueada pelo acesso à API GitHub.
-> Migrations 007/008, função trip-voice e publicação aguardam autorização.
-> IA, fotos e validação completa em dispositivos/redes reais continuam pendentes.
+> Estado verificado em 2026-10-24: Auth, garagem, viagens, mapas, convites,
+> tracking e notificações estão publicados. A interface de grupos e voz/SOS
+> também está na PWA, mas estas duas funcionalidades **ainda não estão operacionais**:
+> faltam as tabelas/RPCs das migrations 007/008 e a Edge Function `trip-voice`.
+> Guardar as chaves LiveKit não instala esse backend. IA, fotos e validação
+> completa de áudio em dispositivos/redes reais continuam pendentes.
 
 ## Objetivo
 Validar que motards conseguem criar e partilhar uma viagem, escolher a mota, participar em grupos e ver as posições uns dos outros em tempo real **com a PWA aberta**. Um planeador com IA transforma pedidos em itinerários validados por um motor de rotas.
@@ -18,9 +17,9 @@ React + TypeScript + Vite; Tailwind; TanStack Query; Zustand quando necessário;
 
 A PWA é servida pela Cloudflare Pages. O Supabase autentica e autoriza os dados;
 o MapTiler fornece cartografia e o openrouteservice calcula percursos reais.
-As ligações tracejadas representam a integração de voz/SOS, ainda com publicação
+As ligações tracejadas representam a integração de voz/SOS, ainda com ativação do backend
 pendente. Grupos e sedes usam a mesma PWA, PostgreSQL/RLS e cartografia; as suas
-tabelas/RPCs novas (migration 007) também aguardam publicação. IA e uploads de fotos continuam planeados e não
+tabelas/RPCs novas (migration 007) também aguardam aplicação. IA e uploads de fotos continuam planeados e não
 estão representados como serviços disponíveis.
 
 ```mermaid
@@ -54,7 +53,7 @@ plano ou mapas offline. [Arquitetura detalhada](docs/03-TECHNICAL-ARCHITECTURE.m
 ## Fluxos principais da aplicação
 
 O diagrama reúne acesso, garagem/perfil, convites, viagens, GPS, voz/SOS e grupos.
-Os percursos tracejados e nós a laranja pertencem às funcionalidades em revisão.
+Os percursos tracejados e nós a laranja precisam do backend ainda por ativar.
 Entrar num grupo motard não concede acesso automático a viagens privadas.
 
 ```mermaid
@@ -125,6 +124,7 @@ o grupo ligado à viagem e não contacta o 112. [Fluxos e estados detalhados](do
 21. [Voz e SOS](docs/20-VOICE-AND-SOS.md)
 22. [Revisão documental](docs/21-DOCUMENTATION-REVIEW.md)
 23. [Proposta de pull request e publicação pendente](docs/22-PULL-REQUEST.md)
+24. [Estado real e roteiro de teste de grupos e voz](docs/23-FEATURE-TEST-GUIDE.md)
 
 ## Limites explícitos
 Não prometer GPS ou voz com ecrã bloqueado/segundo plano no iOS. SOS avisa apenas o grupo da viagem, não é contacto com emergência/112. Diretório de grupos e sedes é visível a utilizadores autenticados; dados legais são autodeclarados. Chat, pagamentos, navegação turn-by-turn, monetização e app nativa continuam fora do âmbito. GPS e microfone exigem consentimentos independentes.
@@ -152,8 +152,11 @@ Abrir este repositório no Claude Code e enviar o conteúdo de `PROMPT-CLAUDE.md
 
 ## Grupos motards e voz/SOS
 
+[Como testar e o que falta ativar](docs/23-FEATURE-TEST-GUIDE.md).
+
 - [Grupos e direção partilhada](docs/19-MOTARD-GROUPS.md): diretório, mapa de
-  sedes, um grupo por conta, aprovação de entradas e vários dirigentes.
+  sedes, pertença opcional (zero ou um grupo por conta), criação por qualquer
+  conta elegível, aprovação de entradas e vários dirigentes.
 - [Voz da viagem e SOS](docs/20-VOICE-AND-SOS.md): áudio do organizador, prioridade
   de SOS, LiveKit Cloud, configuração, limites e validação pendente.
 - [Revisão documental](docs/21-DOCUMENTATION-REVIEW.md): inconsistências corrigidas

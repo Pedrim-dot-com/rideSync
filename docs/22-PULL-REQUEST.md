@@ -1,6 +1,7 @@
 # 22 — Proposta de pull request
 
-Estado: branch enviada ao GitHub; PR ainda não criado. A API GitHub devolveu
+Estado da tentativa automática: branch enviada; este ambiente não conseguiu
+criar o PR. O estado atual de PRs externos não foi consultado. A API GitHub devolveu
 Forbidden nas tentativas de listagem/criação, enquanto o push Git funciona.
 Não foi possível consultar o resultado remoto do CI neste ambiente.
 
@@ -10,7 +11,11 @@ Base: `main`. Head: `feat/motard-groups-voice-sos`.
 
 Add motard groups with shared leadership and priority SOS voice
 
-## Descrição pronta para revisão
+A interface foi entretanto observada em produção; o backend 007/008/trip-voice
+continua ausente. Estado e roteiro atuais: [guia de teste](23-FEATURE-TEST-GUIDE.md).
+A descrição abaixo é o texto preparado na proposta anterior.
+
+## Descrição preparada para revisão
 
 Esta alteração acrescenta grupos motards com sedes públicas para contas autenticadas e comunicação de voz durante viagens ativas.
 

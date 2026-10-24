@@ -73,7 +73,7 @@ passam a MAP-001…006. Os FR-021…024 da tabela principal mantêm o significad
 | ID | Prioridade | Requisito | Aceitação |
 |---|---|---|---|
 | GRP-001 | P0 | Diretório e mapa das sedes | Todas as contas autenticadas consultam sedes declaradas sem expor GPS pessoal |
-| GRP-002 | P0 | Uma inscrição por conta | No máximo um grupo aceite; um pedido pendente; limites impostos na BD |
+| GRP-002 | P0 | Uma inscrição por conta | Pertença opcional: zero ou um grupo aceite; no máximo um pedido pendente; qualquer conta sem ambos pode criar grupo; limites na BD |
 | GRP-003 | P0 | Aprovar entradas | Só dirigentes aprovam/recusam; membro não se promove nem altera pedidos alheios |
 | GRP-004 | P0 | Vários dirigentes | Poderes iguais; impedir remover/despromover/sair do último dirigente, incluindo concorrência |
 | GRP-005 | P0 | Associação e sede física | Nome/morada/coordenadas; denominação e registo opcionais; sem selo de verificação legal |

@@ -1,10 +1,17 @@
 # 19 — Grupos motards e direção partilhada
 
 Pedido obrigatório do utilizador em 2026-10-24, incluindo associações com sede
-física e vários dirigentes. Uma conta pertence a um grupo; entrada aprovada por
+física e vários dirigentes. Pertencer a um grupo é opcional: uma conta pode
+ficar sem grupo ou pertencer a um único grupo. Entrada aprovada por
 um dirigente, conforme preferência confirmada pelo utilizador.
 
 ## Interface
+
+Registar conta não associa ninguém automaticamente a um grupo. Uma pessoa sem
+grupo pode usar viagens/garagem/voz e consultar todas as sedes. Qualquer conta
+sem inscrição aceite nem pedido pendente pode criar o seu próprio grupo e
+tornar-se o primeiro dirigente. Para criar outro grupo, sair do atual ou retirar
+o pedido pendente; o último dirigente tem de promover outro membro antes de sair.
 
 Separador Grupos com lista pesquisável e mapa das sedes. Selecionar um grupo
 mostra nome/descrição, sede e dados legais opcionais. Sem selo “verificado”.
@@ -40,10 +47,15 @@ associações em seeds. Não incluir dados reais de grupos sem autorização.
 
 ## Estado e validação
 
-Implementado localmente; migration 007 e publicação pendentes de autorização.
+Verificação read-only em 2026-10-24: a interface está publicada na PWA, mas
+`motard_groups`, `group_memberships` e `save_motard_group` não existem no Supabase.
+A migration 007 ainda precisa de aplicação autorizada; os grupos não podem ser
+criados/consultados de ponta a ponta enquanto faltar este backend.
 Testes de BD cobrem outsider/anon, RLS, approval, privilégios, vários dirigentes,
 último dirigente, concorrência e grupo único. E2E simulado cobre mapa/lista,
 pedido, aprovação por outro dirigente e direção partilhada em viewport mobile.
 Cadastro oficial/importação pública, prova de mandato, fotos, eventos e gestão
 financeira não fazem parte desta entrega. Exclusão administrativa da última
 conta dirigente exige tratamento explícito do grupo pelo operador.
+
+Roteiro de teste e pré-condições: [docs/23-FEATURE-TEST-GUIDE.md](23-FEATURE-TEST-GUIDE.md).
