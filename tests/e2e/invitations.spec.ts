@@ -281,9 +281,16 @@ test("organizer creates/revokes a link, rider signs up, logs in and accepts with
       .getByRole("button", { name: "Criar conta", exact: true })
       .click();
     await expect(
-      rider.getByText(
-        "Se o registo for aceite, receberás um email de confirmação.",
-      ),
+      rider.getByRole("heading", { name: "Confirma o teu email" }),
+    ).toBeVisible();
+    await expect(
+      rider.getByText("rider@example.test", { exact: true }),
+    ).toBeVisible();
+    await rider
+      .getByRole("button", { name: "Já confirmei o email. Entrar" })
+      .click();
+    await expect(
+      rider.getByRole("button", { name: "Entrar", exact: true }),
     ).toBeVisible();
     await rider.reload();
     await expect(

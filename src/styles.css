@@ -1548,3 +1548,10 @@ details[open] > summary::after {
     font-size: 23px;
   }
 }
+
+.signup-confirmation .eyebrow {
+  margin-bottom: 12px;
+}
+.signup-confirmation strong {
+  overflow-wrap: anywhere;
+}

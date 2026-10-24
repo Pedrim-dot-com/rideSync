@@ -61,6 +61,29 @@ describe("authentication", () => {
       password: "newpassword123",
     });
   });
+  it("explains the next step when login requires email confirmation", async () => {
+    auth.signInWithPassword.mockResolvedValue({
+      error: {
+        code: "email_not_confirmed",
+        message: "internal service detail",
+      },
+    });
+    render(<Auth onRecovered={() => {}} />);
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "rider@example.test" },
+    });
+    fireEvent.change(screen.getByLabelText("Password"), {
+      target: { value: "password123" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Confirma primeiro o teu email",
+    );
+    expect(
+      screen.queryByText("internal service detail"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Entrar" })).toBeEnabled();
+  });
   it("shows a safe login error", async () => {
     auth.signInWithPassword.mockResolvedValue({
       error: { message: "private details" },

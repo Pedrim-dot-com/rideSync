@@ -16,6 +16,7 @@ export function Auth({
   const [mode, setMode] = useState<"login" | "signup" | "reset">("login");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [signupEmail, setSignupEmail] = useState<string | null>(null);
   const [supported] = useState(supportsPasskeys);
   const [passkeyBusy, setPasskeyBusy] = useState(false);
   const ceremony = useRef<AbortController | null>(null);
@@ -73,15 +74,22 @@ export function Auth({
       if (recovery) {
         setMessage("Password atualizada.");
         onRecovered();
-      } else if (mode === "signup")
-        setMessage(
-          "Se o registo for aceite, receberás um email de confirmação.",
-        );
-      else if (mode === "reset")
+      } else if (mode === "signup") {
+        const hasSession =
+          "data" in result &&
+          result.data &&
+          "session" in result.data &&
+          result.data.session;
+        if (!hasSession) setSignupEmail(email);
+      } else if (mode === "reset")
         setMessage("Se existir uma conta, receberás um email de recuperação.");
-    } catch {
+    } catch (error) {
+      const code =
+        error && typeof error === "object" && "code" in error ? error.code : "";
       setMessage(
-        "Não foi possível concluir. Verifica os dados e tenta novamente.",
+        mode === "login" && code === "email_not_confirmed"
+          ? "Confirma primeiro o teu email. Procura o email do RideSync na caixa de entrada ou no spam e abre o link de confirmação."
+          : "Não foi possível concluir. Verifica os dados e tenta novamente.",
       );
     } finally {
       setBusy(false);
@@ -104,115 +112,170 @@ export function Auth({
           <span>DUAS RODAS. O MESMO CAMINHO.</span>
         </div>
       </div>
-      <form className="panel" onSubmit={submit}>
-        <h2>
-          {recovery
-            ? "Nova password"
-            : mode === "login"
-              ? "Bem-vindo de volta"
-              : mode === "signup"
-                ? "Cria a tua conta"
-                : "Recuperar acesso"}
-        </h2>
-        <p>
-          {recovery
-            ? "Escolhe uma password segura."
-            : "As tuas viagens e o teu grupo, no mesmo lugar."}
-        </p>
-        {!recovery && mode === "login" && supported && (
-          <div className="passkey-login">
-            <button
-              type="button"
-              className="secondary"
-              disabled={busy}
-              onClick={() => void biometricLogin()}
-            >
-              <Fingerprint size={20} />
-              {passkeyBusy ? "A aguardar o dispositivo…" : "Entrar com passkey"}
-            </button>
+      {signupEmail && mode === "signup" && !recovery ? (
+        <section
+          className="panel signup-confirmation"
+          aria-labelledby="signup-confirm-title"
+        >
+          <span className="eyebrow">FALTA SÓ UM PASSO</span>
+          <h2 id="signup-confirm-title">Confirma o teu email</h2>
+          <div role="status">
             <p>
-              Face ID, impressão digital ou código do dispositivo. Configura
-              primeiro uma chave de acesso no Perfil.
+              Procura um email do RideSync em <strong>{signupEmail}</strong> e
+              abre o link de confirmação para ativar a conta.
             </p>
-            {passkeyBusy && (
-              <button
-                type="button"
-                className="text-button"
-                onClick={() => ceremony.current?.abort()}
-              >
-                Cancelar pedido
-              </button>
-            )}
-            <span className="auth-divider">ou usa email e password</span>
+            <p>
+              Verifica também a pasta de spam. Depois de confirmares o email,
+              volta aqui para entrar.
+            </p>
           </div>
-        )}
-        {!recovery && (
-          <label>
-            Email
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              maxLength={254}
-            />
-          </label>
-        )}
-        {(recovery || mode !== "reset") && (
-          <label>
-            Password
-            <input
-              name="password"
-              type="password"
-              autoComplete={
-                mode === "login" && !recovery
-                  ? "current-password"
-                  : "new-password"
-              }
-              minLength={8}
-              required
-            />
-          </label>
-        )}
-        <button disabled={busy}>
-          {busy
-            ? "A processar…"
-            : recovery
-              ? "Guardar password"
-              : mode === "login"
-                ? "Entrar"
-                : mode === "signup"
-                  ? "Criar conta"
-                  : "Enviar email"}
-        </button>
-        {message && <p role="status">{message}</p>}
-        {!recovery && (
+          <button
+            type="button"
+            onClick={() => {
+              setMode("login");
+              setSignupEmail(null);
+              setMessage("");
+            }}
+          >
+            Já confirmei o email. Entrar
+          </button>
           <div className="auth-actions">
             <button
-              className="text-button"
               type="button"
-              disabled={busy}
+              className="text-button"
               onClick={() => {
-                setMode(mode === "signup" ? "login" : "signup");
+                setSignupEmail(null);
                 setMessage("");
               }}
             >
-              {mode === "signup" ? "Já tenho conta" : "Criar conta"}
+              Corrigir o email
             </button>
             <button
-              className="text-button"
               type="button"
-              disabled={busy}
+              className="text-button"
               onClick={() => {
                 setMode("reset");
+                setSignupEmail(null);
                 setMessage("");
               }}
             >
-              Esqueci-me da password
+              Já tenho conta: recuperar acesso
             </button>
           </div>
-        )}
-      </form>
+        </section>
+      ) : (
+        <form className="panel" onSubmit={submit}>
+          <h2>
+            {recovery
+              ? "Nova password"
+              : mode === "login"
+                ? "Bem-vindo de volta"
+                : mode === "signup"
+                  ? "Cria a tua conta"
+                  : "Recuperar acesso"}
+          </h2>
+          <p>
+            {recovery
+              ? "Escolhe uma password segura."
+              : "As tuas viagens e o teu grupo, no mesmo lugar."}
+          </p>
+          {!recovery && mode === "login" && supported && (
+            <div className="passkey-login">
+              <button
+                type="button"
+                className="secondary"
+                disabled={busy}
+                onClick={() => void biometricLogin()}
+              >
+                <Fingerprint size={20} />
+                {passkeyBusy
+                  ? "A aguardar o dispositivo…"
+                  : "Entrar com passkey"}
+              </button>
+              <p>
+                Face ID, impressão digital ou código do dispositivo. Configura
+                primeiro uma chave de acesso no Perfil.
+              </p>
+              {passkeyBusy && (
+                <button
+                  type="button"
+                  className="text-button"
+                  onClick={() => ceremony.current?.abort()}
+                >
+                  Cancelar pedido
+                </button>
+              )}
+              <span className="auth-divider">ou usa email e password</span>
+            </div>
+          )}
+          {!recovery && (
+            <label>
+              Email
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                maxLength={254}
+              />
+            </label>
+          )}
+          {(recovery || mode !== "reset") && (
+            <label>
+              Password
+              <input
+                name="password"
+                type="password"
+                autoComplete={
+                  mode === "login" && !recovery
+                    ? "current-password"
+                    : "new-password"
+                }
+                minLength={8}
+                required
+              />
+            </label>
+          )}
+          <button disabled={busy}>
+            {busy
+              ? "A processar…"
+              : recovery
+                ? "Guardar password"
+                : mode === "login"
+                  ? "Entrar"
+                  : mode === "signup"
+                    ? "Criar conta"
+                    : "Enviar email"}
+          </button>
+          {message && <p role="status">{message}</p>}
+          {!recovery && (
+            <div className="auth-actions">
+              <button
+                className="text-button"
+                type="button"
+                disabled={busy}
+                onClick={() => {
+                  setMode(mode === "signup" ? "login" : "signup");
+                  setMessage("");
+                }}
+              >
+                {mode === "signup" ? "Já tenho conta" : "Criar conta"}
+              </button>
+              <button
+                className="text-button"
+                type="button"
+                disabled={busy}
+                onClick={() => {
+                  setMode("reset");
+                  setMessage("");
+                }}
+              >
+                Esqueci-me da password
+              </button>
+            </div>
+          )}
+        </form>
+      )}
     </section>
   );
 }

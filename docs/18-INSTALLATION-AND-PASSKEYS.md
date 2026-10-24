@@ -104,3 +104,18 @@ HTTPS de https://ridesync-8z1.pages.dev confirmou HTML 200, JavaScript
 `/assets/index-SXgjaUjH.css` e service worker que precacheia esse mesmo JS.
 A configuração remota e a distribuição estão ativas; registar a primeira chave
 no iPhone continua a ser uma ação explícita do utilizador no Perfil.
+
+## Registo — confirmação clara do email
+
+A resposta de registo sem sessão apresenta agora um ecrã próprio «Confirma o teu
+email», com o endereço introduzido, instruções para procurar a mensagem e o link
+na caixa de entrada/spam, e botão «Já confirmei o email. Entrar». É possível
+corrigir o endereço ou recuperar uma conta existente. Não sugere aprovação
+manual, não garante envio quando o serviço mascara contas já existentes e não
+contorna a verificação do servidor. Uma resposta com sessão não apresenta esta
+etapa. O convite pendente mantém-se durante este fluxo.
+
+Quando o servidor devolve `email_not_confirmed` no login, a mensagem volta a
+indicar como confirmar o email, em vez do erro genérico. Recuperação por email
+mantém a resposta neutra para não revelar contas existentes. Alteração apenas no
+frontend, testada com Auth simulado; publicação desta correção aguarda autorização.
