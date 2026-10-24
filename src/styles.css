@@ -1406,3 +1406,145 @@ details[open] > summary::after {
     animation-duration: 0.01ms !important;
   }
 }
+
+.install-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 18px;
+  background: white;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--orange);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.install-icon {
+  color: #aa4300;
+}
+.install-copy h2 {
+  font-size: 25px;
+  margin: 0 0 5px;
+}
+.install-copy p {
+  font-size: 12px;
+  margin: 0;
+}
+.install-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.install-actions button {
+  min-height: 44px;
+  font-size: 11px;
+}
+.install-dismiss {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+}
+.install-instructions,
+.install-message {
+  grid-column: 2/-1;
+}
+.install-instructions {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.install-instructions h3 {
+  margin: 0 0 12px;
+}
+.install-instructions ol {
+  list-style: decimal;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.install-instructions li {
+  margin-block: 10px;
+}
+.install-instructions li svg {
+  display: inline;
+  vertical-align: middle;
+}
+.install-instructions p,
+.install-message {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.passkey-login {
+  margin-block: 24px;
+}
+.passkey-login > button {
+  width: 100%;
+}
+.passkey-login p {
+  font-size: 12px;
+  margin: 10px 0 18px;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--line);
+}
+.passkey-settings {
+  max-width: 760px;
+  margin-top: 24px;
+  border-top: 3px solid var(--orange);
+}
+.passkey-settings .eyebrow {
+  margin-bottom: 12px;
+}
+.passkey-settings .note {
+  display: block;
+  margin: 16px 0 24px;
+  padding-top: 16px;
+  font-size: 12px;
+}
+.passkey-list {
+  list-style: none;
+  padding: 0;
+}
+.passkey-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.passkey-list small {
+  display: block;
+  margin-top: 6px;
+}
+@media (max-width: 760px) {
+  .install-banner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 18px;
+  }
+  .install-actions {
+    grid-column: 2;
+  }
+  .install-dismiss {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .install-instructions,
+  .install-message {
+    grid-column: 1/-1;
+  }
+  .install-copy h2 {
+    font-size: 23px;
+  }
+}

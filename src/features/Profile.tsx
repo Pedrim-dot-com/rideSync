@@ -1,3 +1,4 @@
+import { PasskeySettings } from "./access/PasskeySettings";
 import { useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProfile, saveProfile } from "../shared/api";
@@ -81,6 +82,9 @@ export function Profile({ userId }: { userId: string }) {
             </p>
           )}
         </form>
+      )}
+      {query.data && (
+        <PasskeySettings key={`passkeys:${userId}`} userId={userId} />
       )}
     </>
   );

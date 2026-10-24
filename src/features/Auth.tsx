@@ -1,5 +1,10 @@
-import { ArrowUpRight } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import {
+  signInWithPasskey,
+  passkeyError,
+  supportsPasskeys,
+} from "./access/passkeys";
+import { ArrowUpRight, Fingerprint } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { client } from "../shared/supabase";
 export function Auth({
   recovery = false,
@@ -11,8 +16,39 @@ export function Auth({
   const [mode, setMode] = useState<"login" | "signup" | "reset">("login");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [supported] = useState(supportsPasskeys);
+  const [passkeyBusy, setPasskeyBusy] = useState(false);
+  const ceremony = useRef<AbortController | null>(null);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      ceremony.current?.abort();
+    };
+  }, []);
+  async function biometricLogin() {
+    if (busy || ceremony.current) return;
+    const abort = new AbortController();
+    ceremony.current = abort;
+    setBusy(true);
+    setPasskeyBusy(true);
+    setMessage("");
+    try {
+      await signInWithPasskey(abort.signal);
+    } catch (error) {
+      if (mounted.current) setMessage(passkeyError(error));
+    } finally {
+      if (mounted.current) {
+        setBusy(false);
+        setPasskeyBusy(false);
+      }
+      ceremony.current = null;
+    }
+  }
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return;
     const form = new FormData(e.currentTarget);
     setBusy(true);
     setMessage("");
@@ -83,6 +119,33 @@ export function Auth({
             ? "Escolhe uma password segura."
             : "As tuas viagens e o teu grupo, no mesmo lugar."}
         </p>
+        {!recovery && mode === "login" && supported && (
+          <div className="passkey-login">
+            <button
+              type="button"
+              className="secondary"
+              disabled={busy}
+              onClick={() => void biometricLogin()}
+            >
+              <Fingerprint size={20} />
+              {passkeyBusy ? "A aguardar o dispositivo…" : "Entrar com passkey"}
+            </button>
+            <p>
+              Face ID, impressão digital ou código do dispositivo. Configura
+              primeiro uma chave de acesso no Perfil.
+            </p>
+            {passkeyBusy && (
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => ceremony.current?.abort()}
+              >
+                Cancelar pedido
+              </button>
+            )}
+            <span className="auth-divider">ou usa email e password</span>
+          </div>
+        )}
         {!recovery && (
           <label>
             Email
@@ -128,6 +191,7 @@ export function Auth({
             <button
               className="text-button"
               type="button"
+              disabled={busy}
               onClick={() => {
                 setMode(mode === "signup" ? "login" : "signup");
                 setMessage("");
@@ -138,6 +202,7 @@ export function Auth({
             <button
               className="text-button"
               type="button"
+              disabled={busy}
               onClick={() => {
                 setMode("reset");
                 setMessage("");

@@ -1,3 +1,4 @@
+import { InstallBanner } from "./InstallBanner";
 import { Invitation } from "./features/trips/Invitation";
 import {
   clearPendingInvitation,
@@ -138,6 +139,9 @@ export default function App() {
         )}
       </header>
       <main id="main-content">
+        <InstallBanner
+          show={Boolean(session && page === "trips" && !recovery && !loading)}
+        />
         {invitation && !loading && !recovery && supabase && (
           <Invitation
             key={`${session?.user.id ?? "anonymous"}-${invitation}`}

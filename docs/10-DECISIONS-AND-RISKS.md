@@ -181,3 +181,20 @@ MapLibre durante updates visuais. Sem alterações de backend ou dependências.
 Publicação autorizada e confirmada na Cloudflare em 2026-10-24: tema, fonte,
 manifesto e precache da nova UI verificados após push do commit 453c62b.
 Ver docs/17-UI-REDESIGN.md.
+
+
+## ADR-014 — Instalação assistida e login por passkey
+
+Pedido do utilizador: banner de instalação no painel e biometria como Face ID.
+Banner por plataforma, instalado detetado e preferência de dispensa sete dias.
+Sem prompt de instalação inventado em Safari; apenas Chrome fornece o evento
+nativo quando elegível. Login implementado com passkeys nativas do Supabase Auth,
+sem recolher biometria, guardar passwords ou fazer autenticação apenas no cliente.
+Face ID, impressão digital ou PIN são escolhas do dispositivo.
+
+Registo só em sessão autenticada, gestão no Perfil e alternativa email/password.
+RP ID proposto limitado a ridesync-8z1.pages.dev e origem HTTPS exata. O projeto
+real tem a funcionalidade desligada; ativação dos quatro campos Auth e publicação
+aguardam confirmação. Não há migrations ou chaves adicionais. SDK e Auth instalado
+incluem endpoints nativos; a prova completa contra servidor real depende da ativação.
+Ver docs/18-INSTALLATION-AND-PASSKEYS.md.
