@@ -95,3 +95,12 @@ a cerimónia nativa do browser. Não foi desativada a verificação TLS nem expo
 qualquer chave privada. Isto valida a integração Auth real, mas não a distribuição
 do frontend, instalação iOS ou Face ID num iPhone físico. Validar Safari/PWA
 instalada e Android depois da publicação.
+
+## Publicação confirmada — 2026-10-24
+
+Push de implementação/ativação concluído (`b9a5776` e `1ef2a66`). Verificação
+HTTPS de https://ridesync-8z1.pages.dev confirmou HTML 200, JavaScript
+`/assets/index-YuYxFh-k.js` com o banner e a gestão de passkeys, CSS
+`/assets/index-SXgjaUjH.css` e service worker que precacheia esse mesmo JS.
+A configuração remota e a distribuição estão ativas; registar a primeira chave
+no iPhone continua a ser uma ação explícita do utilizador no Perfil.
