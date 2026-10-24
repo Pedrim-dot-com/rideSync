@@ -57,3 +57,13 @@ dos utilizadores precisam de testar a ligação e som reais conforme docs/23.
 Verificações locais da ativação: 127 unitários, 316 checks PostgreSQL e seis
 E2E com transporte simulado aprovados;
 tipagem, lint, formatação, build/PWA e check Deno das três funções aprovados.
+
+
+## Confirmação da PWA pública
+
+Push para main do commit `6bcb36c` concluído. A Cloudflare passou a servir
+`/assets/index-Ddx2-HYw.js`, com GROUP_CHANGED/PT409 e os contratos de grupos/voz.
+O service worker público precacheia o mesmo bundle. Verificação final do projeto
+confirmou motard_groups/trip_voice_state presentes, conflito HTTP explícito e
+trip-voice ACTIVE versão 1. Para receber a mensagem de conflito atualizada,
+aplicar o aviso Atualizar na PWA. Não são necessárias novas chaves.

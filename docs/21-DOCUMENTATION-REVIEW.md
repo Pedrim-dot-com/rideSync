@@ -117,3 +117,10 @@ limpeza confirmada das fixtures. README, fluxogramas, plano, arquitetura e guias
 foram atualizados para backend ativo, preservando os registos anteriores como
 históricos. Recibos e limites da validação em docs/24; testes de áudio em aparelhos
 reais mantêm-se distintos da validação do provider/roles por API.
+
+
+Publicação confirmada após push de 6bcb36c: bundle público e service worker
+correspondem à versão ativada. Verificações locais finais: 127 unitários,
+316 checks PostgreSQL e seis E2E simulados aprovados; 49 checks HTTPS reais
+com limpeza confirmada. O proxy recusou WebSocket LiveKit como Domain forbidden,
+pelo que o áudio físico continua sujeito ao roteiro em aparelhos reais.
