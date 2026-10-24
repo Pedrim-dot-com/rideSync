@@ -52,7 +52,8 @@ Sem migrations remotas nem deploy automático.
 
 **Inconsistência documental identificada:** FR-021 a FR-024 são usados tanto
 na tabela original como na tabela adicional de mapas em `02-FUNCTIONAL-REQUIREMENTS.md`.
-Até renumeração acordada, referenciar esses requisitos pelo ID e pelo nome.
+Resolvido na revisão de 2026-10-24: tabela adicional passa a MAP-001…006,
+sem alterar FR-021…024 da tabela principal. IDs de testes de mapas passam a MAP-T01…08.
 
 ## ADR-009 — Planeamento de viagens antes da integração de mapas
 
@@ -240,3 +241,37 @@ content-box. Isto é uma regressão geométrica em Chromium, não uma execução
 de Safari ou uma garantia sobre o hardware. Validar novamente no iPhone após
 publicação. Esta correção dá continuidade ao deploy já autorizado para o mesmo
 campo; não altera schema nem dados.
+
+
+## ADR-016 — Grupos motards com direção plural
+
+Pedido obrigatório do utilizador em 2026-10-24. Confirmação: uma conta por grupo,
+entrada com aprovação; esclarecimento posterior: associações podem ter sede
+física/registo e vários dirigentes. Substitui exclusão antiga de motoclubes no
+PRD/README. Não implementa certificação jurídica. Papéis member/leader; qualquer
+dirigente pode aprovar/editar; não existe dirigente principal ou UUID criador com
+privilégio permanente. Índices únicos e locks protegem grupo único/última direção.
+Morada e coordenadas de sede são divulgação explícita a contas autenticadas;
+GPS pessoal permanece privado. Migration 007 preparada, não aplicada.
+
+## ADR-017 — Voz por LiveKit e SOS de prioridade
+
+Pedido obrigatório do utilizador em 2026-10-24; LiveKit proposto e utilizador
+criou/guardou os três segredos (nomes confirmados por leitura). Organizador
+publica voz; demais participantes só através de SOS ativo. Um SOS de cada vez,
+até resolver/90 s, sem contactos de emergência. Gravação não implementada.
+O alerta visual é criado antes da permissão de microfone e permanece se falhar.
+
+Supabase autentica e arbitra; LiveKit gerido transporta WebRTC/SFU/TURN.
+Canais de audiência isolados por época de fala impedem replay de JWT publisher
+para a audiência atual. Não confiar apenas em mutar botões no browser ou em
+metadata enviada pelo participante. Tokens curtos, fonte microfone, sem data
+publish; Edge service-only deriva actor do JWT. Polling e Realtime privados,
+snapshots antigos/foreground fazem fail-closed. Reconnect na mudança de voz
+acrescenta latência a medir; não prometer intercomunicador background em iOS.
+
+SDKs Apache-2.0; custos/minutos/tráfego e salas órfãs exigem revisão operacional.
+Só a presença dos nomes dos segredos foi verificada; valores/provider ainda não
+validados. Migration 008 e publicação dependem de autorização; teste de três
+telefones/headset e limpeza administrativa de salas antigas ainda pendentes.
+Ver docs/20-VOICE-AND-SOS.md. Fotos, IA e app nativa mantêm o estado anterior.

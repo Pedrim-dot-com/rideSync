@@ -56,3 +56,6 @@
 
 ## Fora de âmbito
 Turn-by-turn interno, mapas offline garantidos, sincronização bidirecional com Waze/Google Maps, tracking em background, instruções de voz, cálculo de percursos especializados para motas sem suporte comprovado.
+
+A intercomunicação entre participantes e o SOS pedidos posteriormente são
+tratados em docs/20-VOICE-AND-SOS.md; não são instruções de navegação por voz.

@@ -4,7 +4,7 @@
 Mobile-first, interface legível sob luz solar, contraste elevado, alvos táteis adequados, operações críticas acessíveis em poucas interações. Não incentivar interação durante a condução; planeamento e edição são para quando estiver parado.
 
 ## Navegação
-Home / Trips / Garage / Profile. A vista Live Trip substitui temporariamente a navegação principal por mapa e controlos mínimos. IA integrada em Create Trip, não precisa de separador próprio.
+Viagens / Garagem / Notificações / Grupos / Perfil. Navegação inferior em mobile e Sair no cabeçalho. Viagem mantém mapa e controlos, incluindo voz/SOS. IA continua planeada, sem separador funcional publicado.
 
 ## Ecrãs
 1. Login/registo; recuperação de acesso.
@@ -38,3 +38,22 @@ Teclado, labels, foco visível, texto escalável, contraste WCAG AA, não depend
 - Se regressar à PWA, pedir/validar permissões, retomar tracking apenas com consentimento e atualizar timestamps.
 - Mostrar última atualização GPS e estados `live`, `stale`, `offline` por participante.
 - Testar notch/Dynamic Island, safe areas, orientação, gestos touch, Safari iOS e Chrome Android.
+
+
+## Grupos, direção e voz/SOS
+
+Grupos tem Lista/Mapa das sedes, pesquisa e detalhe. Inscrição mostra estados
+sem grupo, pedido pendente, aceite e dirigente. Vários dirigentes gerem o mesmo
+grupo; indicar que não é possível sair ou remover o último. Dados legais são
+opcionais e declarados; nenhuma marca de certificação. Sede tem aviso de
+visibilidade antes da gravação.
+
+Viagem ativa tem painel Voz e SOS. Ouvir não pede microfone. Falar é exclusivo
+do organizador, exceto SOS do participante. Motivo e grande botão SOS vermelho
+com texto/ícone; alerta tem nome e motivo, sem depender só de cor. Manter alerta
+se microfone falhar. Indicar limite foreground e comando Ativar som no Safari.
+Não reativar microfone depois de SOS, background ou perda de ligação.
+
+Em mobile há um atalho SOS fixo acima da navegação durante a viagem ativa,
+para não obrigar a percorrer mapa/controlos até ao painel de voz. Com alerta
+ativo o atalho abre o painel; sem alerta envia SOS com o motivo selecionado.

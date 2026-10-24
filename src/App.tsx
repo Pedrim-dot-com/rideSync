@@ -1,3 +1,4 @@
+import { Groups } from "./features/groups/Groups";
 import { Notifications } from "./features/trips/Notifications";
 import { useNotifications } from "./features/trips/notifications-api";
 import { InstallBanner } from "./InstallBanner";
@@ -10,7 +11,15 @@ import { UpdateNotice } from "./UpdateNotice";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
-import { Bike, UserRound, LogOut, ArrowUpRight, Map, Bell } from "lucide-react";
+import {
+  Bike,
+  UserRound,
+  LogOut,
+  ArrowUpRight,
+  Map,
+  Bell,
+  Users,
+} from "lucide-react";
 import { supabase } from "./shared/supabase";
 import { Auth } from "./features/Auth";
 import { Garage } from "./features/Garage";
@@ -32,7 +41,7 @@ export default function App() {
   const [authError, setAuthError] = useState(false);
   const [recovery, setRecovery] = useState(false);
   const [page, setPage] = useState<
-    "garage" | "profile" | "trips" | "notifications"
+    "garage" | "profile" | "trips" | "notifications" | "groups"
   >("trips");
   const notifications = useNotifications(
     !recovery ? session?.user.id : undefined,
@@ -155,6 +164,14 @@ export default function App() {
               Notificações
             </button>
             <button
+              aria-current={page === "groups" ? "page" : undefined}
+              className={page === "groups" ? "nav-active" : ""}
+              onClick={() => setPage("groups")}
+            >
+              <Users size={18} />
+              Grupos
+            </button>
+            <button
               aria-current={page === "profile" ? "page" : undefined}
               className={page === "profile" ? "nav-active" : ""}
               onClick={() => setPage("profile")}
@@ -238,6 +255,8 @@ export default function App() {
               />
             ) : page === "notifications" ? (
               <Notifications userId={session.user.id} onAccepted={openTrip} />
+            ) : page === "groups" ? (
+              <Groups userId={session.user.id} />
             ) : (
               <Profile userId={session.user.id} />
             )}

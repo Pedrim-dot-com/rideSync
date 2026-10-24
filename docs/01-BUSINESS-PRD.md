@@ -7,7 +7,7 @@ Organizar passeios de mota exige coordenar percurso, horários, participantes e 
 Uma PWA mobile-first que permite criar uma viagem, visualizar o percurso, convidar motards, escolher a mota utilizada e acompanhar o grupo num mapa em tempo real enquanto a aplicação está ativa. Um assistente de IA ajuda a preparar o itinerário.
 
 ## Público-alvo
-Motards individuais e pequenos grupos de amigos. Motoclubes e eventos públicos ficam fora da PoC.
+Motards individuais, grupos de amigos e associações/motoclubes com sede física e direção partilhada. Eventos públicos continuam fora da PoC.
 
 ## Personas
 - **Organizador:** cria viagem, define percurso, convida e gere participantes.
@@ -44,7 +44,25 @@ Motards individuais e pequenos grupos de amigos. Motoclubes e eventos públicos 
 - O planeamento com IA devolve uma proposta editável e uma rota validada.
 
 ## Fora de âmbito
-Pagamentos, subscrições, social feed, chat, alertas de emergência, navegação curva-a-curva, localização garantida com ecrã bloqueado, telemetria da mota, motoclubes públicos, histórico GPS de alta resolução, apps nativas.
+Pagamentos, subscrições, social feed, chat, integração com serviços de emergência/112, navegação curva-a-curva, GPS/voz garantidos com ecrã bloqueado, telemetria da mota, histórico GPS de alta resolução e apps nativas.
 
 ## Experiência de mapa e navegação aprovada
 O utilizador planeia e acompanha a viagem no mapa interno MapLibre, alimentado por MapTiler e openrouteservice. Durante uma viagem pode optar por abrir Google Maps ou Waze para navegação turn-by-turn externa. Esta ação **não mantém a partilha GPS da PWA garantida**: os outros motards devem ver a última localização recebida, timestamp e estado stale/offline. A PoC não fornece navegação turn-by-turn própria nem tracking contínuo em background. A experiência deve funcionar em iOS e Android.
+
+
+## Extensão obrigatória pedida em 2026-10-24
+
+O organizador comunica por voz com os participantes aceites de uma viagem ativa.
+Os restantes só falam ao acionar SOS, com prioridade sobre o organizador. O SOS
+visual não exige microfone nem adesão ao áudio. Exige rede e só chega a quem está
+ligado à viagem. Um SOS de cada vez, até resolver ou expirar em 90 segundos;
+a prioridade é do primeiro alerta ativo. O organizador retoma explicitamente a
+fala após resolução, sem ligar microfones automaticamente.
+
+Cada conta pertence a no máximo um grupo motard. Entradas exigem aprovação de
+um dirigente. Pode haver vários dirigentes com os mesmos poderes: aprovar,
+recusar, promover/despromover, remover membros e editar sede/dados. Impedir saída
+ou despromoção do último dirigente pela app. Grupos podem declarar denominação
+legal e registo/NIPC, sem certificação automática pela plataforma. Todas as contas
+autenticadas consultam o diretório e o mapa de sedes publicáveis. A inscrição
+num grupo não concede acesso a viagens privadas nem cargos de organizador.

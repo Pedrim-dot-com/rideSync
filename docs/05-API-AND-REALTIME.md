@@ -1,58 +1,62 @@
 # 05 — Contratos de API e eventos
 
-## Abordagem
-CRUD simples via Supabase client com RLS. Operações transacionais/autorizadas via RPC ou Edge Functions. Não criar REST backend paralelo sem necessidade.
+Estado revisto em 2026-10-24. Os nomes abaixo correspondem à implementação;
+`plan-trip` continua planeado. Exemplos antigos de eventos com coordenadas e
+`riderId` fornecido pelo cliente foram retirados: não são o contrato publicado.
 
-## Operações de domínio
-| Operação | Interface proposta | Autorizações |
+| Operação | Interface | Autorização |
 |---|---|---|
-| getMyProfile/updateMyProfile | Supabase profiles | sessão própria |
-| listMyMotorcycles/create/update/delete | Supabase motorcycles | owner |
-| setPrimaryMotorcycle | RPC `set_primary_motorcycle(id)` | owner + transação |
-| createTrip | RPC `create_trip(...)` | autenticado |
-| updateTrip/waypoints | DB/RPC | organizer; estado permitido |
-| calculateRoute | Edge Function `calculate-route` | participante/organizador |
-| createInvite | Edge Function/RPC `create-invite` | organizer |
-| acceptInvite | Edge Function/RPC `accept-invite` | auth + token válido |
-| chooseTripMotorcycle | RPC `choose_trip_motorcycle` | participant + ownership |
-| start/stopTrip | RPC `start_trip` / `stop_trip` | organizer |
-| updateLocationSnapshot | RPC `update_location` | próprio + sessão ativa + consentimento |
-| planTripWithAI | Edge Function `plan-trip` | autenticado + rate limit |
+| Perfil/garagem | tabelas profiles/motorcycles sob RLS | próprio |
+| Mota principal | set_primary_motorcycle | próprio + transação |
+| Criar/editar | create_trip, update_trip, replace_trip_waypoints | organizador, revisão e estado |
+| Rotas | calculate-route | organizador antes de iniciar, tripId/revisão; pontos lidos no servidor |
+| Pesquisa | search-places | JWT válido e quota |
+| Convites | create/list/revoke_trip_invitation | organizador |
+| Responder por token | respond_trip_invitation | conta autenticada + token válido |
+| Notificações | remember_trip_invitation, list_received_trip_invitations, respond_received_trip_invitation | recibo próprio |
+| Mota na viagem | set_trip_motorcycle | participante aceite, mota própria |
+| Sessão | start_trip, finish_trip | organizador + revisão |
+| GPS | start/stop_location_sharing, publish_rider_location, tracking_snapshot | identidade própria, sessão/consentimento válidos |
+| Grupo/sede | save_motard_group | criação autenticada; edição por dirigente + revisão |
+| Inscrição/direção | change_group_membership, list_group_members | próprio/dirigente conforme ação |
+| SOS | raise_trip_sos, resolve_trip_sos, trip_voice_snapshot | participante aceite em viagem ativa |
+| Voz | Edge trip-voice | JWT getUser, membership, viagem ativa e floor no servidor |
+| IA (planeada) | plan-trip | ainda não implementada |
 
-## Payload de localização (proposta)
-```json
-{
-  "event": "rider.location.updated",
-  "data": {
-    "tripId": "uuid",
-    "sessionId": "uuid",
-    "riderId": "uuid",
-    "sequence": 42,
-    "latitude": 40.4168,
-    "longitude": -8.7501,
-    "accuracyMeters": 12,
-    "speedMetersPerSecond": 13.8,
-    "recordedAt": "2026-10-23T14:30:00Z"
-  }
-}
-```
-`riderId` no evento é informativo; o sistema não deve confiar nele sem associar o emissor à sessão autenticada. Nunca enviar tokens nos payloads. Rejeitar timestamps absurdos e coordenadas inválidas. Ignorar sequência antiga por rider/session.
+## Realtime publicado e preparado
 
-## Eventos
-- `rider.location.updated`: localização recente.
-- `rider.sharing.stopped`: participante parou partilha; remover marcador live.
-- `trip.session.started` / `trip.session.ended`: estado de sessão.
-- Presence: `online`, `offline` derivados da ligação; independentes da partilha GPS.
+`trip:<uuid>` recebe `tracking_changed`, emitido pela BD, com `{changed:true}`.
+A UI relê tracking_snapshot e metadados da viagem sob autorização. Posições não
+são aceites da payload de Broadcast/Presence.
 
-## Erros e estados
-`UNAUTHENTICATED`, `FORBIDDEN`, `NOT_FOUND`, `INVALID_STATE`, `VALIDATION_ERROR`, `RATE_LIMITED`, `ROUTING_UNAVAILABLE`, `AI_UNAVAILABLE`. Mostrar mensagem legível, sem stack traces ou dados sensíveis.
+`voice:<uuid>` recebe `voice_changed`, emitido pela BD, com `{trip_id:uuid}`.
+A UI relê trip_voice_snapshot. Não aceitar papéis, prioridades, tokens, áudio ou
+identidades de mensagens enviadas por browsers. Ver migrations 005 e 008 para
+policies de SELECT; clientes não têm policy de INSERT nos canais.
 
-## Contrato de routing
-Entrada: coordenadas de origem/destino, lista ordenada de waypoints, preferências suportadas pelo fornecedor. Saída: geometria GeoJSON/Polyline normalizada, `distanceMeters`, `durationSeconds`, `provider`, `calculatedAt`. Se evitar autoestradas não for suportado, explicitar a limitação.
+O áudio WebRTC passa pela LiveKit Cloud e usa JWT próprio emitido pela Edge.
+Nenhum token Supabase é entregue ao fornecedor. O JWT LiveKit tem identidade
+obtida da sessão validada, sala exata e fontes limitadas a microfone. Participantes
+normais são ouvintes; só o interlocutor autorizado tem canPublish.
 
-## Integração de mapas e navegação
-- Routing: Edge Function `calculate-route` valida origem/destino/waypoints e opções suportadas, chama openrouteservice e normaliza `{geometry, distanceM, durationS, provider, waypoints}`.
-- Geocoding: Edge Function `search-places` com limites de input, debounce no cliente, throttling/rate limit no servidor e normalização de resultados.
-- A UI nunca chama APIs que exijam segredos diretamente. Não misturar chave pública MapTiler com chave privada openrouteservice.
-- Links Google Maps/Waze são criados localmente a partir de coordenadas verificadas e `encodeURIComponent`; abrir por gesto explícito. Documentar limitações de waypoints e do background.
-- Realtime continua independente da navegação externa; se a PWA ficar suspensa, posições ficam stale e nunca se inferem novas coordenadas.
+## Payloads
+
+- calculate-route: `{tripId,expectedRevision,avoidHighways}`; saída
+  `{route:{geometry,distanceM,durationS,provider,calculatedAt}}`.
+- search-places: `{text}`; saída `{places:[{label,latitude,longitude}]}`.
+- trip-voice: `{tripId,action}` com action join/speak/sos/stop/leave/heartbeat.
+  Join devolve `{token,url,room}` sem cache; restantes devolvem `{ok,room}`.
+  Não aceita actor/userId/role/room/URL no corpo.
+- Snapshot de voz: server_now, status, room_epoch, speaker_id/name/kind/until,
+  ready, settling e SOS mínimo. Fonte da decisão de reprodução no cliente.
+
+## Erros e limites
+
+Mapas usam códigos estáveis UNAUTHENTICATED, FORBIDDEN, RATE_LIMITED,
+TRIP_CHANGED, ITINERARY_LOCKED e erros de fornecedor. Voz acrescenta
+VOICE_NOT_CONFIGURED, VOICE_BUSY, VOICE_CHANGED, SOS_ALREADY_ACTIVE,
+VOICE_UNAVAILABLE e ORIGIN_NOT_ALLOWED. A UI não mostra exceções privadas do
+fornecedor nem guarda tokens LiveKit em storage/offline cache.
+
+Ver docs/12-MAPS-AND-NAVIGATION.md, docs/19-MOTARD-GROUPS.md e
+docs/20-VOICE-AND-SOS.md para contratos, CORS, quotas e lifecycle.

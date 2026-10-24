@@ -7,9 +7,9 @@
 - `trip_waypoints(id uuid PK, trip_id -> trips, position int, label, latitude, longitude)`; UNIQUE(trip_id,position).
 - `trip_routes(id uuid PK, trip_id -> trips, geometry jsonb/GeoJSON, distance_m, duration_s, routing_provider, calculated_at)`; para PoC, uma rota atual por viagem.
 - `trip_participants(trip_id,user_id PK composta, role [organizer, rider], status [invited, accepted, declined, removed], motorcycle_id nullable -> motorcycles, joined_at)`.
-- `trip_invitations(id uuid PK, trip_id, token_hash unique, invited_by, expires_at, accepted_by nullable, used_at nullable)`.
+- `trip_invitations(id uuid PK, trip_id, token_hash unique, invited_by, expires_at, used_by nullable, used_at nullable)`.
 - `tracking_sessions(id uuid PK, trip_id, started_by, started_at, ended_at)`; no máximo uma ativa por viagem.
-- `rider_locations(trip_id,user_id PK composta, session_id, latitude, longitude, accuracy_m, speed_mps nullable, recorded_at, updated_at)`; apenas último snapshot.
+- `rider_locations(trip_id,user_id PK composta, session_id, latitude, longitude, accuracy_m, heading nullable, recorded_at, received_at)`; apenas último snapshot.
 
 ## Integridade e índices
 - `motorcycles.user_id`, `trips.created_by`, `trip_participants.user_id`, `trip_waypoints(trip_id,position)`, `rider_locations(trip_id,recorded_at)`.
@@ -37,7 +37,29 @@
 Usar canais privados `trip:<uuid>` e policies de autorização em `realtime.messages`, verificando membership aceite. Nunca tratar segredo do nome do canal como mecanismo de autorização. Considerar que Broadcast enviado diretamente pelo cliente não é, por si só, prova de identidade da payload: atribuir identidade a partir da sessão/autorização, rejeitar spoofing e validar o modelo de confiança em testes. Para garantias fortes, usar publicação via servidor/DB ou Edge Function autenticada, em vez de confiar em `userId` no payload.
 
 ## Privacidade
-Consentimento explícito, revogação imediata, retenção mínima, exclusão dos snapshots após fim de sessão/partilha, política de privacidade e direito de apagar dados. Não publicar coordenadas em páginas públicas. Evitar dados pessoais reais nos seeds e logs. Guardar somente o necessário para PoC.
+Consentimento explícito, revogação imediata, retenção mínima, exclusão dos snapshots após fim de sessão/partilha, política de privacidade e direito de apagar dados. Nunca publicar GPS de participantes em páginas públicas. Sedes fixas de grupos são a exceção explícita pedida: morada/coordenadas fornecidas por um representante, com aviso de divulgação a todas as contas autenticadas. Evitar dados pessoais reais nos seeds e logs. Guardar somente o necessário para PoC.
 
 ## Segurança operacional
 Sem `service_role` no browser; sem tokens no git; HTTPS; Storage policies; validação server-side; limites de input; rate limits para convites, IA e routing; secrets nas Edge Functions. Confirmar configuração de verificação JWT por função.
+
+
+## Grupos e voz/SOS (migrations 007/008 preparadas)
+
+- `motard_groups`: nome, descrição, denominação/registo opcionais, sede e revisão.
+  SELECT autenticado apenas de colunas do diretório; não expor UUID de criador.
+- `group_memberships`: role member/leader e estado; índices parciais garantem
+  um grupo aceite e um pedido pendente por conta. Leituras brutas próprias ou
+  de dirigentes; roster mínimo por RPC para membros aceites, pendentes só direção.
+- `trip_sos_alerts`: apenas último SOS da viagem; expira 90 s. Sem texto livre,
+  coordenadas adicionais ou contacto externo. Removido ao terminar viagem.
+- `trip_voice_state`: época, interlocutor, prazo e operação em curso; sem áudio.
+- `trip_voice_limits`: contador por minuto/conta. Sem SELECT cliente.
+- `voice:<trip>`: canal privado só para membros aceites de viagem ativa; nenhuma
+  policy INSERT para clientes. Broadcast limita-se a invalidar a query.
+- `begin/finish_trip_voice_operation`: só service_role. Edge valida JWT, extrai
+  actor de getUser e ignora papéis/identidades não autorizados. Corpo estrito.
+
+SDKs de áudio não concedem acesso a dados de perfis/garagens/grupos ou viagens.
+Remoção administrativa de conta que seja último dirigente exige transferência
+ou tratamento do grupo; não existe ainda eliminação de conta na UI. Não confundir
+a proteção de saída na app com gestão administrativa de cascades no Supabase.
