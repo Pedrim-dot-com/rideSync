@@ -92,7 +92,7 @@ build passam. SQL inalterado desde os 138 checks PostgreSQL aprovados; os três
 E2E com transporte simulado passaram na implementação da funcionalidade.
 
 
-## Notificações persistentes — migration 006 preparada
+## Notificações persistentes — migration 006 aplicada
 
 Pedido: fechar o banner deve permitir responder mais tarde. Os links atuais
 não designam uma conta ou email: a receção acontece quando alguém abre o link
@@ -127,5 +127,14 @@ mudar de dispositivo/separador antes da gravação, reabrir o link original.
 Validação local da fase: 43 novos checks PostgreSQL (238 no total), 106 testes
 unitários, tipagem, lint, formatação, build e cinco E2E passaram. Incluem UI de
 recusa/histórico/rede e E2E que fecha antes e depois do login, recarrega e aceita
-a partir das notificações. Migration 006, validação remota com contas
-temporárias e publicação ainda aguardam autorização do utilizador.
+a partir das notificações.
+
+Aplicação autorizada em 2026-10-24, recibo UTC
+`2026-10-24 09:27:45.930452+00`. SHA-256 da migration 006:
+`05bf4179759111a87a31165b8b3c2b1cd46189dc92947fc86bbce28e1e773052`.
+RLS ativo, SELECT direto e execução da função interna negados. Snapshot de tipos
+regenerado da API; contratos derivados com refinamentos de nulabilidade/estado.
+Passaram 26 verificações HTTPS reais com três contas temporárias, incluindo
+privacidade, ownership, recusa, expiração, revogação e concorrência entre token
+e recibo, com apenas um vencedor. Contas, viagem e recibos de teste removidos;
+limpeza confirmada. Publicação autorizada em curso via push para main.

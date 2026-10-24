@@ -218,5 +218,6 @@ aceitar; detalhes da viagem continuam privados por RLS. Respostas por recibo
 exigem ownership e partilham a implementação atómica do token original. Não
 adicionar envio de email, push, localização ou acesso antecipado à viagem.
 Histórico retido enquanto convite/viagem/conta existir; só pedidos válidos têm
-ações. Ver docs/15-INVITATIONS-AND-PARTICIPATION.md. Migration 006 e publicação
-pendentes de autorização; não alterar migrations já aplicadas.
+ações. Ver docs/15-INVITATIONS-AND-PARTICIPATION.md. Migration 006 aplicada com autorização em 2026-10-24; tipos regenerados e
+26 checks HTTPS reais passaram, com limpeza das contas/viagem/recibos temporários
+confirmada. Publicação autorizada em curso. Não alterar migrations já aplicadas.

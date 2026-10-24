@@ -1,4 +1,3 @@
-// Generated from the Supabase public schema after migration 202610240005.
 export type Json =
   | string
   | number
@@ -247,6 +246,42 @@ export type Database = {
             columns: ["trip_id"];
             isOneToOne: true;
             referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      trip_invitation_receipts: {
+        Row: {
+          id: string;
+          invitation_id: string;
+          received_at: string;
+          user_id: string;
+        };
+        Insert: {
+          id?: string;
+          invitation_id: string;
+          received_at?: string;
+          user_id: string;
+        };
+        Update: {
+          id?: string;
+          invitation_id?: string;
+          received_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "trip_invitation_receipts_invitation_id_fkey";
+            columns: ["invitation_id"];
+            isOneToOne: false;
+            referencedRelation: "trip_invitations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_invitation_receipts_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
@@ -510,6 +545,19 @@ export type Database = {
         Args: { p_expected_revision: number; p_trip_id: string };
         Returns: undefined;
       };
+      list_received_trip_invitations: {
+        Args: never;
+        Returns: {
+          departure_at: string;
+          expires_at: string;
+          inviter_name: string;
+          receipt_id: string;
+          received_at: string;
+          status: string;
+          title: string;
+          trip_id: string;
+        }[];
+      };
       list_trip_invitations: {
         Args: { p_trip_id: string };
         Returns: {
@@ -544,9 +592,18 @@ export type Database = {
         };
         Returns: undefined;
       };
+      remember_trip_invitation: { Args: { p_token: string }; Returns: string };
       replace_trip_waypoints: {
         Args: { p_trip_id: string; p_waypoints: Json };
         Returns: undefined;
+      };
+      respond_invitation_internal: {
+        Args: { p_accept: boolean; p_invitation_id: string };
+        Returns: string;
+      };
+      respond_received_trip_invitation: {
+        Args: { p_accept: boolean; p_receipt_id: string };
+        Returns: string;
       };
       respond_trip_invitation: {
         Args: { p_accept: boolean; p_token: string };

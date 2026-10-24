@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import type { Database } from "../../shared/database.generated";
 import { client } from "../../shared/supabase";
 export type InvitationStatus =
   | "pending"
@@ -9,25 +10,25 @@ export type InvitationStatus =
   | "expired"
   | "unavailable"
   | "joined";
-export type ReceivedInvitation = {
-  receipt_id: string;
-  title: string;
-  departure_at: string;
-  inviter_name: string;
-  expires_at: string;
-  received_at: string;
-  status: InvitationStatus;
-  trip_id: string | null;
-};
-// Migration 006 contract; the generated snapshot is refreshed after remote approval.
+type Functions = Database["public"]["Functions"];
+export type ReceivedInvitation = Omit<
+  Functions["list_received_trip_invitations"]["Returns"][number],
+  "status" | "trip_id"
+> & { status: InvitationStatus; trip_id: string | null };
+// Refine SQL status/nullable results and represent a no-argument RPC as {}.
 export type NotificationFunctions = {
-  remember_trip_invitation: { Args: { p_token: string }; Returns: string };
-  list_received_trip_invitations: {
+  remember_trip_invitation: Functions["remember_trip_invitation"];
+  list_received_trip_invitations: Omit<
+    Functions["list_received_trip_invitations"],
+    "Args" | "Returns"
+  > & {
     Args: Record<string, never>;
     Returns: ReceivedInvitation[];
   };
-  respond_received_trip_invitation: {
-    Args: { p_receipt_id: string; p_accept: boolean };
+  respond_received_trip_invitation: Omit<
+    Functions["respond_received_trip_invitation"],
+    "Returns"
+  > & {
     Returns: string | null;
   };
 };
