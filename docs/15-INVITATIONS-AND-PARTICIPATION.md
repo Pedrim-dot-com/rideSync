@@ -137,4 +137,9 @@ regenerado da API; contratos derivados com refinamentos de nulabilidade/estado.
 Passaram 26 verificações HTTPS reais com três contas temporárias, incluindo
 privacidade, ownership, recusa, expiração, revogação e concorrência entre token
 e recibo, com apenas um vencedor. Contas, viagem e recibos de teste removidos;
-limpeza confirmada. Publicação autorizada em curso via push para main.
+limpeza confirmada. Publicação autorizada e confirmada em 2026-10-24 após push
+para main do commit `29f2c76`. Bundle público `/assets/index-CjoFwJXN.js`
+contém os campos `departure_date`/`departure_time` e as três RPCs de notificações.
+CSS `/assets/index-D0x-0J4X.css` inclui as regras de contenção dos campos; o
+service worker público precacheia ambos os ficheiros. Atualização na PWA requer
+o botão «Atualizar» quando surge o aviso de nova versão.

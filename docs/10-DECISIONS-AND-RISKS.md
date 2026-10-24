@@ -220,4 +220,6 @@ adicionar envio de email, push, localização ou acesso antecipado à viagem.
 Histórico retido enquanto convite/viagem/conta existir; só pedidos válidos têm
 ações. Ver docs/15-INVITATIONS-AND-PARTICIPATION.md. Migration 006 aplicada com autorização em 2026-10-24; tipos regenerados e
 26 checks HTTPS reais passaram, com limpeza das contas/viagem/recibos temporários
-confirmada. Publicação autorizada em curso. Não alterar migrations já aplicadas.
+confirmada. Publicação autorizada e confirmada na Cloudflare após push de
+29f2c76: campos separados, RPCs de notificações, CSS e precache públicos verificados.
+Não alterar migrations já aplicadas.
