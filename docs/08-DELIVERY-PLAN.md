@@ -53,7 +53,7 @@
 - [ ] Deploy e roteiro de demonstração.
 
 ## Formato para cada PR
-Objetivo, requisitos FR, alterações, migration/RLS, testes executados, screenshots se UI, riscos e rollback.
+Objetivo, requisitos, alterações, migration/RLS, testes executados, screenshots se UI, riscos e rollback. Rever toda a documentação e atualizar README/documentos afetados em cada entrega; depois de aplicar/publicar, registar o resultado verificado e pendências reais.
 
 ## Checklist específica de mapas
 - [ ] Confirmar chaves, quotas e termos MapTiler/openrouteservice; registar restrições de domínio/servidor.

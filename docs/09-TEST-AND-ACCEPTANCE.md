@@ -28,7 +28,7 @@
 Três contas, três motas, uma viagem com 2+ waypoints, convite e aceitação, seleção de mota, visualização simultânea de posições, interrupção/reconexão, stop de partilha, encerramento e proposta de rota por IA.
 
 ## Critérios de qualidade
-Typecheck, lint, testes automatizados e verificações RLS a passar; nenhuma chave privada no frontend; fluxos críticos demonstrados em dispositivos reais; erros e limitações documentados.
+Typecheck, lint, testes automatizados e verificações RLS a passar; nenhuma chave privada no frontend; fluxos críticos demonstrados em dispositivos reais; erros e limitações documentados. Toda a documentação e o README devem ser revistos em cada alteração, com os documentos afetados atualizados e os estados local/publicado/validado coerentes. Validar links locais e IDs documentais.
 
 ## Testes adicionais — mapa e navegação
 | ID | Cenário | Resultado esperado |

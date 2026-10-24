@@ -26,6 +26,15 @@ React + TypeScript + Vite; Tailwind; TanStack Query; Zustand quando necessário;
 11. `docs/10-DECISIONS-AND-RISKS.md` — ADRs e pendências
 12. `docs/11-OPERATIONS.md` — setup, deploy e observabilidade
 13. `docs/12-MAPS-AND-NAVIGATION.md` — decisão e integração de mapas
+14. [Desenvolvimento](docs/13-DEVELOPMENT.md)
+15. [Publicação Cloudflare Pages](docs/14-CLOUDFLARE-PAGES.md)
+16. [Convites e notificações](docs/15-INVITATIONS-AND-PARTICIPATION.md)
+17. [Sessões e tracking](docs/16-TRIP-TRACKING.md)
+18. [Interface](docs/17-UI-REDESIGN.md)
+19. [Instalação e passkeys](docs/18-INSTALLATION-AND-PASSKEYS.md)
+20. [Grupos motards](docs/19-MOTARD-GROUPS.md)
+21. [Voz e SOS](docs/20-VOICE-AND-SOS.md)
+22. [Revisão documental](docs/21-DOCUMENTATION-REVIEW.md)
 
 ## Limites explícitos
 Não prometer GPS ou voz com ecrã bloqueado/segundo plano no iOS. SOS avisa apenas o grupo da viagem, não é contacto com emergência/112. Diretório de grupos e sedes é visível a utilizadores autenticados; dados legais são autodeclarados. Chat, pagamentos, navegação turn-by-turn, monetização e app nativa continuam fora do âmbito. GPS e microfone exigem consentimentos independentes.
@@ -59,3 +68,15 @@ Abrir este repositório no Claude Code e enviar o conteúdo de `PROMPT-CLAUDE.md
   de SOS, LiveKit Cloud, configuração, limites e validação pendente.
 - [Revisão documental](docs/21-DOCUMENTATION-REVIEW.md): inconsistências corrigidas
   e distinção entre implementado, publicado e ainda não validado em hardware.
+
+
+## Manutenção obrigatória
+
+Em cada alteração, rever toda a documentação e atualizar o README e os documentos
+afetados na mesma entrega. Manter coerentes requisitos, decisões, arquitetura,
+contratos, segurança, UX, plano, testes e operação. Identificar o que está apenas
+implementado localmente, o que foi aplicado/publicado e o que foi efetivamente
+validado, incluindo limitações e próximos passos. Após migrations ou deploy,
+atualizar o estado só depois de verificar a execução. Preservar recibos históricos
+e validar links e IDs ao alterar a documentação. Regra permanente do utilizador,
+registada também em CLAUDE.md.

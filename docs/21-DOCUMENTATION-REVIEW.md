@@ -47,3 +47,14 @@ procedimentos mais recentes registados nas ADRs.
 Estes resultados correspondem à implementação local. Migrations 007/008,
 provider/token real, publicação e teste de três dispositivos mantêm o estado
 pendente descrito acima, até autorização/execução próprias.
+
+
+## Regra permanente de manutenção
+
+Instrução explícita do utilizador em 2026-10-24: atualizar sempre a documentação
+e o README. Registada em CLAUDE.md, README e critérios de entrega/aceitação.
+Cada alteração exige revisão do conjunto documental e atualização dos ficheiros
+afetados, incluindo resultados após publicação e testes reais. Não alterar
+recibos históricos nem apresentar implementação local como publicação concluída.
+O índice do README passa a incluir todos os documentos de docs/01 a docs/21.
+Esta atualização documental não altera a autorização pendente para 007/008/voz.
